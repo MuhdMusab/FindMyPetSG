@@ -29,9 +29,33 @@ InputDecoration textFieldInputDecoration(String hintText) {
   );
 }
 
-TextStyle simpleTextStyle() {
+InputDecoration circularFieldInputDecoration(String hintText) {
+  return InputDecoration(
+    hintText: hintText,
+    hintStyle: TextStyle(
+      color: Colors.black87,
+    ),
+    border: InputBorder.none,
+  );
+}
+
+TextStyle simpleWhiteTextStyle() {
   return TextStyle(
       color: Colors.white,
+      fontSize: 16
+  );
+}
+
+TextStyle simpleBlackTextStyle() {
+  return TextStyle(
+      color: Colors.black,
+      fontSize: 16
+  );
+}
+
+TextStyle simpleGreyTextStyle() {
+  return TextStyle(
+      color: Colors.black45,
       fontSize: 16
   );
 }
@@ -40,5 +64,30 @@ TextStyle mediumTextStyle() {
   return TextStyle(
       color: Colors.white,
       fontSize: 17
+  );
+}
+
+Container inputTextField(String str) {
+  return Container(
+    //alignment: Alignment.bottomLeft,
+    //width: MediaQuery.of(context).size.width,
+    padding: EdgeInsets.symmetric(
+        vertical: 2,
+        horizontal: 15
+    ),
+    decoration: BoxDecoration(
+      gradient: LinearGradient(colors: [
+        Colors.white,
+        Colors.white,
+      ]),
+      borderRadius: BorderRadius.circular(30),
+       border: Border.all(color: Colors.black26,
+         width: 3,
+       ),
+    ),
+    child: TextField(
+      style: simpleBlackTextStyle(),
+      decoration: circularFieldInputDecoration(str),
+    ),
   );
 }

@@ -22,18 +22,15 @@ class _SignUpState extends State<SignUp> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextField(
-                    style: simpleTextStyle(),
-                    decoration: textFieldInputDecoration("username"),
+                 inputTextField("username"),
+                  SizedBox(
+                    height: 10,
                   ),
-                  TextField(
-                    style: simpleTextStyle(),
-                    decoration: textFieldInputDecoration("email"),
+                  inputTextField("email"),
+                  SizedBox(
+                    height: 10,
                   ),
-                  TextField(
-                    style: simpleTextStyle(),
-                    decoration: textFieldInputDecoration("password"),
-                  ),
+                  inputTextField("password"),
                   SizedBox(
                     height: 8,
                   ),
@@ -43,7 +40,7 @@ class _SignUpState extends State<SignUp> {
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: Text(
                         "Forgot Password?",
-                        style: simpleTextStyle(),
+                        style: simpleGreyTextStyle(),
                       ),
                     ),
                   ),
@@ -81,13 +78,13 @@ class _SignUpState extends State<SignUp> {
                       vertical: 20,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.black87,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
                       "Sign up with Google",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 20,
                       ),
                     ),

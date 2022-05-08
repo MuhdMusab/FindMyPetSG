@@ -23,11 +23,11 @@ class _SignInState extends State<SignIn> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
-                    style: simpleTextStyle(),
+                    style: simpleWhiteTextStyle(),
                     decoration: textFieldInputDecoration("email"),
                   ),
                   TextField(
-                    style: simpleTextStyle(),
+                    style: simpleWhiteTextStyle(),
                     decoration: textFieldInputDecoration("password"),
                   ),
                   SizedBox(
@@ -39,7 +39,7 @@ class _SignInState extends State<SignIn> {
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: Text(
                         "Forgot Password?",
-                        style: simpleTextStyle(),
+                        style: simpleWhiteTextStyle(),
                       ),
                     ),
                   ),

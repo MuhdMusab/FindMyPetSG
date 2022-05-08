@@ -55,19 +55,19 @@ TextStyle simpleBlackTextStyle() {
 
 TextStyle simpleGreyTextStyle() {
   return TextStyle(
-      color: Colors.black45,
+      color: Colors.black,
       fontSize: 16
   );
 }
 
 TextStyle mediumTextStyle() {
   return TextStyle(
-      color: Colors.white,
+      color: Colors.black,
       fontSize: 17
   );
 }
 
-Container inputTextField(String str) {
+Container inputTextField(String str, TextEditingController ctrl) {
   return Container(
     //alignment: Alignment.bottomLeft,
     //width: MediaQuery.of(context).size.width,
@@ -82,10 +82,11 @@ Container inputTextField(String str) {
       ]),
       borderRadius: BorderRadius.circular(30),
        border: Border.all(color: Colors.black26,
-         width: 3,
+         width: 2,
        ),
     ),
     child: TextField(
+      controller: ctrl,
       style: simpleBlackTextStyle(),
       decoration: circularFieldInputDecoration(str),
     ),

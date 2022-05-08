@@ -4,8 +4,12 @@ buildscript {
         google()
         mavenCentral()
     }
+    apply plugin: 'com.android.application'
+    apply plugin: 'com.google.gms.google-services'
 
     dependencies {
+        implementation 'com.google.firebase:firebase-analytics'
+        implementation platform('com.google.firebase:firebase-bom:30.0.0')
         classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }

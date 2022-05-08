@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1094059780853",
+    "project_id": "findmypetsg",
+    "storage_bucket": "findmypetsg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094059780853:android:7c913a1da78ef2a6a973bc",
+        "android_client_info": {
+          "package_name": "com.example.find_my_pet_sg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1094059780853-j02ec0pfa1vjrc1ij5181io6lvfipusq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz1ECR-KPkB3vSSyCqvXq5j8lMhRJfTqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1094059780853-j02ec0pfa1vjrc1ij5181io6lvfipusq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

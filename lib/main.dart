@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/views/sign_up.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

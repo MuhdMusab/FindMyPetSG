@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1094059780853:android:7c913a1da78ef2a6a973bc",
+        "mobilesdk_app_id": "1:1094059780853:android:528ee8507a317ffca973bc",
         "android_client_info": {
           "package_name": "com.example.find_my_pet_sg"
         }
@@ -29,6 +29,13 @@
             {
               "client_id": "1094059780853-j02ec0pfa1vjrc1ij5181io6lvfipusq.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1094059780853-vq0crts4r2v0mps7r8bb5ndm2frtiqlt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.findMyPetSg"
+              }
             }
           ]
         }

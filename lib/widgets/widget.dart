@@ -35,7 +35,7 @@ InputDecoration circularFieldInputDecoration(String hintText) {
     hintStyle: TextStyle(
       color: Colors.black87,
     ),
-    border: InputBorder.none,
+    //border: InputBorder.none,
   );
 }
 
@@ -67,10 +67,12 @@ TextStyle mediumTextStyle() {
   );
 }
 
-Container inputTextField(String str, TextEditingController ctrl) {
+typedef F<String> = List<String> Function<String>(String);
+
+Container inputTextField(String str, TextEditingController ctrl, BuildContext context, String ? Function(String ?) validator) {
+  //String ? Function(String ?) ? func
   return Container(
-    //alignment: Alignment.bottomLeft,
-    //width: MediaQuery.of(context).size.width,
+    width: MediaQuery.of(context).size.width,
     padding: EdgeInsets.symmetric(
         vertical: 2,
         horizontal: 15
@@ -85,7 +87,8 @@ Container inputTextField(String str, TextEditingController ctrl) {
          width: 2,
        ),
     ),
-    child: TextField(
+    child: TextFormField(
+      validator: validator,
       controller: ctrl,
       style: simpleBlackTextStyle(),
       decoration: circularFieldInputDecoration(str),

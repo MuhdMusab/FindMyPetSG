@@ -71,7 +71,7 @@ TextStyle mediumTextStyle() {
 
 typedef F<String> = List<String> Function<String>(String);
 
-Container inputTextField(String str, TextEditingController ctrl, BuildContext context, String ? Function(String ?) validator) {
+Container inputTextFieldCircular(String str, TextEditingController ctrl, BuildContext context, String ? Function(String ?) validator, double radius) {
   //String ? Function(String ?) ? func
   return Container(
     width: MediaQuery.of(context).size.width - 100,
@@ -85,7 +85,7 @@ Container inputTextField(String str, TextEditingController ctrl, BuildContext co
         Colors.white,
         Colors.white,
       ]),
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.circular(radius),
        border: Border.all(color: Colors.black26,
          width: 2,
        ),
@@ -97,4 +97,5 @@ Container inputTextField(String str, TextEditingController ctrl, BuildContext co
       decoration: circularFieldInputDecoration(str),
     ),
   );
+
 }

@@ -1,5 +1,4 @@
 import 'package:find_my_pet_sg/services/auth.dart';
-import 'package:find_my_pet_sg/views/chatRoomScreen.dart';
 import 'package:find_my_pet_sg/views/sign_up_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import "package:flutter/material.dart";
@@ -39,21 +38,6 @@ class _SignUpState extends State<SignUp> {
               ? "Please provide a password that is 6 characters or greater"
               : null;
   };
-
-  signUp() {
-    if (formKey.currentState!.validate()) {
-      setState(() {
-        isLoading = true;
-      });
-
-      authMethods.signUpWithEmailAndPassword(emailTextEditingController.text,
-          passwordTextEditingController.text).then((val) {
-            Navigator.pushReplacement(context, MaterialPageRoute(
-                builder: (context) => SignUpForm()
-            ),);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

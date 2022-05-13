@@ -1,10 +1,14 @@
 import 'package:find_my_pet_sg/services/auth.dart';
+import 'package:find_my_pet_sg/views/chatRoomScreen.dart';
+import 'package:find_my_pet_sg/views/sign_up_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import "package:flutter/material.dart";
-import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  //const SignUp({Key? key}) : super(key: key);
+
+  final Function toggle;
+  SignUp(this.toggle);
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -44,7 +48,9 @@ class _SignUpState extends State<SignUp> {
 
       authMethods.signUpWithEmailAndPassword(emailTextEditingController.text,
           passwordTextEditingController.text).then((val) {
-            print("$val.uid");
+            Navigator.pushReplacement(context, MaterialPageRoute(
+                builder: (context) => SignUpForm()
+            ),);
       });
     }
   }
@@ -55,39 +61,61 @@ class _SignUpState extends State<SignUp> {
         appBar: appBarMain(context),
         body: SingleChildScrollView(
           child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/signinpage.png"
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
             height: MediaQuery.of(context).size.height - 50,
             alignment: Alignment.bottomCenter,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              // decoration: BoxDecoration(
+              //     gradient: LinearGradient(
+              //         colors: [
+              //           Colors.pink.withOpacity(0.2),
+              //           Colors.pink.withOpacity(0.1),
+              //         ],
+              //       //stops: [0,0,1],
+              //         begin: Alignment.topCenter,
+              //     ),
+              // ),
+              //padding: EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                    inputTextField("username", userNameTextEditingController, context, usernameValidator),
-                      //SizedBox(
-                        //height: 10,
-                      //),
-                      inputTextField("email", emailTextEditingController, context, emailValidator),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      inputTextField("password", passwordTextEditingController, context, passwordValidator),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      ],
-                    ),
-                  ),
+                  // Form(
+                  //   key: formKey,
+                  //   child: Column(
+                  //     children: [
+                  //   inputTextField("username", userNameTextEditingController, context, usernameValidator),
+                  //     //SizedBox(
+                  //       //height: 10,
+                  //     //),
+                  //     inputTextField("email", emailTextEditingController, context, emailValidator),
+                  //     SizedBox(
+                  //       height: 10,
+                  //     ),
+                  //     inputTextField("password", passwordTextEditingController, context, passwordValidator),
+                  //     SizedBox(
+                  //       height: 8,
+                  //     ),
+                  //     ],
+                  //   ),
+                  // ),
                   Container(
                     alignment: Alignment.centerRight,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: Text(
                         "Forgot Password?",
-                        style: simpleGreyTextStyle(),
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -96,18 +124,21 @@ class _SignUpState extends State<SignUp> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      signUp();
+                      Navigator.pushReplacement(context, MaterialPageRoute(
+                          builder: (context) => SignUpForm()
+                      ));
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width - 50,
                       padding: EdgeInsets.symmetric(
                         vertical: 20,
+                        horizontal: 20,
                       ),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(colors: [
-                          const Color(0xff007EF4),
-                          const Color(0xff2A75BC),
+                          const Color(0xfff26579),
+                          const Color(0xfff26579),
                         ]),
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -115,7 +146,9 @@ class _SignUpState extends State<SignUp> {
                         "Sign up",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 19,
+                          fontFamily: "Open Sans Extra Bold",
+                          fontWeight: FontWeight.bold
                         ),
                       ),
                     ),
@@ -125,19 +158,21 @@ class _SignUpState extends State<SignUp> {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width - 50,
                     padding: EdgeInsets.symmetric(
                       vertical: 20,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.black87,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
                       "Sign up with Google",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
+                        color: Colors.black,
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Open Sans Extra Bold",
                       ),
                     ),
                   ),
@@ -146,11 +181,21 @@ class _SignUpState extends State<SignUp> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Already have an account? ", style: mediumTextStyle()),
-                        Text("Sign in",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            decoration: TextDecoration.underline,
+                        GestureDetector(
+                          onTap: () {
+                            widget.toggle();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Text("Sign in",
+                              style: TextStyle(
+                                color: Color(0xfff26579),
+                                fontSize: 17,
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
+                                decorationThickness: 2,
+                              ),
+                            ),
                           ),
                         ),
                       ]

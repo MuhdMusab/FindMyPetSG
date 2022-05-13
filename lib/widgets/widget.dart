@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 PreferredSizeWidget appBarMain(BuildContext context) {
   return AppBar(
-      //title: Image.asset("assets/images/logo.png", height: 50)
+   centerTitle: true,
    title: Text(
      "FindMyPetSG",
      style: TextStyle(
-       fontSize: 17,
-       color: Colors.white,
+       fontSize: 38,
+       color: Color(0xFFf26579),
+       fontFamily: 'Open Sans Extra Bold',
+       fontWeight: FontWeight.bold,
 
      ),
    ),
@@ -72,9 +74,10 @@ typedef F<String> = List<String> Function<String>(String);
 Container inputTextField(String str, TextEditingController ctrl, BuildContext context, String ? Function(String ?) validator) {
   //String ? Function(String ?) ? func
   return Container(
-    width: MediaQuery.of(context).size.width,
+    width: MediaQuery.of(context).size.width - 100,
+    alignment: Alignment.center,
     padding: EdgeInsets.symmetric(
-        vertical: 2,
+        //vertical: 20,
         horizontal: 15
     ),
     decoration: BoxDecoration(

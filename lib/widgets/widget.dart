@@ -33,6 +33,7 @@ InputDecoration textFieldInputDecoration(String hintText) {
 
 InputDecoration circularFieldInputDecoration(String hintText) {
   return InputDecoration(
+    border: InputBorder.none,
     hintText: hintText,
     hintStyle: TextStyle(
       color: Colors.black87,

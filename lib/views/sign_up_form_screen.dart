@@ -1,4 +1,4 @@
-import 'package:find_my_pet_sg/views/chatRoomScreen.dart';
+import 'package:find_my_pet_sg/views/explore_screen.dart';
 import 'package:find_my_pet_sg/views/sign_in.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +21,7 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController passwordTextEditingController = TextEditingController();
   AuthMethods authMethods = AuthMethods();
   bool isLoading = true;
+  bool _passwordVisible = false;
 
   String ? Function(String ?) usernameValidator = (val) {
     return val!.isEmpty || val.length < 4
@@ -49,7 +50,7 @@ class _SignUpFormState extends State<SignUpForm> {
       authMethods.signUpWithEmailAndPassword(emailTextEditingController.text,
           passwordTextEditingController.text).then((val) {
         Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (context) => ChatRoom(),
+            builder: (context) => ExploreScreen(),
         ),);
       });
     }
@@ -91,8 +92,8 @@ class _SignUpFormState extends State<SignUpForm> {
               alignment: Alignment.centerLeft,
               child: Text("Username",
                 style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
+                  color: Colors.black,
+                  fontSize: 14,
                 ),
               ),
             ),
@@ -103,7 +104,39 @@ class _SignUpFormState extends State<SignUpForm> {
               key: formKey,
               child: Column(
                 children: [
-              inputTextFieldCircular("username", userNameTextEditingController, context, usernameValidator, 5),
+                  TextFormField(
+                    validator: usernameValidator,
+                    controller: userNameTextEditingController,
+                    style: simpleBlackTextStyle(),
+                    decoration: InputDecoration(
+                      fillColor: Colors.grey.withOpacity(0.1),
+                      filled: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 15,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white,
+                          width: 0,),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white,
+                          width: 0,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white,
+                          width: 0,),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      hintText: "username",
+                      hintStyle: TextStyle(
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
               SizedBox(
                 height: 13,
               ),
@@ -119,7 +152,39 @@ class _SignUpFormState extends State<SignUpForm> {
                   SizedBox(
                     height: 5,
                   ),
-                inputTextFieldCircular("email", emailTextEditingController, context, emailValidator, 5),
+                  TextFormField(
+                    validator: emailValidator,
+                    controller: emailTextEditingController,
+                    style: simpleBlackTextStyle(),
+                    decoration: InputDecoration(
+                      fillColor: Colors.grey.withOpacity(0.1),
+                      filled: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 15,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white,
+                          width: 0,),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white,
+                          width: 0,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white,
+                          width: 0,),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      hintText: "email",
+                      hintStyle: TextStyle(
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
                 SizedBox(
                   height: 13,
                 ),
@@ -135,8 +200,54 @@ class _SignUpFormState extends State<SignUpForm> {
                   SizedBox(
                     height: 5,
                   ),
-                inputTextFieldCircular("password", passwordTextEditingController, context, passwordValidator, 5),
-                SizedBox(
+                TextFormField(
+                  obscureText: _passwordVisible,
+                  validator: passwordValidator,
+                  controller: passwordTextEditingController,
+                  style: simpleBlackTextStyle(),
+                  decoration: InputDecoration(
+                      fillColor: Colors.grey.withOpacity(0.1),
+                      filled: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 15,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white,
+                          width: 0,),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white,
+                          width: 0,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white,
+                          width: 0,),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      hintText: "password",
+                      hintStyle: TextStyle(
+                           color: Colors.black54,
+                         ),
+                      suffixIcon: GestureDetector(
+                        child: Icon(
+                          _passwordVisible ? Icons.visibility
+                                           : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                      ),
+                  ),
+
+                ),
+                  SizedBox(
                   height: 20,
                 ),
                   GestureDetector(

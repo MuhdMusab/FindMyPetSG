@@ -15,30 +15,6 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
 
-  final formKey = GlobalKey<FormState>();
-  TextEditingController userNameTextEditingController = TextEditingController();
-  TextEditingController emailTextEditingController = TextEditingController();
-  TextEditingController passwordTextEditingController = TextEditingController();
-  bool isLoading = false;
-  AuthMethods authMethods = AuthMethods();
-  String ? Function(String ?) usernameValidator = (val) {
-    return val!.isEmpty || val.length < 4
-              ? "Please provide a valid username"
-              : null;
-  };
-
-  String ? Function(String ?) emailValidator = (val) {
-    return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val!)
-              ? null
-              : "Please provide a valid email";
-  };
-
-  String ? Function(String ?) passwordValidator = (val) {
-    return val!.length < 6
-              ? "Please provide a password that is 6 characters or greater"
-              : null;
-  };
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,39 +32,9 @@ class _SignUpState extends State<SignUp> {
             height: MediaQuery.of(context).size.height - 50,
             alignment: Alignment.bottomCenter,
             child: Container(
-              // decoration: BoxDecoration(
-              //     gradient: LinearGradient(
-              //         colors: [
-              //           Colors.pink.withOpacity(0.2),
-              //           Colors.pink.withOpacity(0.1),
-              //         ],
-              //       //stops: [0,0,1],
-              //         begin: Alignment.topCenter,
-              //     ),
-              // ),
-              //padding: EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Form(
-                  //   key: formKey,
-                  //   child: Column(
-                  //     children: [
-                  //   inputTextField("username", userNameTextEditingController, context, usernameValidator),
-                  //     //SizedBox(
-                  //       //height: 10,
-                  //     //),
-                  //     inputTextField("email", emailTextEditingController, context, emailValidator),
-                  //     SizedBox(
-                  //       height: 10,
-                  //     ),
-                  //     inputTextField("password", passwordTextEditingController, context, passwordValidator),
-                  //     SizedBox(
-                  //       height: 8,
-                  //     ),
-                  //     ],
-                  //   ),
-                  // ),
                   Container(
                     alignment: Alignment.centerRight,
                     child: Container(

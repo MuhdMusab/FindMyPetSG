@@ -35,7 +35,10 @@ In Singapore, there is no one-stop portal for lost-and-found pets. Posting on th
 
 ### Features
 - Lost and Found explore page
-![Lost and Found explore page screen](https://drive.google.com/file/d/1L2bN7LSHyKcRbjgOU_VyErzF79Uap-6h/view?usp=sharing)
+<div align='center'>
+  <img src="https://user-images.githubusercontent.com/70519015/170710056-115cc670-7bd8-4de9-a91a-d6cae7251014.png" width="313" height="443">
+</div>
+
 - Report Abuse
 - Chat
 - Lookout notifications

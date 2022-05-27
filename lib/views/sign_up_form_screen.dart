@@ -5,7 +5,6 @@ import 'package:find_my_pet_sg/views/home.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/services/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);

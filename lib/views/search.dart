@@ -1,10 +1,4 @@
-import 'package:find_my_pet_sg/helper/firebase_api.dart';
-import 'package:find_my_pet_sg/modal/person.dart';
-import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
-import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
-import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:find_my_pet_sg/helper/homehelper.dart';
@@ -67,7 +61,7 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
 
   @override
   Widget build(BuildContext context) {
-    //super.build(context);
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutter Socket.IO'),

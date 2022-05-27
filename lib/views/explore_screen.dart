@@ -1,10 +1,7 @@
-import 'package:find_my_pet_sg/views/chatRoomScreen.dart';
-import 'package:find_my_pet_sg/views/profile_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
 const TextStyle _textStyle = TextStyle(
   fontSize: 40,
   fontWeight: FontWeight.bold,

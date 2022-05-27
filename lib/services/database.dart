@@ -27,12 +27,6 @@ class DatabaseMethods {
     });
   }
 
-  // getUserbyUsername(String username) {
-  //   FirebaseFirestore.instance.collection("users")
-  //       .where('name', isEqualTo: username)
-  //       .get();
-  // }
-
   searchByName(String searchField) {
     return FirebaseFirestore.instance
         .collection("users")

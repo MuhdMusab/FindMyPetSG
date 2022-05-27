@@ -1,4 +1,3 @@
-import 'package:find_my_pet_sg/services/auth.dart';
 import 'package:find_my_pet_sg/views/sign_in_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import "package:flutter/material.dart";

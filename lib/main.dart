@@ -1,10 +1,14 @@
 import 'package:find_my_pet_sg/helper/authenticate.dart';
+import 'package:find_my_pet_sg/helper/firebase_api.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:find_my_pet_sg/modal/person.dart';
+import 'package:find_my_pet_sg/users.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseApi.addRandomUsers(Persons.initPersons);
   runApp(const MyApp());
 }
 
@@ -37,7 +41,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Authenticate(),
+      home: Authenticate(showSignIn: false,),
     );
   }
 }

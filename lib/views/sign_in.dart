@@ -1,9 +1,9 @@
+import 'package:find_my_pet_sg/services/auth.dart';
+import 'package:find_my_pet_sg/views/sign_in_form_screen.dart';
+import 'package:find_my_pet_sg/widgets/widget.dart';
 import "package:flutter/material.dart";
-import "package:find_my_pet_sg/widgets/widget.dart";
 
 class SignIn extends StatefulWidget {
-  //const SignIn({Key? key}) : super(key: key);
-
   final Function toggle;
   SignIn(this.toggle);
 
@@ -12,61 +12,72 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: appBarMain(context),
         body: SingleChildScrollView(
           child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    "assets/images/signinpage.png"
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
             height: MediaQuery.of(context).size.height - 50,
             alignment: Alignment.bottomCenter,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextField(
-                    style: simpleWhiteTextStyle(),
-                    decoration: textFieldInputDecoration("email"),
-                  ),
-                  TextField(
-                    style: simpleWhiteTextStyle(),
-                    decoration: textFieldInputDecoration("password"),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
                   Container(
                     alignment: Alignment.centerRight,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: Text(
                         "Forgot Password?",
-                        style: simpleWhiteTextStyle(),
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(
                     height: 8,
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20,
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        const Color(0xff007EF4),
-                        const Color(0xff2A75BC),
-                      ]),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Text(
-                      "Sign in",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(context, MaterialPageRoute(
+                          builder: (context) => SignInForm()
+                      ));
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width - 50,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 20,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          const Color(0xfff26579),
+                          const Color(0xfff26579),
+                        ]),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Text(
+                        "Sign in",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 19,
+                            fontFamily: "Open Sans Extra Bold",
+                            fontWeight: FontWeight.bold
+                        ),
                       ),
                     ),
                   ),
@@ -75,7 +86,7 @@ class _SignInState extends State<SignIn> {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width - 50,
                     padding: EdgeInsets.symmetric(
                       vertical: 20,
                     ),
@@ -87,7 +98,9 @@ class _SignInState extends State<SignIn> {
                       "Sign in with Google",
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Open Sans Extra Bold",
                       ),
                     ),
                   ),
@@ -102,11 +115,13 @@ class _SignInState extends State<SignIn> {
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Text("Register now!",
+                            child: Text("Sign up",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Color(0xfff26579),
                                 fontSize: 17,
                                 decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
+                                decorationThickness: 2,
                               ),
                             ),
                           ),

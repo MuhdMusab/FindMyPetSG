@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/views/sign_in.dart';
 
 class Authenticate extends StatefulWidget {
-  const Authenticate({Key? key}) : super(key: key);
+  bool? showSignIn;
+  Authenticate({
+    Key? key,
+    this.showSignIn,
+  }) : super(key: key);
 
   @override
   State<Authenticate> createState() => _AuthenticateState();
@@ -11,16 +15,17 @@ class Authenticate extends StatefulWidget {
 
 class _AuthenticateState extends State<Authenticate> {
 
-  bool showSignIn = false;
+
 
   void toggleView() {
     setState(() {
-      showSignIn = !showSignIn;
+      widget.showSignIn = !widget.showSignIn!;
     });
   }
   @override
   Widget build(BuildContext context) {
-    if (showSignIn) {
+    print(widget.showSignIn);
+    if (widget.showSignIn!) {
       return SignIn(toggleView);
     } else {
       return SignUp(toggleView);

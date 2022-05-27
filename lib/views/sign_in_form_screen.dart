@@ -1,29 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/helper/authenticate.dart';
-import 'package:find_my_pet_sg/helper/helper_functions.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/views/home.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/services/auth.dart';
+import 'package:find_my_pet_sg/helper/helper_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+
+class SignInForm extends StatefulWidget {
+  const SignInForm({Key? key}) : super(key: key);
 
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  State<SignInForm> createState() => _SignInFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _SignInFormState extends State<SignInForm> {
   final formKey = GlobalKey<FormState>();
-  TextEditingController userNameTextEditingController = TextEditingController();
-  TextEditingController emailTextEditingController = TextEditingController();
-  TextEditingController passwordTextEditingController = TextEditingController();
+  TextEditingController emailEditingController = new TextEditingController();
+  TextEditingController passwordEditingController = new TextEditingController();
   AuthMethods authMethods = AuthMethods();
   bool isLoading = true;
   bool _obscureText = true;
   DatabaseMethods databaseMethods = DatabaseMethods();
-
   String? Function(String?) usernameValidator = (val) {
     return val!.isEmpty || val.length < 4
         ? "Please provide a valid username"
@@ -32,8 +31,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
   String? Function(String?) emailValidator = (val) {
     return RegExp(
-                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-            .hasMatch(val!)
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(val!)
         ? null
         : "Please provide a valid email";
   };
@@ -44,40 +43,36 @@ class _SignUpFormState extends State<SignUpForm> {
         : null;
   };
 
-  signUp() async {
-    if (formKey.currentState!.validate()) {
+signIn() async {
+  if (formKey.currentState!.validate()) {
+    setState(() {
+      isLoading = true;
+    });
 
-      setState(() {
-        isLoading = true;
-      });
-      await authMethods
-          .signUpWithEmailAndPassword(emailTextEditingController.text,
-              passwordTextEditingController.text)
-          .then((val) async {
-            if (val != null) {
-              Map<String, String> userInfoMap = {
-                "name" : userNameTextEditingController.text,
-                "email" : emailTextEditingController.text,
-              };
-
-              databaseMethods.addUserInfo(userInfoMap);
-
-              HelperFunctions.saveUserLoggedInSharedPreference(true);
-              HelperFunctions.saveUserNameSharedPreference(userNameTextEditingController.text);
-              HelperFunctions.saveUserEmailSharedPreference(emailTextEditingController.text);
-            }
-            QuerySnapshot userInfoSnapshot =
-               await DatabaseMethods().getUserInfo(emailTextEditingController.text);
-
+    await authMethods
+        .signInWithEmailAndPassword(
+        emailEditingController.text, passwordEditingController.text)
+        .then((result) async {
+      if (result != null) {
+        QuerySnapshot userInfoSnapshot =
+        await DatabaseMethods().getUserInfo(emailEditingController.text);
+        HelperFunctions.saveUserLoggedInSharedPreference(true);
+        HelperFunctions.saveUserNameSharedPreference(
+            userInfoSnapshot.docs[0]['name']);
+        HelperFunctions.saveUserEmailSharedPreference(
+            userInfoSnapshot.docs[0]['email']);
+        final user = FirebaseAuth.instance.currentUser;
         Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Home(userInfoSnapshot.docs[0]),
-          ),
-        );
-      });
-    }
+            context, MaterialPageRoute(builder: (context) => Home(userInfoSnapshot.docs[0])));
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +92,7 @@ class _SignUpFormState extends State<SignUpForm> {
             children: [
               Container(
                 child: Text(
-                  "SIGN UP",
+                  "SIGN IN",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 30,
@@ -109,16 +104,6 @@ class _SignUpFormState extends State<SignUpForm> {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Username",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
               SizedBox(
                 height: 5,
               ),
@@ -126,47 +111,6 @@ class _SignUpFormState extends State<SignUpForm> {
                 key: formKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      validator: usernameValidator,
-                      controller: userNameTextEditingController,
-                      style: simpleBlackTextStyle(),
-                      decoration: InputDecoration(
-                        fillColor: Colors.grey.withOpacity(0.1),
-                        filled: true,
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: "username",
-                        hintStyle: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 13,
-                    ),
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -182,7 +126,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     TextFormField(
                       validator: emailValidator,
-                      controller: emailTextEditingController,
+                      controller: emailEditingController,
                       style: simpleBlackTextStyle(),
                       decoration: InputDecoration(
                         fillColor: Colors.grey.withOpacity(0.1),
@@ -237,7 +181,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     TextFormField(
                       obscureText: _obscureText,
                       validator: passwordValidator,
-                      controller: passwordTextEditingController,
+                      controller: passwordEditingController,
                       style: simpleBlackTextStyle(),
                       decoration: InputDecoration(
                         fillColor: Colors.grey.withOpacity(0.1),
@@ -291,7 +235,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        signUp();
+                        signIn();
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -308,7 +252,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          "Sign up",
+                          "Sign in",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 19,
@@ -318,21 +262,21 @@ class _SignUpFormState extends State<SignUpForm> {
                       ),
                     ),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text("Already have an account? ",
+                      Text("Don't have an account? ",
                           style: mediumTextStyle()),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Authenticate(showSignIn: true,),
+                              builder: (context) => Authenticate(showSignIn: false,),
                             ),
                           );
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 8),
                           child: Text(
-                            "Sign in",
+                            "Sign up",
                             style: TextStyle(
                               color: Color(0xfff26579),
                               fontSize: 17,

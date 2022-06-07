@@ -1,6 +1,14 @@
+import 'package:find_my_pet_sg/services/database.dart';
+import 'package:find_my_pet_sg/views/forgot_password_screen.dart';
+import 'package:find_my_pet_sg/views/googlesignupusername.dart';
 import 'package:find_my_pet_sg/views/sign_in_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
+import 'package:find_my_pet_sg/views/mainpage.dart';
+import 'package:provider/provider.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggle;
@@ -11,6 +19,18 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
+  hasUsername() async {
+    if (await DatabaseMethods.containsEmail(FirebaseAuth.instance.currentUser!.email!)) {
+      Navigator.pushReplacement(context, MaterialPageRoute(
+        builder: (context) => MainPage(),
+      ));
+    } else {
+      Navigator.pushReplacement(context, MaterialPageRoute(
+        builder: (context) => GoogleSignUpUsername(),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +52,22 @@ class _SignInState extends State<SignIn> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    alignment: Alignment.centerRight,
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ForgotPassword(),
+                    )),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Text(
+                          "Forgot Password?",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontSize: 17,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -49,57 +75,49 @@ class _SignInState extends State<SignIn> {
                   SizedBox(
                     height: 8,
                   ),
-                  GestureDetector(
-                    onTap: () {
+                  ElevatedButton(
+                    onPressed: () {
                       Navigator.pushReplacement(context, MaterialPageRoute(
                           builder: (context) => SignInForm()
                       ));
                     },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width - 50,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 20,
-                        horizontal: 20,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                          const Color(0xfff26579),
-                          const Color(0xfff26579),
-                        ]),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        "Sign in",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 19,
-                            fontFamily: "Open Sans Extra Bold",
-                            fontWeight: FontWeight.bold
-                        ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
+                      primary: const Color(0xfff26579),
+                      fixedSize: Size(MediaQuery.of(context).size.width - 50, 66),
+                    ),
+                    child: Text(
+                      "Sign in",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 19,
+                          fontFamily: "Open Sans Extra Bold",
+                          fontWeight: FontWeight.bold
                       ),
                     ),
                   ),
                   SizedBox(
                     height: 16,
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width - 50,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20,
+                  ElevatedButton.icon(
+                    icon: FaIcon(FontAwesomeIcons.google, color: Colors.red,),
+                    onPressed: () {
+                      final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+                      provider.googleLogin();
+                      hasUsername();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
+                      primary: Colors.white,
+                      fixedSize: Size(MediaQuery.of(context).size.width - 50, 66),
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Text(
+                    label: Text(
                       "Sign in with Google",
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 19,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Open Sans Extra Bold",
+                          color: Colors.black,
+                          fontSize: 19,
+                          fontFamily: "Open Sans Extra Bold",
+                          fontWeight: FontWeight.bold
                       ),
                     ),
                   ),
@@ -127,7 +145,7 @@ class _SignInState extends State<SignIn> {
                         ),
                       ]
                   ),
-                  SizedBox(height: 50,)
+                  SizedBox(height: 50,),
                 ],
               ),
             ),

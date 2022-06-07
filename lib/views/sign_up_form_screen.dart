@@ -1,11 +1,11 @@
 import 'package:find_my_pet_sg/helper/authenticate.dart';
-import 'package:find_my_pet_sg/helper/helper_functions.dart';
 import 'package:find_my_pet_sg/services/database.dart';
-import 'package:find_my_pet_sg/views/home.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/services/auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_my_pet_sg/views/verify_email_screen.dart';
+import "package:firebase_auth/firebase_auth.dart";
+
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
 
@@ -13,8 +13,9 @@ class SignUpForm extends StatefulWidget {
   State<SignUpForm> createState() => _SignUpFormState();
 }
 
+final formKey = GlobalKey<FormState>();
+
 class _SignUpFormState extends State<SignUpForm> {
-  final formKey = GlobalKey<FormState>();
   TextEditingController userNameTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
@@ -31,8 +32,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
   String? Function(String?) emailValidator = (val) {
     return RegExp(
-                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-            .hasMatch(val!)
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(val!)
         ? null
         : "Please provide a valid email";
   };
@@ -45,38 +46,67 @@ class _SignUpFormState extends State<SignUpForm> {
 
   signUp() async {
     if (formKey.currentState!.validate()) {
-
       setState(() {
         isLoading = true;
       });
-      await authMethods
-          .signUpWithEmailAndPassword(emailTextEditingController.text,
-              passwordTextEditingController.text)
-          .then((val) async {
-            if (val != null) {
-              Map<String, String> userInfoMap = {
-                "name" : userNameTextEditingController.text,
-                "email" : emailTextEditingController.text,
-              };
-
-              databaseMethods.addUserInfo(userInfoMap);
-
-              HelperFunctions.saveUserLoggedInSharedPreference(true);
-              HelperFunctions.saveUserNameSharedPreference(userNameTextEditingController.text);
-              HelperFunctions.saveUserEmailSharedPreference(emailTextEditingController.text);
-            }
-            QuerySnapshot userInfoSnapshot =
-               await DatabaseMethods().getUserInfo(emailTextEditingController.text);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Home(userInfoSnapshot.docs[0]),
-          ),
-        );
-      });
+      if (await DatabaseMethods.containsUsername(
+          userNameTextEditingController.text)) {
+        setState(() {
+          final text = 'Username is taken';
+          final snackBar = SnackBar(
+            duration: Duration(seconds: 60),
+            content: Text(text),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: Colors.blue,
+              onPressed: () {},
+            ),
+          );
+          ScaffoldMessenger.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(snackBar);
+        });
+      } else if (await DatabaseMethods.containsEmail(
+          emailTextEditingController.text)) {
+        setState(() {
+          final text = 'Email is taken';
+          final snackBar = SnackBar(
+            duration: Duration(seconds: 60),
+            content: Text(text),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: Colors.blue,
+              onPressed: () {},
+            ),
+          );
+          ScaffoldMessenger.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(snackBar);
+        });
+      } else {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailTextEditingController.text.trim(),
+            password: passwordTextEditingController.text.trim())
+            .then((value) async {
+          if (value != null) {
+            Map<String, String> userInfoMap = {
+              "name": userNameTextEditingController.text,
+              "email": emailTextEditingController.text,
+            };
+            DatabaseMethods.addUserInfo(userInfoMap);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => VerifyEmailPage(
+                ),
+              ),
+            );
+          }
+        });
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

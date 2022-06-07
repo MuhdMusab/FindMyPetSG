@@ -1,5 +1,6 @@
 import "package:firebase_auth/firebase_auth.dart";
 import "package:find_my_pet_sg/modal/person.dart";
+import 'package:flutter/services.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -30,7 +31,11 @@ class AuthMethods {
       User ? firebaseUser = result.user;
       return _userFromFireBaseUser(firebaseUser!);
     } catch (e){
-      print(e.toString());
+      if (e is PlatformException) {
+        if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+          return "A";
+        }
+      }
       return null;
     }
   }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/helper/authenticate.dart';
+import 'package:find_my_pet_sg/helper/homehelper.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/views/home.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/services/auth.dart';
 import 'package:find_my_pet_sg/helper/helper_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:find_my_pet_sg/views/verify_email_screen.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -15,8 +18,9 @@ class SignInForm extends StatefulWidget {
   State<SignInForm> createState() => _SignInFormState();
 }
 
+final formKey = GlobalKey<FormState>();
+
 class _SignInFormState extends State<SignInForm> {
-  final formKey = GlobalKey<FormState>();
   TextEditingController emailEditingController = new TextEditingController();
   TextEditingController passwordEditingController = new TextEditingController();
   AuthMethods authMethods = AuthMethods();
@@ -54,18 +58,45 @@ signIn() async {
         emailEditingController.text, passwordEditingController.text)
         .then((result) async {
       if (result != null) {
-        QuerySnapshot userInfoSnapshot =
-        await DatabaseMethods().getUserInfo(emailEditingController.text);
-        HelperFunctions.saveUserLoggedInSharedPreference(true);
-        HelperFunctions.saveUserNameSharedPreference(
-            userInfoSnapshot.docs[0]['name']);
-        HelperFunctions.saveUserEmailSharedPreference(
-            userInfoSnapshot.docs[0]['email']);
-        final user = FirebaseAuth.instance.currentUser;
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Home(userInfoSnapshot.docs[0])));
+        if (!(FirebaseAuth.instance.currentUser!.emailVerified)) {
+          print(FirebaseAuth.instance.currentUser!.email);
+          print(FirebaseAuth.instance.currentUser!.emailVerified);
+         Navigator.pushReplacement(context, MaterialPageRoute(
+           builder: (context) => VerifyEmailPage(
+           ),
+         ));
+        } else {
+          QuerySnapshot userInfoSnapshot =
+          await DatabaseMethods().getUserInfo(emailEditingController.text);
+          HelperFunctions.saveUserLoggedInSharedPreference(true);
+          HelperFunctions.saveUserNameSharedPreference(
+              userInfoSnapshot.docs[0]['name']);
+          HelperFunctions.saveUserEmailSharedPreference(
+              userInfoSnapshot.docs[0]['email']);
+          final user = FirebaseAuth.instance.currentUser;
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ChangeNotifierProvider(
+                      create: (context) => HomeProvider(),
+                      child: Home(userInfoSnapshot.docs[0]))));
+        }
+
       } else {
         setState(() {
+          final text = 'Email or Password is invalid';
+          final snackBar = SnackBar(
+            duration: Duration(seconds: 60),
+              content: Text(text),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: Colors.blue,
+              onPressed: () {},
+            ),
+          );
+          ScaffoldMessenger.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(snackBar);
           isLoading = false;
         });
       }

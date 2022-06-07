@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
-  Future<void> addUserInfo(userData) async {
+  static Future<void> addUserInfo(userData) async {
     FirebaseFirestore.instance.collection("users").add(userData).catchError((e) {
       print(e.toString());
     });
@@ -15,6 +15,18 @@ class DatabaseMethods {
         .catchError((e) {
       print(e.toString());
     });
+  }
+  
+  static Future<bool> containsUsername(String username) async {
+    return (await FirebaseFirestore.instance
+        .collection("users")
+        .where("name", isEqualTo: username).get()).docs.length > 0;
+  }
+
+  static Future<bool> containsEmail(String email) async {
+    return (await FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: email).get()).docs.length > 0;
   }
 
   Future<QuerySnapshot> getUserByUsername(String username) async {

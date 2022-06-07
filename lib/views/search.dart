@@ -5,7 +5,7 @@ import 'package:find_my_pet_sg/helper/homehelper.dart';
 import 'package:provider/provider.dart';
 import 'package:find_my_pet_sg/modal/messages.dart';
 import 'package:intl/intl.dart';
-
+import 'package:find_my_pet_sg/widgets/widget.dart';
 
 
 
@@ -21,6 +21,7 @@ class SearchScreen extends StatefulWidget {
 }
 //http://10.0.2.2:3000
 //'http://localhost:3000'
+//'http://192.168.1.255:3000'
 class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClientMixin<SearchScreen> {
   final TextEditingController _messageInputController = TextEditingController();
   late IO.Socket _socket;
@@ -52,7 +53,7 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
   void initState() {
     super.initState();
     _socket = IO.io(
-      'http://10.0.2.2:3000',
+      'http://192.168.1.255:3000',
       IO.OptionBuilder().setTransports(['websocket']).setQuery(
           {'username': widget._user!['name']}).build(),
     );
@@ -63,9 +64,7 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter Socket.IO'),
-      ),
+      appBar: appBarMain(context),
       body: Column(
         children: [
           Expanded(

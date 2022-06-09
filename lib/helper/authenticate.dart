@@ -1,6 +1,6 @@
-import 'package:find_my_pet_sg/views/sign_up.dart';
+import 'package:find_my_pet_sg/screens/sign_up.dart';
 import 'package:flutter/material.dart';
-import 'package:find_my_pet_sg/views/sign_in.dart';
+import 'package:find_my_pet_sg/screens/sign_in.dart';
 
 class Authenticate extends StatefulWidget {
   bool? showSignIn;

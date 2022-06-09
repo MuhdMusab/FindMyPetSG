@@ -1,32 +1,29 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/helper/authenticate.dart';
-import 'package:find_my_pet_sg/helper/homehelper.dart';
 import 'package:find_my_pet_sg/services/database.dart';
-import 'package:find_my_pet_sg/views/home.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/services/auth.dart';
-import 'package:find_my_pet_sg/helper/helper_functions.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/views/verify_email_screen.dart';
+import 'package:find_my_pet_sg/screens/verify_email_screen.dart';
+import "package:firebase_auth/firebase_auth.dart";
 
-class SignInForm extends StatefulWidget {
-  const SignInForm({Key? key}) : super(key: key);
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  State<SignInForm> createState() => _SignInFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
 final formKey = GlobalKey<FormState>();
 
-class _SignInFormState extends State<SignInForm> {
-  TextEditingController emailEditingController = new TextEditingController();
-  TextEditingController passwordEditingController = new TextEditingController();
+class _SignUpFormState extends State<SignUpForm> {
+  TextEditingController userNameTextEditingController = TextEditingController();
+  TextEditingController emailTextEditingController = TextEditingController();
+  TextEditingController passwordTextEditingController = TextEditingController();
   AuthMethods authMethods = AuthMethods();
   bool isLoading = true;
   bool _obscureText = true;
   DatabaseMethods databaseMethods = DatabaseMethods();
+
   String? Function(String?) usernameValidator = (val) {
     return val!.isEmpty || val.length < 4
         ? "Please provide a valid username"
@@ -47,47 +44,18 @@ class _SignInFormState extends State<SignInForm> {
         : null;
   };
 
-signIn() async {
-  if (formKey.currentState!.validate()) {
-    setState(() {
-      isLoading = true;
-    });
-
-    await authMethods
-        .signInWithEmailAndPassword(
-        emailEditingController.text, passwordEditingController.text)
-        .then((result) async {
-      if (result != null) {
-        if (!(FirebaseAuth.instance.currentUser!.emailVerified)) {
-          print(FirebaseAuth.instance.currentUser!.email);
-          print(FirebaseAuth.instance.currentUser!.emailVerified);
-         Navigator.pushReplacement(context, MaterialPageRoute(
-           builder: (context) => VerifyEmailPage(
-           ),
-         ));
-        } else {
-          QuerySnapshot userInfoSnapshot =
-          await DatabaseMethods().getUserInfo(emailEditingController.text);
-          HelperFunctions.saveUserLoggedInSharedPreference(true);
-          HelperFunctions.saveUserNameSharedPreference(
-              userInfoSnapshot.docs[0]['name']);
-          HelperFunctions.saveUserEmailSharedPreference(
-              userInfoSnapshot.docs[0]['email']);
-          final user = FirebaseAuth.instance.currentUser;
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChangeNotifierProvider(
-                      create: (context) => HomeProvider(),
-                      child: Home(userInfoSnapshot.docs[0]))));
-        }
-
-      } else {
+  signUp() async {
+    if (formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+      if (await DatabaseMethods.containsUsername(
+          userNameTextEditingController.text)) {
         setState(() {
-          final text = 'Email or Password is invalid';
+          final text = 'Username is taken';
           final snackBar = SnackBar(
             duration: Duration(seconds: 60),
-              content: Text(text),
+            content: Text(text),
             action: SnackBarAction(
               label: 'Dismiss',
               textColor: Colors.blue,
@@ -97,12 +65,48 @@ signIn() async {
           ScaffoldMessenger.of(context)
             ..removeCurrentSnackBar()
             ..showSnackBar(snackBar);
-          isLoading = false;
+        });
+      } else if (await DatabaseMethods.containsEmail(
+          emailTextEditingController.text)) {
+        setState(() {
+          final text = 'Email is taken';
+          final snackBar = SnackBar(
+            duration: Duration(seconds: 60),
+            content: Text(text),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: Colors.blue,
+              onPressed: () {},
+            ),
+          );
+          ScaffoldMessenger.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(snackBar);
+        });
+      } else {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailTextEditingController.text.trim(),
+            password: passwordTextEditingController.text.trim())
+            .then((value) async {
+          if (value != null) {
+            Map<String, String> userInfoMap = {
+              "name": userNameTextEditingController.text,
+              "email": emailTextEditingController.text,
+            };
+            DatabaseMethods.addUserInfo(userInfoMap);
+            DatabaseMethods.addRealtimeUser(userNameTextEditingController.text.trim());
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => VerifyEmailPage(
+                ),
+              ),
+            );
+          }
         });
       }
-    });
+    }
   }
-}
 
 
   @override
@@ -123,7 +127,7 @@ signIn() async {
             children: [
               Container(
                 child: Text(
-                  "SIGN IN",
+                  "SIGN UP",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 30,
@@ -135,6 +139,16 @@ signIn() async {
               SizedBox(
                 height: 20,
               ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Username",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 5,
               ),
@@ -142,6 +156,47 @@ signIn() async {
                 key: formKey,
                 child: Column(
                   children: [
+                    TextFormField(
+                      validator: usernameValidator,
+                      controller: userNameTextEditingController,
+                      style: simpleBlackTextStyle(),
+                      decoration: InputDecoration(
+                        fillColor: Colors.grey.withOpacity(0.1),
+                        filled: true,
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 15,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        hintText: "username",
+                        hintStyle: TextStyle(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 13,
+                    ),
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -157,7 +212,7 @@ signIn() async {
                     ),
                     TextFormField(
                       validator: emailValidator,
-                      controller: emailEditingController,
+                      controller: emailTextEditingController,
                       style: simpleBlackTextStyle(),
                       decoration: InputDecoration(
                         fillColor: Colors.grey.withOpacity(0.1),
@@ -212,7 +267,7 @@ signIn() async {
                     TextFormField(
                       obscureText: _obscureText,
                       validator: passwordValidator,
-                      controller: passwordEditingController,
+                      controller: passwordTextEditingController,
                       style: simpleBlackTextStyle(),
                       decoration: InputDecoration(
                         fillColor: Colors.grey.withOpacity(0.1),
@@ -266,7 +321,7 @@ signIn() async {
                     ),
                     GestureDetector(
                       onTap: () {
-                        signIn();
+                        signUp();
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -283,7 +338,7 @@ signIn() async {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          "Sign in",
+                          "Sign up",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 19,
@@ -293,21 +348,21 @@ signIn() async {
                       ),
                     ),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text("Don't have an account? ",
+                      Text("Already have an account? ",
                           style: mediumTextStyle()),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Authenticate(showSignIn: false,),
+                              builder: (context) => Authenticate(showSignIn: true,),
                             ),
                           );
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 8),
                           child: Text(
-                            "Sign up",
+                            "Sign in",
                             style: TextStyle(
                               color: Color(0xfff26579),
                               fontSize: 17,

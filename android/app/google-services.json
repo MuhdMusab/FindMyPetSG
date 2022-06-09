@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1094059780853",
+    "firebase_url": "https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "findmypetsg",
     "storage_bucket": "findmypetsg.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1094059780853-fjoj0dftruuav3f982ggnbko8tki1qsp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.find_my_pet_sg",
+            "certificate_hash": "b9b6bc5243d9f362cca3c7ca9a53e01fc8d3161c"
+          }
+        },
         {
           "client_id": "1094059780853-j02ec0pfa1vjrc1ij5181io6lvfipusq.apps.googleusercontent.com",
           "client_type": 3

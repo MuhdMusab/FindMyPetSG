@@ -1,7 +1,7 @@
 import 'package:find_my_pet_sg/services/database.dart';
-import 'package:find_my_pet_sg/views/home.dart';
-import 'package:find_my_pet_sg/views/mainpage.dart';
-import 'package:find_my_pet_sg/views/sign_up_form_screen.dart';
+import 'package:find_my_pet_sg/screens/home.dart';
+import 'package:find_my_pet_sg/screens/mainpage.dart';
+import 'package:find_my_pet_sg/screens/sign_up_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +50,7 @@ class _GoogleSignUpUsernameState extends State<GoogleSignUpUsername> {
           "email": email,
         };
         DatabaseMethods.addUserInfo(userInfoMap);
+        DatabaseMethods.addRealtimeUser(userNameTextEditingController.text.trim());
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

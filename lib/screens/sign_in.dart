@@ -1,13 +1,13 @@
 import 'package:find_my_pet_sg/services/database.dart';
-import 'package:find_my_pet_sg/views/forgot_password_screen.dart';
-import 'package:find_my_pet_sg/views/googlesignupusername.dart';
-import 'package:find_my_pet_sg/views/sign_in_form_screen.dart';
+import 'package:find_my_pet_sg/screens/forgot_password_screen.dart';
+import 'package:find_my_pet_sg/screens/googlesignupusername.dart';
+import 'package:find_my_pet_sg/screens/sign_in_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
-import 'package:find_my_pet_sg/views/mainpage.dart';
+import 'package:find_my_pet_sg/screens/mainpage.dart';
 import 'package:provider/provider.dart';
 
 class SignIn extends StatefulWidget {
@@ -21,6 +21,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
 
   hasUsername() async {
+    await Future.delayed(Duration(seconds: 1));
     if (await DatabaseMethods.containsEmail(FirebaseAuth.instance.currentUser!.email!)) {
       Navigator.pushReplacement(context, MaterialPageRoute(
         builder: (context) => MainPage(),

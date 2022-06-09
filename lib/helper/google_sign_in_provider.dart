@@ -1,4 +1,4 @@
-import 'package:find_my_pet_sg/views/sign_up_form_screen.dart';
+import 'package:find_my_pet_sg/screens/sign_up_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";

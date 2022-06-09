@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_my_pet_sg/modal/RealtimeUser.dart';
+import 'package:find_my_pet_sg/modal/realtimeuserdao.dart';
 
 class DatabaseMethods {
   static Future<void> addUserInfo(userData) async {
@@ -82,4 +84,9 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  static void addRealtimeUser(String username) {
+      final user = RealtimeUser(username);
+      final realtimeUserDao = RealtimeUserDao();
+      realtimeUserDao.saveUser(user);
+  }
 }

@@ -10,7 +10,6 @@ PreferredSizeWidget appBarMain(BuildContext context) {
        color: Color(0xFFf26579),
        fontFamily: 'Open Sans Extra Bold',
        fontWeight: FontWeight.bold,
-
      ),
    ),
   );

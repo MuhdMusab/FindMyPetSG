@@ -1,9 +1,9 @@
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/services/database.dart';
-import 'package:find_my_pet_sg/views/forgot_password_screen.dart';
-import 'package:find_my_pet_sg/views/googlesignupusername.dart';
-import 'package:find_my_pet_sg/views/mainpage.dart';
-import 'package:find_my_pet_sg/views/sign_up_form_screen.dart';
+import 'package:find_my_pet_sg/screens/forgot_password_screen.dart';
+import 'package:find_my_pet_sg/screens/googlesignupusername.dart';
+import 'package:find_my_pet_sg/screens/mainpage.dart';
+import 'package:find_my_pet_sg/screens/sign_up_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";

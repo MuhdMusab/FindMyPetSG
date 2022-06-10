@@ -107,10 +107,6 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
                         });
                         print(temp);
                         final chat = Chatroom.fromJson(otherChatters!);
-                        // print(chat.username);
-                        // print(chatrooms.values);
-                        //print(chatrooms.values.toList());
-                        //print(chatrooms.values.length.toString());
                         return ChatHeaderWidget(users: temp);
                       }
                     }

@@ -183,12 +183,13 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
               ],
             ),
             Text(widget._user!['name'].toString()),
-            // ElevatedButton(
-            //     onPressed: () {
-            //       chatroomDao.addChatroom(username, Chatroom('musab65143'));
-            //       //chatroomDao.saveChatroom(Chatroom('musab12345'));
-            //     },
-            //     child: Text('press', style: TextStyle(color: Colors.black),)),
+            ElevatedButton(
+                onPressed: () {
+                  chatroomDao.addChatroom(username, Chatroom('musab146'));
+                  chatroomDao.addChatroom(username, Chatroom('musab14'));
+                  //chatroomDao.saveChatroom(Chatroom('musab12345'));
+                },
+                child: Text('press', style: TextStyle(color: Colors.black),)),
           ],
         ),
       ),

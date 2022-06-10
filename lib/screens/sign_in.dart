@@ -20,9 +20,9 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
 
-  hasUsername() async {
-    await Future.delayed(Duration(seconds: 1));
-    if (await DatabaseMethods.containsEmail(FirebaseAuth.instance.currentUser!.email!)) {
+  hasUsername(String email) async {
+    //await Future.delayed(Duration(seconds: 1));
+    if (await DatabaseMethods.containsEmail(email)) {
       Navigator.pushReplacement(context, MaterialPageRoute(
         builder: (context) => MainPage(),
       ));
@@ -105,7 +105,7 @@ class _SignInState extends State<SignIn> {
                     onPressed: () {
                       final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                       provider.googleLogin();
-                      hasUsername();
+                      hasUsername(provider.getEmail());
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/modal/RealtimeUser.dart';
+import 'package:find_my_pet_sg/modal/chatroom.dart';
+import 'package:find_my_pet_sg/modal/chatroomdao.dart';
 import 'package:find_my_pet_sg/modal/realtimeuserdao.dart';
 
 class DatabaseMethods {
@@ -87,6 +89,9 @@ class DatabaseMethods {
   static void addRealtimeUser(String username) {
       final user = RealtimeUser(username);
       final realtimeUserDao = RealtimeUserDao();
+      final chatroomDao = ChatroomDao();
+      chatroomDao.addEmpty(username);
       realtimeUserDao.saveUser(user);
   }
+
 }

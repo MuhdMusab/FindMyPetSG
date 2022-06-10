@@ -10,11 +10,13 @@ class GoogleSignInProvider extends ChangeNotifier {
 
   GoogleSignInAccount? _user;
   GoogleSignInAccount get user => _user!;
+  String? _email;
 
   Future googleLogin() async {
     final googleUser = await googleSignIn.signIn();
     if (googleUser == null) return;
     _user = googleUser;
+    _email = _user!.email;
     final googleAuth = await googleUser.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
@@ -26,6 +28,9 @@ class GoogleSignInProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String getEmail() {
+    return _email!;
+  }
   Future logout() async {
     if (await googleSignIn.isSignedIn()) {
       await googleSignIn.disconnect();

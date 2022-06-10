@@ -3,6 +3,7 @@ import 'package:find_my_pet_sg/screens/search.dart';
 import 'package:find_my_pet_sg/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/modal/person.dart';
+import 'package:find_my_pet_sg/widgets/pop_up_icon.dart';
 
 class ChatHeaderWidget extends StatelessWidget {
   final List users;
@@ -88,10 +89,6 @@ class ChatHeaderWidget extends StatelessWidget {
                                 );
                               }
                             }
-                          // child: CircleAvatar(
-                          //   radius: 24,
-                          //   backgroundImage: AssetImage("assets/images/default_user_icon.png"),//NetworkImage(user.urlAvatar),
-                          // ),
                         ),
                       ),
                     );

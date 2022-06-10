@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 PreferredSizeWidget appBarMain(BuildContext context) {
   return AppBar(
+    automaticallyImplyLeading: false,
    centerTitle: true,
    title: Text(
      "FindMyPetSG",

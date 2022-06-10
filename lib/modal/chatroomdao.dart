@@ -18,4 +18,8 @@ class ChatroomDao {
     return _chatroomRef;
   }
 
+  void addEmpty(String user) {
+    _chatroomRef.child(user).set("");
+  }
+
 }

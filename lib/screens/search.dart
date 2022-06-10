@@ -1,6 +1,7 @@
 import 'package:find_my_pet_sg/modal/chatroom.dart';
 import 'package:find_my_pet_sg/modal/person.dart';
 import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
+import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,12 +38,12 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
   @override
   bool get wantKeepAlive => true;
 
-  void _sendMessage() {
+  void _sendMessage(Function callback) {
     if (_canSendMessage()) {
       final message = Message2(_messageInputController.text, DateTime.now());
       widget.messageDao.saveMessage(message);
       _messageInputController.clear();
-      setState(() {});
+      callback();
     }
   }
 
@@ -115,32 +116,10 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
 
             ),
             _getMessageList(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: TextField(
-                      keyboardType: TextInputType.text,
-                      controller: _messageInputController,
-                      onChanged: (text) => setState(() {}),
-                      onSubmitted: (input) {
-                        _sendMessage();
-                      },
-                      decoration:
-                      const InputDecoration(hintText: 'Enter new message'),
-                    ),
-                  ),
-                ),
-                IconButton(
-                    icon: Icon(_canSendMessage()
-                        ? CupertinoIcons.arrow_right_circle_fill
-                        : CupertinoIcons.arrow_right_circle),
-                    onPressed: () {
-                      _sendMessage();
-                    })
-              ],
+            MessageList(
+              sendMessage: _sendMessage,
+              textEditingController: _messageInputController,
+              canSendMessage: _canSendMessage,
             ),
           ],
         ),

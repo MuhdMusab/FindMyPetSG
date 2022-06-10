@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
 
   ChatroomDao _chatroomDao = ChatroomDao();
   ScrollController _scrollController = ScrollController();
-
+  TextEditingController userNameTextEditingController = TextEditingController();
   Widget _getMessageList() {
     return Expanded(
       child: FirebaseAnimatedList(
@@ -185,11 +185,49 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
             Text(widget._user!['name'].toString()),
             ElevatedButton(
                 onPressed: () {
-                  chatroomDao.addChatroom(username, Chatroom('musab146'));
-                  chatroomDao.addChatroom(username, Chatroom('musab14'));
+                  chatroomDao.addChatroom(username,  Chatroom(userNameTextEditingController.text));
                   //chatroomDao.saveChatroom(Chatroom('musab12345'));
                 },
-                child: Text('press', style: TextStyle(color: Colors.black),)),
+                child: Text('press', style: TextStyle(color: Colors.black),)
+            ),
+            SizedBox(height: 10,),
+            TextFormField(
+              controller: userNameTextEditingController,
+              style: simpleBlackTextStyle(),
+              decoration: InputDecoration(
+                fillColor: Colors.grey.withOpacity(0.1),
+                filled: true,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 15,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                hintText: "username",
+                hintStyle: TextStyle(
+                  color: Colors.black54,
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -38,6 +38,7 @@ class _ExploreScreenState extends State<ExploreScreen>
     super.build(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.pink,
         onPressed: () {
           Navigator.push(
             context,
@@ -45,7 +46,11 @@ class _ExploreScreenState extends State<ExploreScreen>
           );
           // Navigator.pushNamed(context, CreatePostPage.route);
         },
-        child: new Icon(Icons.add, size: 40.0),
+        child: new Icon(
+          Icons.add,
+          size: 40.0,
+          color: Colors.white,
+        ),
         elevation: 8.0,
       ),
       body: Column(

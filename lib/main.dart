@@ -1,6 +1,5 @@
 import 'package:find_my_pet_sg/helper/authenticate.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
-import 'package:find_my_pet_sg/providers/user_provider.dart';
 import 'package:find_my_pet_sg/screens/mainpage.dart';
 import 'package:find_my_pet_sg/screens/verify_email_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,25 +32,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => UserProvider(),
+    return ChangeNotifierProvider(
+      create: (context) => GoogleSignInProvider(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Colors.white,
+          scaffoldBackgroundColor: Colors.white,
+          primarySwatch: white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-      ],
-      child: ChangeNotifierProvider(
-        create: (context) => GoogleSignInProvider(),
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primaryColor: Colors.white,
-            scaffoldBackgroundColor: Colors.white,
-            primarySwatch: white,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: MainPage(),
-        ),
+        home: MainPage(),
       ),
     );
   }

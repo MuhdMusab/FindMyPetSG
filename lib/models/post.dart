@@ -8,6 +8,9 @@ class Post {
   final String date;
   final String postId;
   final String photoUrl;
+  final bool isMale;
+  final int age;
+  final int reward;
 
   const Post({
     required this.name,
@@ -17,6 +20,9 @@ class Post {
     required this.date,
     required this.postId,
     required this.photoUrl,
+    required this.isMale,
+    required this.age,
+    required this.reward,
   });
 
   Map<String, dynamic> toJson() => {
@@ -27,6 +33,9 @@ class Post {
         "date": date,
         "postId": postId,
         "photoUrl": photoUrl,
+        "isMale": isMale,
+        "age": age,
+        "reward": reward,
       };
 
   static Post fromSnap(DocumentSnapshot snap) {
@@ -40,6 +49,9 @@ class Post {
       date: snapshot['date'],
       postId: snapshot['postId'],
       photoUrl: snapshot['photoUrl'],
+      isMale: snapshot['isMale'],
+      age: snapshot['age'],
+      reward: snapshot['reward'],
     );
   }
 }

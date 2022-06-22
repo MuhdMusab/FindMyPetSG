@@ -53,16 +53,16 @@ class _ImageSliderCarouselState extends State<ImageSliderCarousel> {
           ),
           Container(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
                 children: [
-                  Column(
-                    children: [
-                      SizedBox(height: 170),
-                      buildIndicator(),
-                    ],
-                  ),
+                  SizedBox(height: 170),
+                  buildIndicator(),
                 ],
-              ))
+              ),
+            ],
+          ))
         ],
       ),
     );

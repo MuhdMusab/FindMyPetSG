@@ -28,6 +28,7 @@ class _CustomMadeButtonState extends State<CustomMadeButton> {
       height: 50,
       width: 370,
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Colors.pink),
         onPressed: widget.onPressed,
         child: Center(
           child: widget.isLoading

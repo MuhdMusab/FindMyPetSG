@@ -8,8 +8,16 @@ import '../models/post.dart';
 
 class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Future<String> uploadPost(String description, Uint8List file, String name,
-      String location, String breed, String date) async {
+  Future<String> uploadPost(
+      String description,
+      Uint8List file,
+      String name,
+      String location,
+      String breed,
+      String date,
+      int reward,
+      int age,
+      bool isMale) async {
     // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
     String res = "Some error occurred";
     try {
@@ -24,6 +32,9 @@ class FireStoreMethods {
         breed: breed,
         postId: postId,
         photoUrl: photoUrl,
+        reward: reward,
+        age: age,
+        isMale: isMale,
       );
       _firestore.collection('posts').doc(postId).set(post.toJson());
       res = "success";

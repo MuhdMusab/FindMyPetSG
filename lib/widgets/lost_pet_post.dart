@@ -7,7 +7,6 @@ import 'package:find_my_pet_sg/widgets/arrow_back_button_2.dart';
 import 'package:find_my_pet_sg/widgets/image_slider_carousel.dart';
 import 'package:find_my_pet_sg/widgets/noncurved_image_slider_carousel.dart';
 import 'package:find_my_pet_sg/models/user.dart' as model;
-import '../providers/user_provider.dart';
 import '../services/firestore_methods.dart';
 import '../utils/showSnackBar.dart';
 
@@ -111,8 +110,7 @@ class _LostPetPostState extends State<LostPetPost> {
                               ),
                             ),
                           ),
-                          // widget.isMale
-                          true
+                          widget.snap['isMale']
                               ? Container(
                                   height: 20,
                                   width: 20,
@@ -162,8 +160,7 @@ class _LostPetPostState extends State<LostPetPost> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      true
-                          // widget.reward > 0
+                      widget.snap['reward'] > 0
                           ? Padding(
                               padding: const EdgeInsets.only(
                                   right: 4.0, bottom: 4.0),
@@ -175,14 +172,14 @@ class _LostPetPostState extends State<LostPetPost> {
                                       color: Colors.green,
                                       borderRadius: BorderRadius.circular(8.0)),
                                   child: Center(
-                                      // child: Text(
-                                      //   '\$' + widget.reward.toString(),
-                                      //   style: TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontSize: 18,
-                                      //   ),
-                                      // ),
-                                      )),
+                                    child: Text(
+                                      '\$' + widget.snap['reward'].toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  )),
                             )
                           : Container(),
                     ],
@@ -248,8 +245,7 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                   ),
                 ),
               ),
-              // widget.lostPetPost.isMale
-              true
+              widget.lostPetPost.snap['isMale']
                   ? Container(
                       height: 20,
                       width: 20,
@@ -285,12 +281,30 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(widget.lostPetPost.snap['location']),
+                Text("Location: " + widget.lostPetPost.snap['location']),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 8.0, top: 20),
+            padding: const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Age: " + widget.lostPetPost.snap['age'].toString()),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Breed: " + widget.lostPetPost.snap['breed']),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
             child: Row(
               children: [
                 Text(
@@ -329,8 +343,7 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  // widget.lostPetPost.reward > 0
-                  true
+                  widget.lostPetPost.snap['reward'] > 0
                       ? Padding(
                           padding: const EdgeInsets.only(
                               left: 8.0, right: 4.0, bottom: 4.0),
@@ -341,14 +354,16 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                                   color: Colors.green,
                                   borderRadius: BorderRadius.circular(8.0)),
                               child: Center(
-                                  // child: Text(
-                                  //   '\$' + widget.lostPetPost.reward.toString(),
-                                  //   style: TextStyle(
-                                  //     color: Colors.white,
-                                  //     fontSize: 18,
-                                  //   ),
-                                  // ),
-                                  )),
+                                child: Text(
+                                  '\$' +
+                                      widget.lostPetPost.snap['reward']
+                                          .toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              )),
                         )
                       : Container(),
                 ],

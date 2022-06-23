@@ -37,7 +37,7 @@ class _NonCurvedImageSliderCarouselState
                 options: CarouselOptions(
                   enableInfiniteScroll: false,
                   viewportFraction: 1,
-                  height: 250,
+                  height: 400,
                   onPageChanged: (index, reason) =>
                       setState(() => activeIndex = index),
                 ),
@@ -52,16 +52,16 @@ class _NonCurvedImageSliderCarouselState
         ),
         Container(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
               children: [
-                Column(
-                  children: [
-                    SizedBox(height: 210),
-                    buildIndicator(),
-                  ],
-                ),
+                SizedBox(height: 360),
+                buildIndicator(),
               ],
-            ))
+            ),
+          ],
+        ))
       ],
     );
   }

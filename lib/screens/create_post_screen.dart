@@ -141,6 +141,35 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     });
   }
 
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(DateTime.now().year, 12, 31),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.pink,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    ).then((value) {
+      if (value != null) {
+        setState(() {
+          _dateController.text = value.day.toString() +
+              "/" +
+              value.month.toString() +
+              "/" +
+              value.year.toString();
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,14 +185,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       children: [
                         _file != null
                             ? CircleAvatar(
-                          radius: 64,
-                          backgroundImage: MemoryImage(_file!),
-                        )
+                                radius: 64,
+                                backgroundImage: MemoryImage(_file!),
+                              )
                             : const CircleAvatar(
-                          radius: 64,
-                          backgroundImage: NetworkImage(
-                              'https://i.pinimg.com/originals/f9/58/18/f95818f914844d2b1cf7a45b232061d1.jpg'),
-                        ),
+                                radius: 64,
+                                backgroundImage: NetworkImage(
+                                    'https://i.pinimg.com/originals/f9/58/18/f95818f914844d2b1cf7a45b232061d1.jpg'),
+                              ),
                         Positioned(
                           bottom: -10,
                           left: 80,
@@ -285,14 +314,50 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     maxLength: 20,
                     maxLines: 1,
                   ),
-                  CustomTextfield2(
-                    infoText: "Date*",
-                    hintText: "Date",
-                    textInputType: TextInputType.datetime,
-                    textEditingController: _dateController,
-                    inputFormatters: [],
-                    maxLength: 20,
-                    maxLines: 1,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 12.0, right: 12.0, bottom: 20.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("Date*"),
+                          ],
+                        ),
+                        Container(
+                          color: Color(0xffF0F0F0),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(4.0),
+                              onTap: _showDatePicker,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      color: Colors.transparent,
+                                    ),
+                                    height: 30,
+                                    width: 370,
+                                  ),
+                                  Positioned(
+                                    top: 2,
+                                    left: 2,
+                                    child: Text(
+                                      _dateController.text,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 20),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   RewardTextfield(
                     infoText: "Reward",

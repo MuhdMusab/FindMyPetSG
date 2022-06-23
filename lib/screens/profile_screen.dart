@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/settings_screen.dart';
+import 'package:find_my_pet_sg/services/database.dart';
+import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/services/storage_service.dart';
 import 'package:find_my_pet_sg/screens/mainpage.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
@@ -12,6 +14,9 @@ import 'package:provider/provider.dart';
 import 'package:find_my_pet_sg/modal/chatroom.dart';
 import 'package:find_my_pet_sg/modal/chatroomdao.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class ProfileScreen extends StatefulWidget {
   QueryDocumentSnapshot<Object?>? _user;
@@ -27,6 +32,13 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveClientMixin<ProfileScreen> {
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tz.initializeTimeZones();
+  }
 
   ChatroomDao _chatroomDao = ChatroomDao();
   ScrollController _scrollController = ScrollController();
@@ -184,9 +196,10 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
             ),
             Text(widget._user!['name'].toString()),
             ElevatedButton(
-                onPressed: () {
-                  chatroomDao.addChatroom(username,  Chatroom(userNameTextEditingController.text));
-                  //chatroomDao.saveChatroom(Chatroom('musab12345'));
+                onPressed: () async {
+                  //chatroomDao.addChatroom(username,  Chatroom(userNameTextEditingController.text));
+                  //chatroomDao.addChatroom(userNameTextEditingController.text,  Chatroom(username));
+                  NotificationService().showNotification(1, 'title', 'body', 5);
                 },
                 child: Text('press', style: TextStyle(color: Colors.black),)
             ),

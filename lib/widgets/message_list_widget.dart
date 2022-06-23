@@ -1,16 +1,35 @@
+
+
+import 'package:find_my_pet_sg/modal/chatroom.dart';
+import 'package:find_my_pet_sg/modal/person.dart';
+import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
+import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
+import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
+import 'package:find_my_pet_sg/widgets/message_widget2.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:find_my_pet_sg/helper/homehelper.dart';
+import 'package:provider/provider.dart';
+import 'package:find_my_pet_sg/modal/messages.dart';
+import 'package:intl/intl.dart';
+import 'package:find_my_pet_sg/widgets/widget.dart';
+import 'package:find_my_pet_sg/modal/message2.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:find_my_pet_sg/modal/messagedao.dart';
+import 'package:find_my_pet_sg/widgets/message_widget.dart';
+import 'package:flutter/scheduler.dart';
 
 class MessageList extends StatefulWidget {
-  Function? sendMessage;
-  TextEditingController? textEditingController;
-  Function? canSendMessage;
+  final messageDao;
+  final ScrollController scrollController;
 
-  MessageList({
-    Key? key,
-    this.sendMessage,
-    this.textEditingController,
-    this.canSendMessage,
+  const MessageList({
+    required this.messageDao,
+    required this.scrollController,
+    key,
   }) : super(key: key);
 
   @override
@@ -18,37 +37,20 @@ class MessageList extends StatefulWidget {
 }
 
 class _MessageListState extends State<MessageList> {
-  void callback() {
-    setState(() {});
-  }
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: TextField(
-              keyboardType: TextInputType.text,
-              controller: widget.textEditingController,
-              onSubmitted: (input) {
-
-                widget.sendMessage!(callback);
-              },
-              decoration:
-              const InputDecoration(hintText: 'Enter new message'),
-            ),
-          ),
-        ),
-        IconButton(
-            icon: Icon(widget.canSendMessage!()
-                ? CupertinoIcons.arrow_right_circle_fill
-                : CupertinoIcons.arrow_right_circle),
-            onPressed: () {
-              widget.sendMessage!(callback);
-            })
-      ],
+    return Expanded(
+      child: FirebaseAnimatedList(
+        physics: BouncingScrollPhysics(),
+        controller: widget.scrollController,
+        query: widget.messageDao.getOwnMessageQuery(),
+        itemBuilder: (context, snapshot, animation, index) {
+          final json = snapshot.value as Map<dynamic, dynamic>;
+          final message = Message2.fromJson(json);
+          return MessageWidget2(message: message.text, isMe: message.isMe, date: message.date, messageDao: widget.messageDao);
+        },
+      ),
     );
   }
 }
+

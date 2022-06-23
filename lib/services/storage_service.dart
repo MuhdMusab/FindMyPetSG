@@ -11,21 +11,20 @@ class Storage {
     this._username = username;
   }
 
-  Future<void> uploadFile(
-        String filePath,
-        String fileName,
-      ) async {
-      File file = File(filePath);
+  Future<void> uploadFile(String filePath,
+      String fileName,) async {
+    File file = File(filePath);
 
-      try {
-        await storage.ref('profile pics/$_username/$fileName').putFile(file);
-      } on firebase_core.FirebaseException catch (e) {
-        print(e);
-      }
+    try {
+      await storage.ref('profile pics/$_username/$fileName').putFile(file);
+    } on firebase_core.FirebaseException catch (e) {
+      print(e);
+    }
   }
 
   Future<firebase_storage.ListResult> listFiles() async {
-    firebase_storage.ListResult results = await storage.ref('profile pics/$_username').listAll();
+    firebase_storage.ListResult results = await storage.ref(
+        'profile pics/$_username').listAll();
     results.items.forEach((firebase_storage.Reference ref) {
       print('Found file: $ref');
     });
@@ -33,6 +32,8 @@ class Storage {
   }
 
   Future<String> downloadURL() async {
-    return await storage.ref('profile pics/$_username/$_username' + '_profile_picture').getDownloadURL();
+    return await storage.ref(
+        'profile pics/$_username/$_username' + '_profile_picture')
+        .getDownloadURL();
   }
 }

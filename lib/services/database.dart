@@ -11,6 +11,7 @@ class DatabaseMethods {
     });
   }
 
+
   Future<QuerySnapshot> getUserInfo(String email) async {
     return FirebaseFirestore.instance
         .collection("users")
@@ -92,6 +93,13 @@ class DatabaseMethods {
       final chatroomDao = ChatroomDao();
       chatroomDao.addEmpty(username);
       realtimeUserDao.saveUser(user);
+  }
+
+  getUsernameFromEmail(String email) async {
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .where('email', isEqualTo : email)
+        .snapshots();
   }
 
 }

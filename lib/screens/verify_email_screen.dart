@@ -87,6 +87,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   @override
   Widget build(BuildContext context) {
     if (_isEmailVerified) {
+      dispose();
       moveToHome();
     }
     return Scaffold(

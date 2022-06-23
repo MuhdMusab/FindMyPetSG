@@ -5,9 +5,10 @@ import 'package:intl/intl.dart';
 class MessageWidget extends StatelessWidget {
   final String message;
   final DateTime date;
-
-  MessageWidget(this.message, this.date);
-
+  final bool isMe;
+  
+  MessageWidget(this.message, this.date, this.isMe);
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,7 +24,7 @@ class MessageWidget extends StatelessWidget {
                           offset: Offset(0, 1.0))
                     ],
                     borderRadius: BorderRadius.circular(50.0),
-                    color: Color(0xfff26579)),
+                    color: isMe ? Color(0xfff26579) : Colors.grey),
                 child: MaterialButton(
                     disabledTextColor: Colors.black87,
                     padding: EdgeInsets.only(left: 18),

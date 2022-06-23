@@ -2,6 +2,7 @@ import 'package:find_my_pet_sg/helper/authenticate.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/mainpage.dart';
 import 'package:find_my_pet_sg/screens/verify_email_screen.dart';
+import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,6 +10,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }

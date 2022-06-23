@@ -2,16 +2,69 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:find_my_pet_sg/modal/message2.dart';
 
 class MessageDao {
-  final DatabaseReference _messagesRef =
-  FirebaseDatabase(databaseURL: 'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
-  .ref().child('messages');
+  String? ownUsername;
+  String? otherUsername;
 
-  void saveMessage(Message2 message) {
-    _messagesRef.push().set(message.toJson());
+  MessageDao(String ownUsername, String otherUsername) {
+    this.ownUsername = ownUsername;
+    this.otherUsername = otherUsername;
   }
 
-  Query getMessageQuery() {
-    return _messagesRef;
+  DatabaseReference getOwnMessageRef() {
+    return FirebaseDatabase(
+        databaseURL: 'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
+        .ref().child(ownUsername!).child(otherUsername!).child('messages');
   }
 
+  DatabaseReference getOwnRef() {
+    return FirebaseDatabase(
+        databaseURL: 'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
+        .ref().child(ownUsername!);
+  }
+
+  DatabaseReference getOtherMessageRef() {
+    return FirebaseDatabase(
+        databaseURL: 'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
+        .ref().child(otherUsername!).child(ownUsername!).child('messages');
+  }
+
+  void saveOwnMessage(Message2 message) {
+    getOwnMessageRef().push().set(message.toJson());
+  }
+
+  void saveOtherMessage(Message2 message) {
+    getOtherMessageRef().push().set(message.toJson());
+  }
+
+  Query getOwnMessageQuery() {
+    return getOwnMessageRef();
+  }
+
+  Query getOtherMessageQuery() {
+    return getOtherMessageRef();
+  }
+
+  Query getOwnChatQuery() {
+    return FirebaseDatabase(
+        databaseURL: 'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
+        .ref().child(ownUsername!).child(otherUsername!);
+  }
+
+  Query getOtherChatQuery() {
+    return FirebaseDatabase(
+        databaseURL: 'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
+        .ref().child(otherUsername!).child(ownUsername!);
+  }
+
+  Future<DataSnapshot> getMostRecentMessage() async {
+    return getOwnMessageQuery().orderByKey().limitToLast(1).get();
+  }
+
+  // Future<DataSnapshot> getMostRecentMessage2() async {
+  //   return getOwnMessageQuery().onChildAdded.listen((event) { return event;});
+  // }
+
+  // void temp() {
+  //   getOwnMessageQuery().onChildAdded.listen((event) { });
+  // }
 }

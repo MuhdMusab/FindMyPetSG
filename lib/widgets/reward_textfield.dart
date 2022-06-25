@@ -5,7 +5,6 @@ class RewardTextfield extends StatefulWidget {
   final String infoText;
   final String hintText;
   final int maxLines;
-  final int maxLength;
   final TextEditingController textEditingController;
   final TextInputType textInputType;
   const RewardTextfield(
@@ -15,7 +14,7 @@ class RewardTextfield extends StatefulWidget {
         required this.textInputType,
         required this.infoText,
         required this.maxLines,
-        required this.maxLength})
+        })
       : super(key: key);
 
   @override
@@ -41,7 +40,6 @@ class _RewardTextfield extends State<RewardTextfield> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 style: TextStyle(fontSize: 20),
                 maxLines: widget.maxLines,
-                maxLength: widget.maxLength,
                 controller: widget.textEditingController,
                 keyboardType: widget.textInputType,
                 cursorColor: Colors.black,
@@ -50,7 +48,7 @@ class _RewardTextfield extends State<RewardTextfield> {
                   filled: true,
                   fillColor: Color(0xffF0F0F0),
                   contentPadding:
-                  EdgeInsets.only(left: 16.0, top: 6.0, bottom: 6.0),
+                  EdgeInsets.only(left: 25.0, top: 6.0, bottom: 6.0),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4.0),
                     borderSide: BorderSide(color: Colors.pink, width: 1.0),
@@ -72,8 +70,8 @@ class _RewardTextfield extends State<RewardTextfield> {
                 ),
               ),
               Positioned(
-                left: -4,
-                bottom: 26,
+                left: 0,
+                bottom: 4,
                 child: Icon(
                   Icons.attach_money_sharp,
                   color: Colors.green,

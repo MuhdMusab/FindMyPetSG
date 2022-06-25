@@ -5,7 +5,6 @@ class CustomTextfield2 extends StatefulWidget {
   final String infoText;
   final String hintText;
   final int maxLines;
-  final int maxLength;
   final TextEditingController textEditingController;
   final TextInputType textInputType;
   final List<TextInputFormatter> inputFormatters;
@@ -17,7 +16,7 @@ class CustomTextfield2 extends StatefulWidget {
         required this.textInputType,
         required this.infoText,
         required this.maxLines,
-        required this.maxLength})
+        })
       : super(key: key);
 
   @override
@@ -28,7 +27,7 @@ class _CustomTextfield2 extends State<CustomTextfield2> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 4.0),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 14.0),
       child: Column(
         children: [
           Row(
@@ -41,7 +40,6 @@ class _CustomTextfield2 extends State<CustomTextfield2> {
             inputFormatters: widget.inputFormatters,
             style: TextStyle(fontSize: 20),
             maxLines: widget.maxLines,
-            maxLength: widget.maxLength,
             controller: widget.textEditingController,
             keyboardType: widget.textInputType,
             cursorColor: Colors.black,

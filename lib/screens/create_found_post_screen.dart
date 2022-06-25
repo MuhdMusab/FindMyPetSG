@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:find_my_pet_sg/widgets/upload_slider_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -101,6 +102,12 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
     );
   }
 
+  void setImageCallback(List<File> files) {
+    setState(() {
+      _files = files;
+    });
+  }
+
   void postImage() async {
     setState(() {
       isLoading = true;
@@ -158,34 +165,11 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
             Expanded(
               child: ListView(
                 children: [
+                  SizedBox(height: 10,),
                   Center(
                     child: Stack(
                       children: [
-                        _files != null
-                            ? CircleAvatar(
-                          radius: 64,
-                          backgroundImage: MemoryImage(_files![0].readAsBytesSync()),
-                        )
-                            : const CircleAvatar(
-                          radius: 64,
-                          backgroundImage: NetworkImage(
-                              'https://i.pinimg.com/originals/f9/58/18/f95818f914844d2b1cf7a45b232061d1.jpg'),
-                        ),
-                        Positioned(
-                          bottom: 0.1,
-                          left: 80,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: Colors.pink,
-                            ),
-                            child: IconButton(
-                              color: Colors.white,
-                              onPressed: () => _selectImage(context),
-                              icon: const Icon(Icons.add_a_photo),
-                            ),
-                          ),
-                        )
+                        UploadSliderCarousel(setImageCallback: setImageCallback),
                       ],
                     ),
                   ),
@@ -196,7 +180,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                     textInputType: TextInputType.name,
                     textEditingController: _nameController,
                     inputFormatters: [],
-                    maxLength: 20,
                     maxLines: 1,
                   ),
                   Padding(
@@ -272,7 +255,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                     textInputType: TextInputType.text,
                     textEditingController: _locationController,
                     inputFormatters: [],
-                    maxLength: 20,
                     maxLines: 1,
                   ),
                   CustomTextfield2(
@@ -281,7 +263,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                     textInputType: TextInputType.datetime,
                     textEditingController: _dateController,
                     inputFormatters: [],
-                    maxLength: 20,
                     maxLines: 1,
                   ),
                   CustomTextfield2(
@@ -290,7 +271,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                     textInputType: TextInputType.text,
                     textEditingController: _descriptionController,
                     inputFormatters: [],
-                    maxLength: 100,
                     maxLines: 10,
                   ),
                   Padding(

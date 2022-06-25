@@ -160,6 +160,35 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
     });
   }
 
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(DateTime.now().year, 12, 31),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.pink,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    ).then((value) {
+      if (value != null) {
+        setState(() {
+          _dateController.text = value.day.toString() +
+              "/" +
+              value.month.toString() +
+              "/" +
+              value.year.toString();
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -269,6 +298,51 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                     textEditingController: _locationController,
                     inputFormatters: [],
                     maxLines: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 12.0, right: 12.0, bottom: 20.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("Date*"),
+                          ],
+                        ),
+                        Container(
+                          color: Color(0xffF0F0F0),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(4.0),
+                              onTap: _showDatePicker,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      color: Colors.transparent,
+                                    ),
+                                    height: 30,
+                                    width: 370,
+                                  ),
+                                  Positioned(
+                                    top: 2,
+                                    left: 2,
+                                    child: Text(
+                                      _dateController.text,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 20),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   CustomTextfield2(
                     infoText: "Breed*",

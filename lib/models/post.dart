@@ -1,43 +1,58 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
+  final String type;
   final String name;
   final String location;
-  final String breed;
+  String? breed;
   final String description;
   final String date;
   final String postId;
-  final String photoUrl;
+  final List<String> photoUrls;
   final bool isMale;
-  final int age;
-  final int reward;
+  int? age;
+  int? reward;
   final String username;
 
-  const Post({
+  Post({
+    required this.type,
     required this.name,
     required this.location,
-    required this.breed,
+    this.breed,
     required this.description,
     required this.date,
     required this.postId,
-    required this.photoUrl,
+    required this.photoUrls,
     required this.isMale,
-    required this.age,
-    required this.reward,
+    this.age,
+    this.reward,
     required this.username,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> lostToJson() => {
+    "type": type,
     "name": name,
     "location": location,
     "breed": breed,
     "description": description,
     "date": date,
     "postId": postId,
-    "photoUrl": photoUrl,
+    "photoUrls": photoUrls,
     "isMale": isMale,
     "age": age,
     "reward": reward,
+    "username": username,
+  };
+
+  Map<String, dynamic> foundToJson() => {
+    "type": type,
+    "name": name,
+    "location": location,
+    "description": description,
+    "date": date,
+    "postId": postId,
+    "photoUrls": photoUrls,
+    "isMale": isMale,
     "username": username,
   };
 
@@ -45,13 +60,14 @@ class Post {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return Post(
+      type: snapshot['type'],
       name: snapshot['name'],
       location: snapshot['location'],
       breed: snapshot['breed'],
       description: snapshot['description'],
       date: snapshot['date'],
       postId: snapshot['postId'],
-      photoUrl: snapshot['photoUrl'],
+      photoUrls: snapshot['photoUrls'],
       isMale: snapshot['isMale'],
       age: snapshot['age'],
       reward: snapshot['reward'],

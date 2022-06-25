@@ -44,7 +44,10 @@ class _ImageSliderCarouselState extends State<ImageSliderCarousel> {
                   ),
                   itemBuilder: (context, index, realIndex) {
                     // final ImageInCarousel = widget.imageArray[index];
-                    return Image.network(widget.imageArray[index]);
+                    return Image.network(
+                      widget.imageArray[index],
+                      fit: BoxFit.cover,
+                    );
                     // return buildImage(ImageInCarousel, index);
                   },
                 ),

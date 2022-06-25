@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -16,20 +17,20 @@ import '../widgets/custom_textfield_2.dart';
 import '../widgets/reward_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CreatePostScreen extends StatefulWidget {
+class CreateFoundPostScreen extends StatefulWidget {
   static String route = "CreatePostPage";
   QueryDocumentSnapshot<Object?>? _user;
 
-  CreatePostScreen(QueryDocumentSnapshot<Object?>? user) {
+  CreateFoundPostScreen(QueryDocumentSnapshot<Object?>? user) {
     this._user = user;
   }
 
   @override
-  State<CreatePostScreen> createState() => _CreatePostScreenState();
+  State<CreateFoundPostScreen> createState() => _CreateFoundPostScreenState();
 }
 
-class _CreatePostScreenState extends State<CreatePostScreen> {
-  Uint8List? _file;
+class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
+  List<File>? _files;
   bool isMale = false;
   bool isLoading = false;
   final TextEditingController _descriptionController = TextEditingController();
@@ -38,7 +39,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _rewardController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
 
   @override
   void dispose() {
@@ -49,7 +49,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     _nameController.dispose();
     _dateController.dispose();
     _rewardController.dispose();
-    _ageController.dispose();
   }
 
   _selectImage(BuildContext parentContext) async {
@@ -64,9 +63,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: const Text('Take a photo'),
                 onPressed: () async {
                   Navigator.pop(context);
-                  Uint8List file = await pickImage(ImageSource.camera);
+                  List<XFile>? files = await ImagePicker.platform.getMultiImage();
+                  List<File> croppedFiles = [];
+                  for (XFile file in files!) {
+                    final File currentFile = File(file.path);
+                    croppedFiles.add(await cropSquareImage(currentFile));
+                  }
                   setState(() {
-                    _file = file;
+                    _files = croppedFiles;
                   });
                 }),
             SimpleDialogOption(
@@ -74,9 +78,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: const Text('Choose from Gallery'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.gallery);
+                  List<PickedFile>? files = await ImagePicker.platform.pickMultiImage();
+                  List<File> croppedFiles = [];
+                  for (PickedFile file in files!) {
+                    final File currentFile = File(file.path);
+                    croppedFiles.add(await cropSquareImage(currentFile));
+                  }
                   setState(() {
-                    _file = file;
+                    _files = croppedFiles;
                   });
                 }),
             SimpleDialogOption(
@@ -99,15 +108,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     // start the loading
     try {
       // upload to storage and db
-      String res = await FireStoreMethods().uploadPost(
+      String res = await FireStoreMethods().uploadFoundPost(
+        "found",
         _descriptionController.text.trim(),
-        _file!,
+        _files!,
         _nameController.text.trim(),
         _locationController.text.trim(),
-        _breedController.text.trim(),
         _dateController.text.trim(),
-        int.parse(_rewardController.text.trim()),
-        int.parse(_ageController.text.trim()),
         isMale,
         widget._user!['name'].toString(),
       );
@@ -137,36 +144,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   void clearImage() {
     setState(() {
-      _file = null;
-    });
-  }
-
-  void _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(DateTime.now().year, 12, 31),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Colors.pink,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    ).then((value) {
-      if (value != null) {
-        setState(() {
-          _dateController.text = value.day.toString() +
-              "/" +
-              value.month.toString() +
-              "/" +
-              value.year.toString();
-        });
-      }
+      _files = null;
     });
   }
 
@@ -183,18 +161,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   Center(
                     child: Stack(
                       children: [
-                        _file != null
+                        _files != null
                             ? CircleAvatar(
-                                radius: 64,
-                                backgroundImage: MemoryImage(_file!),
-                              )
+                          radius: 64,
+                          backgroundImage: MemoryImage(_files![0].readAsBytesSync()),
+                        )
                             : const CircleAvatar(
-                                radius: 64,
-                                backgroundImage: NetworkImage(
-                                    'https://i.pinimg.com/originals/f9/58/18/f95818f914844d2b1cf7a45b232061d1.jpg'),
-                              ),
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                              'https://i.pinimg.com/originals/f9/58/18/f95818f914844d2b1cf7a45b232061d1.jpg'),
+                        ),
                         Positioned(
-                          bottom: -10,
+                          bottom: 0.1,
                           left: 80,
                           child: Container(
                             decoration: BoxDecoration(
@@ -211,6 +189,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 10,),
                   CustomTextfield2(
                     infoText: "Name*",
                     hintText: "Name",
@@ -218,15 +197,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     textEditingController: _nameController,
                     inputFormatters: [],
                     maxLength: 20,
-                    maxLines: 1,
-                  ),
-                  CustomTextfield2(
-                    infoText: "Age*",
-                    hintText: "Age",
-                    textInputType: TextInputType.number,
-                    textEditingController: _ageController,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    maxLength: 3,
                     maxLines: 1,
                   ),
                   Padding(
@@ -306,65 +276,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     maxLines: 1,
                   ),
                   CustomTextfield2(
-                    infoText: "Breed*",
-                    hintText: "Breed",
-                    textInputType: TextInputType.text,
-                    textEditingController: _breedController,
+                    infoText: "Date*",
+                    hintText: "Date",
+                    textInputType: TextInputType.datetime,
+                    textEditingController: _dateController,
                     inputFormatters: [],
                     maxLength: 20,
-                    maxLines: 1,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 12.0, right: 12.0, bottom: 20.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Date*"),
-                          ],
-                        ),
-                        Container(
-                          color: Color(0xffF0F0F0),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(4.0),
-                              onTap: _showDatePicker,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4.0),
-                                      color: Colors.transparent,
-                                    ),
-                                    height: 30,
-                                    width: 370,
-                                  ),
-                                  Positioned(
-                                    top: 2,
-                                    left: 2,
-                                    child: Text(
-                                      _dateController.text,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 20),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  RewardTextfield(
-                    infoText: "Reward",
-                    hintText: "Reward",
-                    textInputType: TextInputType.datetime,
-                    textEditingController: _rewardController,
-                    maxLength: 5,
                     maxLines: 1,
                   ),
                   CustomTextfield2(

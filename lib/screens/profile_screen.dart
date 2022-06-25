@@ -43,20 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
   ChatroomDao _chatroomDao = ChatroomDao();
   ScrollController _scrollController = ScrollController();
   TextEditingController userNameTextEditingController = TextEditingController();
-  Widget _getMessageList() {
-    return Expanded(
-      child: FirebaseAnimatedList(
-        controller: _scrollController,
-        query: _chatroomDao.getUserQuery(),
-        itemBuilder: (context, snapshot, animation, index) {
-          final json = snapshot.value as Map<dynamic, dynamic>;
-          final message = Chatroom.fromJson(json);
-          print(message.username);
-          return Text('data');
-        },
-      ),
-    );
-  }
 
   Future showImageSource(BuildContext context, Storage storage, String username) async {
     return showModalBottomSheet(

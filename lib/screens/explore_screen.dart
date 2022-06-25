@@ -1,10 +1,12 @@
+import 'package:find_my_pet_sg/widgets/custom_dialog_box.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../widgets/lost_pet_post.dart';
+import '../widgets/found_pet_post.dart';
 import '../widgets/search_textfield.dart';
-import 'create_post_screen.dart';
+import 'create_lost_post_screen.dart';
 
 const TextStyle _textStyle = TextStyle(
   fontSize: 40,
@@ -40,11 +42,10 @@ class _ExploreScreenState extends State<ExploreScreen>
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.pink,
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreatePostScreen(widget._user)),
-          );
-          // Navigator.pushNamed(context, CreatePostPage.route);
+          showDialog(context: context, builder: (BuildContext context) {
+            return CustomDialogBox(title: "Have you Lost or Found a pet?", descriptions: "poop", text: "yes", user: widget._user);
+
+          });
         },
         child: new Icon(
           Icons.add,
@@ -80,10 +81,16 @@ class _ExploreScreenState extends State<ExploreScreen>
                 return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (ctx, index) => Container(
-                    child: LostPetPost(
+                    child: snapshot.data!.docs[index].data()['type'] == "lost"
+                      ? LostPetPost(
                       snap: snapshot.data!.docs[index].data(),
                       user: widget._user,
-                    ),
+                    )
+                        : FoundPetPost(
+                      snap: snapshot.data!.docs[index].data(),
+                      user: widget._user,
+                    )
+                    ,
                   ),
                 );
               },

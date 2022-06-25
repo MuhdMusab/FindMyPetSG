@@ -44,7 +44,10 @@ class _NonCurvedImageSliderCarouselState
                 itemBuilder: (context, index, realIndex) {
                   // final ImageInCarousel = widget.imageArray[index];
                   // return buildImage(ImageInCarousel, index);
-                  return Image.network(widget.imageArray[index]);
+                  return Image.network(
+                      widget.imageArray[index],
+                    fit: BoxFit.cover,
+                  );
                 },
               ),
             ],

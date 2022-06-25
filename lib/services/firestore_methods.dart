@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,9 +9,10 @@ import '../models/post.dart';
 
 class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Future<String> uploadPost(
+  Future<String> uploadLostPost(
+      String type,
       String description,
-      Uint8List file,
+      List<File> files,
       String name,
       String location,
       String breed,
@@ -22,23 +24,66 @@ class FireStoreMethods {
     // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
     String res = "Some error occurred";
     try {
-      String photoUrl =
-      await StorageMethods().uploadImageToStorage('posts', file, true);
+      List<String> photoUrls = [];
+      for (File file in files) {
+        String photoUrl =
+        await StorageMethods().uploadImageToStorage('posts', file.readAsBytesSync(), true);
+        photoUrls.add(photoUrl);
+      }
       String postId = const Uuid().v1(); // creates unique id based on time
       Post post = Post(
+        type: type,
         description: description,
         name: name,
         date: date,
         location: location,
         breed: breed,
         postId: postId,
-        photoUrl: photoUrl,
+        photoUrls: photoUrls,
         reward: reward,
         age: age,
         isMale: isMale,
         username: username,
       );
-      _firestore.collection('posts').doc(postId).set(post.toJson());
+      _firestore.collection('posts').doc(postId).set(post.lostToJson());
+      res = "success";
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  Future<String> uploadFoundPost(
+      String type,
+      String description,
+      List<File> files,
+      String name,
+      String location,
+      String date,
+      bool isMale,
+      String username,) async {
+    // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
+    String res = "Some error occurred";
+    try {
+      List<String> photoUrls = [];
+      for (File file in files) {
+        String photoUrl =
+        await StorageMethods().uploadImageToStorage('posts', file.readAsBytesSync(), true);
+        photoUrls.add(photoUrl);
+      }
+      String postId = const Uuid().v1(); // creates unique id based on time
+      Post post = Post(
+        type: type,
+        description: description,
+        name: name,
+        date: date,
+        location: location,
+        postId: postId,
+        photoUrls: photoUrls,
+        isMale: isMale,
+        username: username,
+      );
+      _firestore.collection('posts').doc(postId).set(post.foundToJson());
       res = "success";
     } catch (err) {
       res = err.toString();

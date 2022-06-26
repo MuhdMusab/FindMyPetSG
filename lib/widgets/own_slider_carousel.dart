@@ -27,6 +27,7 @@ class OwnSliderCarousel extends StatefulWidget {
   final String username;
   List<dynamic>? posts;
   Function callback;
+  final String postId;
 
   OwnSliderCarousel({
     Key? key,
@@ -34,6 +35,7 @@ class OwnSliderCarousel extends StatefulWidget {
     required this.username,
     required this.posts,
     required this.callback,
+    required this.postId,
   }) : super(key: key);
 
   @override
@@ -64,7 +66,7 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                     File file = (await cropSquareImage(File(xfile!.path)));
                     final StorageMethods storageMethods = StorageMethods();
                     List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
-                    await DatabaseMethods.addPost(widget.username, urls[0], postIndex,);
+                    await DatabaseMethods.addImageToPost(widget.username, widget.postId, urls[0],);
                     await DatabaseMethods.addStorageReference(widget.username, urls[1], postIndex,);
                     widget.callback();
                   }
@@ -78,11 +80,11 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                     // do nothing
                   } else {
                     XFile? xfile = await ImagePicker.platform.getImageFromSource(
-                        source: ImageSource.camera);
+                        source: ImageSource.gallery);
                     File file = (await cropSquareImage(File(xfile!.path)));
                     final StorageMethods storageMethods = StorageMethods();
                     List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
-                    await DatabaseMethods.addPost(widget.username, urls[0], postIndex,);
+                    await DatabaseMethods.addImageToPost(widget.username, widget.postId, urls[0],);
                     await DatabaseMethods.addStorageReference(widget.username, urls[1], postIndex,);
                     widget.callback();
                   }
@@ -119,7 +121,7 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                   final StorageMethods storageMethods = StorageMethods();
                   storageMethods.deleteImageFromStorage(prevRef);
                   List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
-                  await DatabaseMethods.editPostAtIndex(widget.username, urls[0], postIndex, activeIndex);
+                  await DatabaseMethods.editPostAtIndex(widget.username, widget.postId, urls[0], activeIndex);
                   await DatabaseMethods.editStorageReferenceAtIndex(widget.username, urls[1], postIndex, activeIndex);
                   widget.callback();
                 }),
@@ -135,7 +137,7 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                   final StorageMethods storageMethods = StorageMethods();
                   storageMethods.deleteImageFromStorage(prevRef);
                   List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
-                  await DatabaseMethods.editPostAtIndex(widget.username, urls[0], postIndex, activeIndex);
+                  await DatabaseMethods.editPostAtIndex(widget.username, widget.postId, urls[0], activeIndex);
                   await DatabaseMethods.editStorageReferenceAtIndex(widget.username, urls[1], postIndex, activeIndex);
                   widget.callback();
                 }),

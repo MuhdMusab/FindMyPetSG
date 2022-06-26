@@ -91,6 +91,7 @@ class _SignUpFormState extends State<SignUpForm> {
             Map<String, dynamic> userInfoMap = {
               "email": emailTextEditingController.text,
               "name": userNameTextEditingController.text,
+              "profilePics": "",
               "posts": {},
               "storageRefs": {},
             };

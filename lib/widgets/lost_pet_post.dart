@@ -494,7 +494,7 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                     //do nothing
                   } else if ((await messageDao.getOwnChatQuery().get()).exists) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ChatScreen(username: ownUsername, messageDao: MessageDao(ownUsername, otherUsername),),
+                      builder: (context) => ChatScreen(username: otherUsername, messageDao: MessageDao(ownUsername, otherUsername),),
                     ));
                   } else {
                     final chatroomDao = ChatroomDao();
@@ -503,7 +503,7 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                     messageDao.getOwnChatQuery().ref.set("");
                     messageDao.getOtherChatQuery().ref.set("");
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ChatScreen(username: ownUsername, messageDao: MessageDao(ownUsername, otherUsername),),
+                      builder: (context) => ChatScreen(username: otherUsername, messageDao: MessageDao(ownUsername, otherUsername),),
                     ));
                   }
                 },

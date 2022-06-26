@@ -48,6 +48,7 @@ class _GoogleSignUpUsernameState extends State<GoogleSignUpUsername> {
         Map<String, dynamic> userInfoMap = {
           "name": userNameTextEditingController.text.trim(),
           "email": email,
+          "profilePics": "",
           "posts": {},
           "storageRefs": {},
         };

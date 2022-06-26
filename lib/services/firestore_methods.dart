@@ -26,14 +26,17 @@ class FireStoreMethods {
     String res = "Some error occurred";
     try {
       List<String> photoUrls = [];
+      int postLength = await DatabaseMethods.getPostsLength(username);
+      int storageRefsLength = await DatabaseMethods.getStorageReferenceLength(username);
       for (File file in files) {
         List<String> urls =
         await StorageMethods().uploadImageToStorage('posts', file.readAsBytesSync(),);
         print(await DatabaseMethods.getPostsLength(username));
-        await DatabaseMethods.addPost(username, urls[0], (await DatabaseMethods.getPostsLength(username)));
-        await DatabaseMethods.addStorageReference(username, urls[1], (await DatabaseMethods.getStorageReferenceLength(username)));
+        await DatabaseMethods.addPost(username, urls[0], postLength);
+        await DatabaseMethods.addStorageReference(username, urls[1], storageRefsLength);
         photoUrls.add(urls[0]);
       }
+
       String postId = const Uuid().v1(); // creates unique id based on time
       Post post = Post(
         type: type,
@@ -70,11 +73,14 @@ class FireStoreMethods {
     String res = "Some error occurred";
     try {
       List<String> photoUrls = [];
+      int postLength = await DatabaseMethods.getPostsLength(username);
+      int storageRefsLength = await DatabaseMethods.getStorageReferenceLength(username);
       for (File file in files) {
         List<String> urls =
         await StorageMethods().uploadImageToStorage('posts', file.readAsBytesSync(),);
         print(await DatabaseMethods.getPostsLength(username));
-        await DatabaseMethods.addPost(username, urls[0], (await DatabaseMethods.getPostsLength(username)));
+        await DatabaseMethods.addPost(username, urls[0], postLength);
+        await DatabaseMethods.addStorageReference(username, urls[1], storageRefsLength);
         photoUrls.add(urls[0]);
       }
 

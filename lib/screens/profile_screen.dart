@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/settings_screen.dart';
+import 'package:find_my_pet_sg/services/auth.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
@@ -22,6 +25,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import '../widgets/lost_pet_post.dart';
 import '../widgets/found_pet_post.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileScreen extends StatefulWidget {
   QueryDocumentSnapshot<Object?>? _user;
@@ -38,11 +42,22 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
   @override
   bool get wantKeepAlive => true;
 
+  StreamSubscription<DocumentSnapshot>? subscription;
+  List<DocumentSnapshot>? myList;
+
+  //final DocumentReference documentReference = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.);
+
+  @override
+  void dispose() {
+    subscription?.cancel();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
-
     tz.initializeTimeZones();
+
   }
 
   ChatroomDao _chatroomDao = ChatroomDao();
@@ -76,8 +91,9 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                 final fileName = '$username' + '_profile_picture';
 
                 storage.uploadFile(path, fileName);
+                String profilePicLink = await storage.downloadURL();
+                DatabaseMethods.editProfilePicLink(username, profilePicLink);
                 FilePickerStatus.done;
-                setState(() {});
               },
             ),
           ],
@@ -96,6 +112,14 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     final Storage storage = Storage(username);
     final image = Image.asset("assets/images/default_user_icon.png");
     final chatroomDao = ChatroomDao();
+    // final DocumentReference<Map<String, dynamic>> collectionReference = FirebaseFirestore.instance.collection('users').doc(username);
+    // subscription = collectionReference.snapshots().listen((datasnapshot) {
+    //   print("wasup" + datasnapshot.toString());
+    //   setState(() {
+    //     myList = datasnapshot.docs;
+    //   });
+    //   print("wasup" + myList.toString());
+    // });
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -132,11 +156,11 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                 ClipOval(
                   child: Material(
                     color: Colors.transparent,
-                    child:  //AssetImage("assets/images/default_user_icon.png",),
-                    FutureBuilder(
+                    child: FutureBuilder(
                         future: storage.downloadURL(),
                         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                           if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+
                             return Ink.image(
                               image: NetworkImage(snapshot.data!),
                               fit: BoxFit.cover,
@@ -198,7 +222,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
               ),
           ),
           SizedBox(height: 30,),
-          SizedBox(height: 10,),
           Padding(
             padding: EdgeInsets.only(left: 30),
             child: Align(
@@ -237,22 +260,37 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
             color: Colors.white,
           ),
           Expanded(
-            child: FutureBuilder<Map<String, dynamic>>(
-              future: DatabaseMethods.getUserPosts(username),
-              builder: (context,
-                  AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                    return ListView.builder(
+                        itemBuilder: (ctx, index) =>
+                        index < snapshot.data!.docs.length && snapshot.data!.docs[index].data()['username'] == username
+                            ? OwnSliderCarousel(postIndex: index, username: username,
+                              posts: snapshot.data!.docs[index].data()['photoUrls'], callback: _callback,
+                                postId: snapshot.data!.docs[index].data()['postId'])
+                            : Container(),
+                        itemCount: snapshot.data!.docs.length,
                   );
                 }
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (ctx, index) => OwnSliderCarousel(postIndex: index,
-                      username: username, posts: snapshot.data![index.toString()], callback: _callback),
-                );
-              },
             ),
+            // child: FutureBuilder<Map<String, dynamic>>(
+            //   future: DatabaseMethods.getUserPosts(username),
+            //   builder: (context,
+            //       AsyncSnapshot<Map<String, dynamic>> snapshot) {
+            //     if (snapshot.connectionState == ConnectionState.waiting) {
+            //       return const Center(
+            //         child: CircularProgressIndicator(),
+            //       );
+            //     }
+            //     return ListView.builder(
+            //       itemCount: snapshot.data!.length,
+            //       itemBuilder: (ctx, index) => OwnSliderCarousel(postIndex: index,
+            //           username: username, posts: snapshot.data![index.toString()], callback: _callback),
+            //     );
+            //   },
+            // ),
           ),
         ],
       ),

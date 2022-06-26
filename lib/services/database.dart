@@ -22,15 +22,18 @@ class DatabaseMethods {
     FirebaseFirestore.instance.collection("users").doc(username).update({"posts": mapOfPosts});
   }
 
-  static Future<void> editPostAtIndex(String username, String post, int mapIndex, int postIndex) async {
-    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(username).get();
-    Map<String, dynamic> mapOfPosts = snapshot['posts'];
-    if (mapOfPosts[mapIndex.toString()] == null) {
-      mapOfPosts[mapIndex.toString()] = [post];
-    } else {
-      mapOfPosts[mapIndex.toString()][postIndex] = post;
-    }
-    FirebaseFirestore.instance.collection("users").doc(username).update({"posts": mapOfPosts});
+  static Future<void> addImageToPost(String username, String postId, String post,) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("posts").doc(postId).get();
+    List<dynamic> photoUrls = snapshot['photoUrls'];
+    photoUrls.add(post);
+    FirebaseFirestore.instance.collection("posts").doc(postId).update({"photoUrls": photoUrls});
+  }
+
+  static Future<void> editPostAtIndex(String username, String postId, String post, int postIndex) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("posts").doc(postId).get();
+    List<dynamic> photoUrls = snapshot['photoUrls'];
+    photoUrls[postIndex] = post;
+    FirebaseFirestore.instance.collection("posts").doc(postId).update({"photoUrls": photoUrls});
   }
 
   static Future<Map<String, dynamic>> getUserPosts(String username) async {
@@ -83,6 +86,10 @@ class DatabaseMethods {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(username).get();
     Map<String, dynamic> mapOfStorageRefs = snapshot['storageRefs'];
     return mapOfStorageRefs.length;
+  }
+
+  static Future<void> editProfilePicLink(String username, String profilePicLink) async {
+    FirebaseFirestore.instance.collection("users").doc(username).update({'profilePics': profilePicLink});
   }
 
   Future<QuerySnapshot> getUserInfo(String email) async {

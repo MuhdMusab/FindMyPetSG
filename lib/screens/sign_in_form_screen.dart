@@ -68,11 +68,6 @@ signIn() async {
         } else {
           QuerySnapshot userInfoSnapshot =
           await DatabaseMethods().getUserInfo(emailEditingController.text);
-          HelperFunctions.saveUserLoggedInSharedPreference(true);
-          HelperFunctions.saveUserNameSharedPreference(
-              userInfoSnapshot.docs[0]['name']);
-          HelperFunctions.saveUserEmailSharedPreference(
-              userInfoSnapshot.docs[0]['email']);
           final user = FirebaseAuth.instance.currentUser;
           Navigator.pushReplacement(
               context,

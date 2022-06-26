@@ -65,7 +65,7 @@ class _ExploreScreenState extends State<ExploreScreen>
           Divider(
             height: 1,
             thickness: 2,
-            color: Colors.pink,
+            color: Colors.white,
           ),
           Expanded(
             child: StreamBuilder(

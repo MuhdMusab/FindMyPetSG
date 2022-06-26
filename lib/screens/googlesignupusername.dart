@@ -45,11 +45,13 @@ class _GoogleSignUpUsernameState extends State<GoogleSignUpUsername> {
         });
       } else {
         String email = FirebaseAuth.instance.currentUser!.email!;
-        Map<String, String> userInfoMap = {
+        Map<String, dynamic> userInfoMap = {
           "name": userNameTextEditingController.text.trim(),
           "email": email,
+          "posts": {},
+          "storageRefs": {},
         };
-        DatabaseMethods.addUserInfo(userInfoMap);
+        DatabaseMethods.addUserInfo(userInfoMap, userNameTextEditingController.text.trim());
         DatabaseMethods.addRealtimeUser(userNameTextEditingController.text.trim());
         Navigator.pushReplacement(
           context,

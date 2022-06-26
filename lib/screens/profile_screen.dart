@@ -3,13 +3,16 @@ import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/settings_screen.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/services/notification_service.dart';
+import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:find_my_pet_sg/services/storage_service.dart';
 import 'package:find_my_pet_sg/screens/mainpage.dart';
+import 'package:find_my_pet_sg/widgets/own_slider_carousel.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:find_my_pet_sg/modal/chatroom.dart';
 import 'package:find_my_pet_sg/modal/chatroomdao.dart';
@@ -17,6 +20,8 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import '../widgets/lost_pet_post.dart';
+import '../widgets/found_pet_post.dart';
 
 class ProfileScreen extends StatefulWidget {
   QueryDocumentSnapshot<Object?>? _user;
@@ -80,6 +85,10 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     );
   }
 
+  _callback() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -113,13 +122,12 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
           )
         ],
       ),
-      body: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: Column(
-          children: [
-            SizedBox(height: 10,),
-            Stack(
+      body: Column(
+        children: [
+          SizedBox(height: 10,),
+          Align(
+            alignment: Alignment.center,
+            child: Stack(
               children: [
                 ClipOval(
                   child: Material(
@@ -180,55 +188,73 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                 )
               ],
             ),
-            Text(widget._user!['name'].toString()),
-            ElevatedButton(
-                onPressed: () async {
-                  //chatroomDao.addChatroom(username,  Chatroom(userNameTextEditingController.text));
-                  //chatroomDao.addChatroom(userNameTextEditingController.text,  Chatroom(username));
-                  NotificationService().showNotification(1, 'title', 'body', 5);
-                },
-                child: Text('press', style: TextStyle(color: Colors.black),)
-            ),
-            SizedBox(height: 10,),
-            TextFormField(
-              controller: userNameTextEditingController,
-              style: simpleBlackTextStyle(),
-              decoration: InputDecoration(
-                fillColor: Colors.grey.withOpacity(0.1),
-                filled: true,
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 15,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white,
-                    width: 0,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white,
-                    width: 0,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white,
-                    width: 0,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                hintText: "username",
-                hintStyle: TextStyle(
-                  color: Colors.black54,
-                ),
+          ),
+          SizedBox(height: 10,),
+          Text(
+              "Hello, " + widget._user!['name'],
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+          ),
+          SizedBox(height: 30,),
+          SizedBox(height: 10,),
+          Padding(
+            padding: EdgeInsets.only(left: 30),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: FutureBuilder<Map<String, dynamic>>(
+                future: DatabaseMethods.getUserPosts(username),
+                builder: (context,
+                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                  int postLength = 0;
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    //do nothing
+                  } else {
+                    postLength = snapshot.data!.length;
+                  }
+                  return Text(
+                    "Your posts (" + postLength.toString() + ")",
+                    style: GoogleFonts.roboto(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    // TextStyle(
+                    //   fontFamily: GoogleFonts.roboto,
+                    //   fontWeight: FontWeight.bold,
+                    //   fontSize: 18,
+                    // ),
+                  );
+                }
+
               ),
             ),
-          ],
-        ),
+          ),
+          SizedBox(height: 20,),
+          Divider(
+            height: 1,
+            thickness: 2,
+            color: Colors.white,
+          ),
+          Expanded(
+            child: FutureBuilder<Map<String, dynamic>>(
+              future: DatabaseMethods.getUserPosts(username),
+              builder: (context,
+                  AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (ctx, index) => OwnSliderCarousel(postIndex: index,
+                      username: username, posts: snapshot.data![index.toString()], callback: _callback),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

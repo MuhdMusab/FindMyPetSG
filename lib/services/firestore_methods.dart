@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
@@ -26,9 +27,12 @@ class FireStoreMethods {
     try {
       List<String> photoUrls = [];
       for (File file in files) {
-        String photoUrl =
-        await StorageMethods().uploadImageToStorage('posts', file.readAsBytesSync(), true);
-        photoUrls.add(photoUrl);
+        List<String> urls =
+        await StorageMethods().uploadImageToStorage('posts', file.readAsBytesSync(),);
+        print(await DatabaseMethods.getPostsLength(username));
+        await DatabaseMethods.addPost(username, urls[0], (await DatabaseMethods.getPostsLength(username)));
+        await DatabaseMethods.addStorageReference(username, urls[1], (await DatabaseMethods.getStorageReferenceLength(username)));
+        photoUrls.add(urls[0]);
       }
       String postId = const Uuid().v1(); // creates unique id based on time
       Post post = Post(
@@ -67,10 +71,13 @@ class FireStoreMethods {
     try {
       List<String> photoUrls = [];
       for (File file in files) {
-        String photoUrl =
-        await StorageMethods().uploadImageToStorage('posts', file.readAsBytesSync(), true);
-        photoUrls.add(photoUrl);
+        List<String> urls =
+        await StorageMethods().uploadImageToStorage('posts', file.readAsBytesSync(),);
+        print(await DatabaseMethods.getPostsLength(username));
+        await DatabaseMethods.addPost(username, urls[0], (await DatabaseMethods.getPostsLength(username)));
+        photoUrls.add(urls[0]);
       }
+
       String postId = const Uuid().v1(); // creates unique id based on time
       Post post = Post(
         type: type,
@@ -90,4 +97,19 @@ class FireStoreMethods {
     }
     return res;
   }
+
+  // Future<String> editLostPost(
+  //     String type,
+  //     String description,
+  //     List<File> files,
+  //     String name,
+  //     String location,
+  //     String breed,
+  //     String date,
+  //     int reward,
+  //     int age,
+  //     bool isMale,
+  //     String username,) async {
+  //
+  // }
 }

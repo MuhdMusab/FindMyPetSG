@@ -19,7 +19,6 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController userNameTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
-  AuthMethods authMethods = AuthMethods();
   bool isLoading = true;
   bool _obscureText = true;
   DatabaseMethods databaseMethods = DatabaseMethods();
@@ -89,11 +88,13 @@ class _SignUpFormState extends State<SignUpForm> {
             password: passwordTextEditingController.text.trim())
             .then((value) async {
           if (value != null) {
-            Map<String, String> userInfoMap = {
-              "name": userNameTextEditingController.text,
+            Map<String, dynamic> userInfoMap = {
               "email": emailTextEditingController.text,
+              "name": userNameTextEditingController.text,
+              "posts": {},
+              "storageRefs": {},
             };
-            DatabaseMethods.addUserInfo(userInfoMap);
+            DatabaseMethods.addUserInfo(userInfoMap, userNameTextEditingController.text.trim());
             DatabaseMethods.addRealtimeUser(userNameTextEditingController.text.trim());
             Navigator.pushReplacement(
               context,

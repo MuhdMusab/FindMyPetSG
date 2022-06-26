@@ -60,56 +60,6 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
     });
   }
 
-  _selectImage(BuildContext parentContext) async {
-    return showDialog(
-      context: parentContext,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: const Text('Create a Report'),
-          children: <Widget>[
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Take a photo'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  List<XFile>? files = await ImagePicker.platform.getMultiImage();
-                  List<File> croppedFiles = [];
-                  for (XFile file in files!) {
-                    final File currentFile = File(file.path);
-                    croppedFiles.add(await cropSquareImage(currentFile));
-                  }
-                  setState(() {
-                    _files = croppedFiles;
-                  });
-                }),
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose from Gallery'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  List<PickedFile>? files = await ImagePicker.platform.pickMultiImage();
-                  List<File> croppedFiles = [];
-                  for (PickedFile file in files!) {
-                    final File currentFile = File(file.path);
-                    croppedFiles.add(await cropSquareImage(currentFile));
-                  }
-                  setState(() {
-                    _files = croppedFiles;
-                  });
-                }),
-            SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
-
   void postImage() async {
     setState(() {
       isLoading = true;
@@ -349,14 +299,6 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                     hintText: "Breed",
                     textInputType: TextInputType.text,
                     textEditingController: _breedController,
-                    inputFormatters: [],
-                    maxLines: 1,
-                  ),
-                  CustomTextfield2(
-                    infoText: "Date*",
-                    hintText: "Date",
-                    textInputType: TextInputType.datetime,
-                    textEditingController: _dateController,
                     inputFormatters: [],
                     maxLines: 1,
                   ),

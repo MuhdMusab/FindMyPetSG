@@ -17,6 +17,10 @@ import '../widgets/custom_textfield.dart';
 import '../widgets/custom_textfield_2.dart';
 import '../widgets/reward_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:io' show Platform;
 
 class CreateLostPostScreen extends StatefulWidget {
   static String route = "CreatePostPage";
@@ -139,6 +143,27 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
     });
   }
 
+  void _showLocationPicker() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return PlacePicker(
+          apiKey: Platform.isAndroid
+              ? "AIzaSyDz1ECR-KPkB3vSSyCqvXq5j8lMhRJfTqM"
+              : "AIzaSyCevtQ-g4R3ZZMse4jdPPsZ1xh7yhod_o4",
+          onPlacePicked: (result) {
+            setState(() {
+              _locationController.text = result.formattedAddress.toString();
+            });
+            Navigator.of(context).pop();
+          },
+          initialPosition: LatLng(1.290270, 103.851959),
+          // useCurrentLocation: true,
+        );
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,15 +174,20 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
             Expanded(
               child: ListView(
                 children: [
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Center(
                     child: Stack(
                       children: [
-                        UploadSliderCarousel(setImageCallback: setImageCallback),
+                        UploadSliderCarousel(
+                            setImageCallback: setImageCallback),
                       ],
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   CustomTextfield2(
                     infoText: "Name*",
                     hintText: "Name",
@@ -241,13 +271,50 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                       ],
                     ),
                   ),
-                  CustomTextfield2(
-                    infoText: "Location*",
-                    hintText: "Location",
-                    textInputType: TextInputType.text,
-                    textEditingController: _locationController,
-                    inputFormatters: [],
-                    maxLines: 1,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 12.0, right: 12.0, bottom: 20.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("Location*"),
+                          ],
+                        ),
+                        Container(
+                          color: Color(0xffF0F0F0),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(4.0),
+                              onTap: _showLocationPicker,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      color: Colors.transparent,
+                                    ),
+                                    height: 30,
+                                    width: 370,
+                                  ),
+                                  Positioned(
+                                    top: 2,
+                                    left: 2,
+                                    child: Text(
+                                      _locationController.text,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 20),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(

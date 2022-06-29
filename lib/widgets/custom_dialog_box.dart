@@ -43,7 +43,8 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
       child: contentBox(context),
     );
   }
-  contentBox(context){
+
+  contentBox(context) {
     return Stack(
       children: <Widget>[
         Container(
@@ -53,28 +54,36 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(Constants.padding),
               boxShadow: [
-                BoxShadow(color: Colors.black,offset: Offset(0,10),
-                    blurRadius: 10
-                ),
-              ]
-          ),
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+              ]),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(widget.title,style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
-              SizedBox(height: 15,),
+              Text(
+                widget.title,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 15,
+              ),
               Row(
                 children: [
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: (context) => CreateLostPostScreen(widget.user)
-                      ));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CreateLostPostScreen(widget.user)));
                     },
                     style: ElevatedButton.styleFrom(
-
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       primary: const Color(0xfff26579),
                       fixedSize: Size(150, 50),
                     ),
@@ -87,16 +96,19 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  // SizedBox(width: 10,),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: (context) => CreateFoundPostScreen(widget.user)
-                      ));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CreateFoundPostScreen(widget.user)));
                     },
                     style: ElevatedButton.styleFrom(
-
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       primary: Color(0xFFff9dab),
                       fixedSize: Size(150, 50),
                     ),
@@ -111,14 +123,19 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                   ),
                 ],
               ),
-              SizedBox(height: 22,),
+              SizedBox(
+                height: 22,
+              ),
               Align(
                 alignment: Alignment.bottomRight,
                 child: FlatButton(
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text("Cancel",style: TextStyle(fontSize: 18),)),
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(fontSize: 18),
+                    )),
               ),
             ],
           ),
@@ -128,8 +145,8 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
   }
 }
 
-class Constants{
+class Constants {
   Constants._();
-  static const double padding =20;
-  static const double avatarRadius =45;
+  static const double padding = 20;
+  static const double avatarRadius = 45;
 }

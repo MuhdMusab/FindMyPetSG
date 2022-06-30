@@ -36,6 +36,9 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
   List<File>? _files;
   bool isMale = false;
   bool isLoading = false;
+  double latitude = 0;
+  double longtitude = 0;
+
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _breedController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
@@ -73,9 +76,12 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
         _files!,
         _nameController.text.trim(),
         _locationController.text.trim(),
+        latitude,
+        longtitude,
         _dateController.text.trim(),
         isMale,
         widget._user!['name'].toString(),
+        DateTime.now(),
       );
       if (res == "success") {
         setState(() {
@@ -147,6 +153,8 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
           onPlacePicked: (result) {
             setState(() {
               _locationController.text = result.formattedAddress.toString();
+              latitude = result.geometry!.location.lat;
+              longtitude = result.geometry!.location.lng;
             });
             Navigator.of(context).pop();
           },

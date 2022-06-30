@@ -42,10 +42,15 @@ class _ExploreScreenState extends State<ExploreScreen>
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.pink,
         onPressed: () {
-          showDialog(context: context, builder: (BuildContext context) {
-            return CustomDialogBox(title: "Have you Lost or Found a pet?", descriptions: "poop", text: "yes", user: widget._user);
-
-          });
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return CustomDialogBox(
+                    title: "Have you Lost or Found a pet?",
+                    descriptions: "poop",
+                    text: "yes",
+                    user: widget._user);
+              });
         },
         child: new Icon(
           Icons.add,
@@ -69,8 +74,10 @@ class _ExploreScreenState extends State<ExploreScreen>
           ),
           Expanded(
             child: StreamBuilder(
-              stream:
-              FirebaseFirestore.instance.collection('posts').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .orderBy("dateTimePosted", descending: true)
+                  .snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -82,15 +89,14 @@ class _ExploreScreenState extends State<ExploreScreen>
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (ctx, index) => Container(
                     child: snapshot.data!.docs[index].data()['type'] == "lost"
-                      ? LostPetPost(
-                      snap: snapshot.data!.docs[index].data(),
-                      user: widget._user,
-                    )
+                        ? LostPetPost(
+                            snap: snapshot.data!.docs[index].data(),
+                            user: widget._user,
+                          )
                         : FoundPetPost(
-                      snap: snapshot.data!.docs[index].data(),
-                      user: widget._user,
-                    )
-                    ,
+                            snap: snapshot.data!.docs[index].data(),
+                            user: widget._user,
+                          ),
                   ),
                 );
               },

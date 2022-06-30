@@ -13,6 +13,9 @@ class Post {
   int? age;
   int? reward;
   final String username;
+  final double latitude;
+  final double longtitude;
+  final DateTime dateTimePosted;
 
   Post({
     required this.type,
@@ -27,34 +30,43 @@ class Post {
     this.age,
     this.reward,
     required this.username,
+    required this.latitude,
+    required this.longtitude,
+    required this.dateTimePosted,
   });
 
   Map<String, dynamic> lostToJson() => {
-    "type": type,
-    "name": name,
-    "location": location,
-    "breed": breed,
-    "description": description,
-    "date": date,
-    "postId": postId,
-    "photoUrls": photoUrls,
-    "isMale": isMale,
-    "age": age,
-    "reward": reward,
-    "username": username,
-  };
+        "type": type,
+        "name": name,
+        "location": location,
+        "latitude": latitude,
+        "longtitude": longtitude,
+        "breed": breed,
+        "description": description,
+        "date": date,
+        "postId": postId,
+        "photoUrls": photoUrls,
+        "isMale": isMale,
+        "age": age,
+        "reward": reward,
+        "username": username,
+        "dateTimePosted": dateTimePosted,
+      };
 
   Map<String, dynamic> foundToJson() => {
-    "type": type,
-    "name": name,
-    "location": location,
-    "description": description,
-    "date": date,
-    "postId": postId,
-    "photoUrls": photoUrls,
-    "isMale": isMale,
-    "username": username,
-  };
+        "type": type,
+        "name": name,
+        "location": location,
+        "latitude": latitude,
+        "longtitude": longtitude,
+        "description": description,
+        "date": date,
+        "postId": postId,
+        "photoUrls": photoUrls,
+        "isMale": isMale,
+        "username": username,
+        "dateTimePosted": dateTimePosted,
+      };
 
   static Post fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
@@ -63,6 +75,8 @@ class Post {
       type: snapshot['type'],
       name: snapshot['name'],
       location: snapshot['location'],
+      latitude: snapshot['latitude'],
+      longtitude: snapshot['longtitude'],
       breed: snapshot['breed'],
       description: snapshot['description'],
       date: snapshot['date'],
@@ -72,6 +86,7 @@ class Post {
       age: snapshot['age'],
       reward: snapshot['reward'],
       username: snapshot['username'],
+      dateTimePosted: snapshot['dateTimePosted'],
     );
   }
 }

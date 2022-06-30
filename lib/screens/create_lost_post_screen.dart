@@ -38,6 +38,8 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
   List<File>? _files;
   bool isMale = false;
   bool isLoading = false;
+  double latitude = 0;
+  double longtitude = 0;
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _breedController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
@@ -77,12 +79,15 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
         _files!,
         _nameController.text.trim(),
         _locationController.text.trim(),
+        latitude,
+        longtitude,
         _breedController.text.trim(),
         _dateController.text.trim(),
         int.parse(_rewardController.text.trim()),
         int.parse(_ageController.text.trim()),
         isMale,
         widget._user!['name'].toString(),
+        DateTime.now(),
       );
       if (res == "success") {
         setState(() {
@@ -154,6 +159,8 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
           onPlacePicked: (result) {
             setState(() {
               _locationController.text = result.formattedAddress.toString();
+              latitude = result.geometry!.location.lat;
+              longtitude = result.geometry!.location.lng;
             });
             Navigator.of(context).pop();
           },

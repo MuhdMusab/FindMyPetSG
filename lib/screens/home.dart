@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/screens/search.dart';
+import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/screens/profile_screen.dart';
 import 'package:find_my_pet_sg/screens/explore_screen.dart';
@@ -31,7 +33,18 @@ class _HomeState extends State<Home> {
       ProfileScreen(widget._user),
     ];
     _pageController = PageController(initialPage: _selectedPageIndex);
+    //_activateListeners();
   }
+
+  // void _activateListeners() {
+  //   final String username = widget._user!['name'].toString();
+  //   FirebaseDatabase.instance.ref().child(username).onChildAdded.listen((event) {
+  //     print(event.snapshot.value.toString() + " poop");
+  //     // final String message = event.snapshot.value as String;
+  //     // NotificationService().showNotification(1, "new message ", message, 2);
+  //   });
+  // }
+
 
   @override
   void dispose() {

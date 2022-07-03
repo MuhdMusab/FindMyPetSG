@@ -80,7 +80,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) => Home(querySnapshot.docs[0])
+          builder: (context) => Home(querySnapshot.docs[0]), fullscreenDialog: true
       ),
     );
   }

@@ -36,6 +36,16 @@ class DatabaseMethods {
     FirebaseFirestore.instance.collection("posts").doc(postId).update({"photoUrls": photoUrls});
   }
 
+  static Future<void> deleteUserPost(String username, String postId) async {
+    FirebaseFirestore.instance.collection("posts").doc(postId).delete();
+  }
+
+  static Future<int> getNumberOfImagesInPost(String username, String postId) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("posts").doc(postId).get();
+    List<dynamic> photoUrls = snapshot['photoUrls'];
+    return photoUrls.length;
+  }
+
   static Future<Map<String, dynamic>> getUserPosts(String username) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(username).get(); //where("name", isEqualTo: username). .catchError((e) {
     Map<String, dynamic> mapOfPosts = snapshot['posts'];
@@ -48,6 +58,24 @@ class DatabaseMethods {
     return mapOfPosts.length;
   }
 
+  static Future<void> updatePostField(String username, String postId, String field, dynamic newField) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("posts").doc(postId).get();
+    FirebaseFirestore.instance.collection("posts").doc(postId).update({field: newField});
+  }
+
+  static Future<void> deleteUserPostAtIndex(String username, int postIndex) async {
+    Map<String, dynamic> mapOfPosts = await getUserPosts(username);
+    int postsLength = await getPostsLength(username);
+    if (postIndex == postsLength - 1) {
+      mapOfPosts.remove(postIndex.toString());
+    } else {
+      dynamic lastPost = mapOfPosts[postsLength.toString()];
+      mapOfPosts[postIndex.toString()] = lastPost;
+      mapOfPosts.remove(postsLength.toString());
+    }
+    FirebaseFirestore.instance.collection("users").doc(username).update({'posts': mapOfPosts});
+  }
+
   static Future<void> addStorageReference(String username, String ref, int refIndex) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(username).get();
     Map<String, dynamic> mapOfStorageRefs = snapshot['storageRefs'];
@@ -57,6 +85,19 @@ class DatabaseMethods {
       mapOfStorageRefs[refIndex.toString()].add(ref);
     }
     FirebaseFirestore.instance.collection("users").doc(username).update({"storageRefs": mapOfStorageRefs});
+  }
+
+  static Future<void> deleteStorageRefAtIndex(String username, int postIndex) async {
+    Map<String, dynamic> mapOfStorageRefs = await getUserStorageReference(username);
+    int postsLength = await getStorageReferenceLength(username);
+    if (postIndex == postsLength - 1) {
+      mapOfStorageRefs.remove(postIndex.toString());
+    } else {
+      dynamic lastPost = mapOfStorageRefs[postsLength.toString()];
+      mapOfStorageRefs[postIndex.toString()] = lastPost;
+      mapOfStorageRefs.remove(postsLength.toString());
+    }
+    FirebaseFirestore.instance.collection("users").doc(username).update({'storageRefs': mapOfStorageRefs});
   }
 
   static Future<void> editStorageReferenceAtIndex(String username, String ref, int mapIndex, int refIndex) async {

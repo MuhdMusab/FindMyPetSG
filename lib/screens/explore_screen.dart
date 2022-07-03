@@ -1,5 +1,7 @@
+import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/widgets/custom_dialog_box.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -35,6 +37,19 @@ class _ExploreScreenState extends State<ExploreScreen>
   @override
   bool get wantKeepAlive => true;
 
+  void initState() {
+    super.initState();
+    _activateListeners();
+  }
+
+  void _activateListeners() {
+    final String username = widget._user!['name'].toString();
+    FirebaseDatabase.instance.ref().child(username).onChildChanged.listen((event) {
+      print(event.snapshot.value);
+      //final String message = event.snapshot.value as String;
+      //NotificationService().showNotification(1, "new message ", message, 2);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -47,7 +62,6 @@ class _ExploreScreenState extends State<ExploreScreen>
               builder: (BuildContext context) {
                 return CustomDialogBox(
                     title: "Have you Lost or Found a pet?",
-                    descriptions: "poop",
                     text: "yes",
                     user: widget._user);
               });

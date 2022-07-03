@@ -12,7 +12,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
   await Firebase.initializeApp();
+  // FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+  // firebaseAppCheck.installAppCheckProviderFactory(
+  //     PlayIntegrityAppCheckProviderFactory.getInstance());
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {

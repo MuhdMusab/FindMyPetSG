@@ -5,32 +5,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CustomDialogBox extends StatefulWidget {
-  final String title, text;
-  final QueryDocumentSnapshot<Object?>? user;
+class DeletePostDialog extends StatefulWidget {
+  final String title;
+  final Function function;
 
-  const CustomDialogBox({
+  const DeletePostDialog({
     Key? key,
     required this.title,
-    required this.text,
-    required this.user,
-    // required this.location,
-    // required this.date,
-    // required this.name,
-    // required this.imageArray,
-    // required this.reward,
-    // required this.postalCode,
-    // required this.description,
-    // required this.type,
-    // required this.exactLocation,
-    // required this.isMale,
+    required this.function,
   }) : super(key: key);
 
   @override
-  _CustomDialogBoxState createState() => _CustomDialogBoxState();
+  _DeletePostDialogState createState() => _DeletePostDialogState();
 }
 
-class _CustomDialogBoxState extends State<CustomDialogBox> {
+class _DeletePostDialogState extends State<DeletePostDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -59,9 +48,12 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                widget.title,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+              Center(
+                child: Text(
+                  widget.title,
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, ),
+
+                ),
               ),
               SizedBox(
                 height: 15,
@@ -73,11 +65,8 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  CreateLostPostScreen(widget.user), fullscreenDialog: true),);
+                      widget.function();
+                      Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -87,7 +76,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                       fixedSize: Size(150, 50),
                     ),
                     child: Text(
-                      "Lost",
+                      "Delete",
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -95,14 +84,10 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                       ),
                     ),
                   ),
-                  // SizedBox(width: 10,),
+                  SizedBox(width: 10,),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  CreateFoundPostScreen(widget.user), fullscreenDialog: true));
+                      Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -112,7 +97,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                       fixedSize: Size(150, 50),
                     ),
                     child: Text(
-                      "Found",
+                      "Cancel",
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -124,17 +109,6 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
               ),
               SizedBox(
                 height: 22,
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(fontSize: 18),
-                    )),
               ),
             ],
           ),

@@ -16,7 +16,7 @@ class CustomTextfield2 extends StatefulWidget {
         required this.textInputType,
         required this.infoText,
         required this.maxLines,
-        })
+      })
       : super(key: key);
 
   @override
@@ -33,7 +33,12 @@ class _CustomTextfield2 extends State<CustomTextfield2> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(widget.infoText),
+              Text(widget.infoText,
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueGrey
+                ),
+              ),
             ],
           ),
           TextField(
@@ -46,24 +51,24 @@ class _CustomTextfield2 extends State<CustomTextfield2> {
             textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Color(0xffF0F0F0),
-              contentPadding: EdgeInsets.only(left: 2.0, top: 6.0, bottom: 6.0),
+              fillColor: Colors.white,
+              contentPadding: EdgeInsets.only(left: 10.0, top: 15.5, bottom: 15.5),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide: BorderSide(color: Colors.pink, width: 1.0),
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.pink, width: 1.5),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide: BorderSide(color: Color(0xffF0F0F0), width: 1.0),
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.blueGrey.shade200, width: 1.5),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide: BorderSide(color: Colors.transparent, width: 1.0),
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.transparent, width: 1.5),
               ),
               border: InputBorder.none,
               isDense: true,
               hintText: widget.hintText,
-              hintStyle: TextStyle(color: Colors.black38, fontSize: 14.0),
+              hintStyle: TextStyle(color: Colors.black54, fontSize: 16.0),
             ),
           ),
         ],

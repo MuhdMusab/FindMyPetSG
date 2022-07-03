@@ -156,11 +156,16 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return WillPopScope(
+      onWillPop: () async {
+        if (Navigator.of(context).userGestureInProgress)
+          return false;
+        else
+          return true;
+      },
       child: Material(
           child: InkWell(
-              customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
               splashColor: Colors.black12,
               onTap: () {
                 if (activeIndex == widget.posts!.length) {
@@ -170,7 +175,7 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                 }
               },
               child: Container(
-                  width: 390,
+                  width: 400,
                   height: 200,
                   decoration: BoxDecoration(
                     color: Colors.black,
@@ -186,10 +191,12 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                   ),
                   child:
                   ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10.0), topLeft: Radius.circular(10.0)),
                     child: Stack(
                       children: [
                         Container(
+                          width: 400,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -244,7 +251,6 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
 
   Widget buildImage(String catImage, intIndex) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 12),
       color: Colors.grey,
       child: Image.asset(catImage, fit: BoxFit.cover),
     );

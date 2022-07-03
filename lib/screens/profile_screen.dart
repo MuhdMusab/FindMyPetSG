@@ -9,6 +9,8 @@ import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:find_my_pet_sg/services/storage_service.dart';
 import 'package:find_my_pet_sg/screens/mainpage.dart';
+import 'package:find_my_pet_sg/widgets/own_lost_pet_post.dart';
+import 'package:find_my_pet_sg/widgets/own_found_pet_post.dart';
 import 'package:find_my_pet_sg/widgets/own_slider_carousel.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,9 +59,16 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
   void initState() {
     super.initState();
     tz.initializeTimeZones();
-
+    // _activateListeners();
   }
 
+  // void _activateListeners() {
+  //   final String username = widget._user!['name'].toString();
+  //   FirebaseDatabase.instance.ref().child(username).onValue.listen((event) {
+  //     final String message = event.snapshot.value as String;
+  //     NotificationService().showNotification(1, "new message ", message, 2);
+  //   });
+  // }
   ChatroomDao _chatroomDao = ChatroomDao();
   ScrollController _scrollController = ScrollController();
   TextEditingController userNameTextEditingController = TextEditingController();
@@ -112,14 +121,8 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     final Storage storage = Storage(username);
     final image = Image.asset("assets/images/default_user_icon.png");
     final chatroomDao = ChatroomDao();
-    // final DocumentReference<Map<String, dynamic>> collectionReference = FirebaseFirestore.instance.collection('users').doc(username);
-    // subscription = collectionReference.snapshots().listen((datasnapshot) {
-    //   print("wasup" + datasnapshot.toString());
-    //   setState(() {
-    //     myList = datasnapshot.docs;
-    //   });
-    //   print("wasup" + myList.toString());
-    // });
+    int postLength = 0;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -134,12 +137,12 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
         ),
         actions: [
           IconButton(
-            color: Color(0xFFf26579),
+              color: Color(0xFFf26579),
               onPressed: () => {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SettingsScreen(),
+                      builder: (context) => SettingsScreen(),
                     ))
               },
               icon: Icon(Icons.settings)
@@ -215,11 +218,11 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
           ),
           SizedBox(height: 10,),
           Text(
-              "Hello, " + widget._user!['name'],
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+            "Hello, " + widget._user!['name'],
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
           SizedBox(height: 30,),
           Padding(
@@ -227,28 +230,27 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
             child: Align(
               alignment: Alignment.bottomLeft,
               child: FutureBuilder<Map<String, dynamic>>(
-                future: DatabaseMethods.getUserPosts(username),
-                builder: (context,
-                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                  int postLength = 0;
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    //do nothing
-                  } else {
-                    postLength = snapshot.data!.length;
+                  future: DatabaseMethods.getUserPosts(username),
+                  builder: (context,
+                      AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      //do nothing
+                    } else {
+                      postLength = snapshot.data!.length;
+                    }
+                    return Text(
+                      "Your posts (" + postLength.toString() + ")",
+                      style: GoogleFonts.roboto(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      // TextStyle(
+                      //   fontFamily: GoogleFonts.roboto,
+                      //   fontWeight: FontWeight.bold,
+                      //   fontSize: 18,
+                      // ),
+                    );
                   }
-                  return Text(
-                    "Your posts (" + postLength.toString() + ")",
-                    style: GoogleFonts.roboto(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    // TextStyle(
-                    //   fontFamily: GoogleFonts.roboto,
-                    //   fontWeight: FontWeight.bold,
-                    //   fontSize: 18,
-                    // ),
-                  );
-                }
 
               ),
             ),
@@ -261,18 +263,26 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
           ),
           Expanded(
             child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+                stream: FirebaseFirestore.instance.collection('posts').snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                    return ListView.builder(
-                        itemBuilder: (ctx, index) =>
-                        index < snapshot.data!.docs.length && snapshot.data!.docs[index].data()['username'] == username
-                            ? OwnSliderCarousel(postIndex: index, username: username,
-                              posts: snapshot.data!.docs[index].data()['photoUrls'], callback: _callback,
-                                postId: snapshot.data!.docs[index].data()['postId'])
-                            : Container(),
-                        itemCount: snapshot.data!.docs.length,
+                  int postIndex = 0;
+                  ListView listView = ListView.builder(
+                    itemBuilder: (ctx, index) =>
+
+                    index < snapshot.data!.docs.length && snapshot.data!.docs[index].data()['username'] == username
+                        ? snapshot.data!.docs[index].data()['type'] == 'lost'
+                          ? OwnLostPetPost(snapshot: snapshot.data!.docs[index].data(),
+                              postIndex: postIndex++, username: username, callback: _callback,
+                                postId: snapshot.data!.docs[index].data()['postId'],)
+                          : OwnFoundPetPost(snapshot: snapshot.data!.docs[index].data(),
+                              postIndex: postIndex++, username: username, callback: _callback,
+                                postId: snapshot.data!.docs[index].data()['postId'],)
+                          : Container(),
+                    itemCount: snapshot.data!.docs.length,
                   );
+                  postLength = postIndex + 1;
+                  return listView;
                 }
             ),
             // child: FutureBuilder<Map<String, dynamic>>(

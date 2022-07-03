@@ -1,5 +1,6 @@
 import 'package:find_my_pet_sg/modal/chatroom.dart';
 import 'package:find_my_pet_sg/modal/person.dart';
+import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
 import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
 import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
@@ -36,7 +37,18 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
   @override
   bool get wantKeepAlive => true;
 
-
+  // void initState() {
+  //   super.initState();
+  //   _activateListeners();
+  // }
+  //
+  // void _activateListeners() {
+  //   final String username = widget._user!['name'].toString();
+  //   FirebaseDatabase.instance.ref().child(username).onChildChanged.listen((event) {
+  //     final String message = event.snapshot.value as String;
+  //     NotificationService().showNotification(1, "new message ", message, 2);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +60,7 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
       appBar: appBarMain(context),
       body: StreamBuilder(
         stream: FirebaseDatabase(databaseURL: 'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
-            .ref().child('chatroom').child(username).onValue,//(chatroomDao as DatabaseReference).onValue,
+            .ref().child('chatroom').child(username).onValue,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:

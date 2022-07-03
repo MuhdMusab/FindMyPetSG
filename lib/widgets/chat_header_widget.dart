@@ -89,7 +89,7 @@ class ChatHeaderWidget extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatScreen(username: otherUser, messageDao: MessageDao(username, otherUser))
+                              builder: (context) => ChatScreen(username: otherUser, messageDao: MessageDao(username, otherUser)), fullscreenDialog: true
                           ));
                         },
                         child: FutureBuilder(

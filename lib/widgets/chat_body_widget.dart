@@ -60,7 +60,7 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
         child: ListTile(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ChatScreen(username: otherUser, messageDao: MessageDao(widget.username, otherUser),),
+              builder: (context) => ChatScreen(username: otherUser, messageDao: MessageDao(widget.username, otherUser),), fullscreenDialog: true
             ));
           },
           leading: FutureBuilder(

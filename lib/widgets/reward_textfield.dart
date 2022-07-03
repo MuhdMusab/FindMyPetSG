@@ -25,13 +25,18 @@ class _RewardTextfield extends State<RewardTextfield> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 4.0),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(widget.infoText),
+              Text(widget.infoText,
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueGrey
+                ),
+              ),
             ],
           ),
           Stack(
@@ -46,32 +51,29 @@ class _RewardTextfield extends State<RewardTextfield> {
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Color(0xffF0F0F0),
-                  contentPadding:
-                  EdgeInsets.only(left: 25.0, top: 6.0, bottom: 6.0),
+                  fillColor: Colors.white,
+                  contentPadding: EdgeInsets.only(left: 25.0, top: 15.5, bottom: 15.5),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                    borderSide: BorderSide(color: Colors.pink, width: 1.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.pink, width: 1.5),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                    borderSide:
-                    BorderSide(color: Color(0xffF0F0F0), width: 1.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.blueGrey.shade200, width: 1.5),
                   ),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                    borderSide:
-                    BorderSide(color: Colors.transparent, width: 1.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.transparent, width: 1.5),
                   ),
                   border: InputBorder.none,
                   isDense: true,
                   hintText: widget.hintText,
-                  hintStyle: TextStyle(color: Colors.black38, fontSize: 14.0),
+                  hintStyle: TextStyle(color: Colors.black54, fontSize: 16.0),
                 ),
               ),
               Positioned(
                 left: 0,
-                bottom: 4,
+                bottom: 12.5,
                 child: Icon(
                   Icons.attach_money_sharp,
                   color: Colors.green,

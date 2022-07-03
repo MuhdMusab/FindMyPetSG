@@ -20,6 +20,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:searchfield/searchfield.dart';
 import 'dart:io' show Platform;
 
 class CreateLostPostScreen extends StatefulWidget {
@@ -41,18 +42,18 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
   double latitude = 0;
   double longtitude = 0;
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _breedController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _rewardController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
+  String? _breed;
+  final _searchFormKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
     _descriptionController.dispose();
-    _breedController.dispose();
     _locationController.dispose();
     _nameController.dispose();
     _dateController.dispose();
@@ -71,45 +72,64 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
       isLoading = true;
     });
     // start the loading
-    try {
-      // upload to storage and db
-      String res = await FireStoreMethods().uploadLostPost(
-        "lost",
-        _descriptionController.text.trim(),
-        _files!,
-        _nameController.text.trim(),
-        _locationController.text.trim(),
-        latitude,
-        longtitude,
-        _breedController.text.trim(),
-        _dateController.text.trim(),
-        int.parse(_rewardController.text.trim()),
-        int.parse(_ageController.text.trim()),
-        isMale,
-        widget._user!['name'].toString(),
-        DateTime.now(),
-      );
-      if (res == "success") {
+    if (!_searchFormKey.currentState!.validate() ||_descriptionController.text.trim().length == 0
+        || _locationController.text.trim().length == 0 || _breed == null || _breed == "" ||
+        _dateController.text.trim().length == 0  || _ageController.text.trim().length == 0
+        || _nameController.text.trim().length == 0) {
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar();
+      showSnackBar(context, "Incomplete fields given");
+      setState(() {
+        isLoading = false;
+      });
+    } else if (_files == null) {
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar();
+      showSnackBar(context, "Please upload at least one image");
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      try {
+        // upload to storage and db
+        String res = await FireStoreMethods().uploadLostPost(
+          "lost",
+          _descriptionController.text.trim(),
+          _files!,
+          _nameController.text.trim(),
+          _locationController.text.trim(),
+          latitude,
+          longtitude,
+          _breed!,
+          _dateController.text.trim(),
+            _rewardController.text.trim() == "" ? 0 : int.parse(_rewardController.text.trim()),
+          int.parse(_ageController.text.trim()),
+          isMale,
+          widget._user!['name'].toString(),
+          DateTime.now(),
+        );
+        if (res == "success") {
+          setState(() {
+            isLoading = false;
+          });
+          showSnackBar(
+            context,
+            'Posted!',
+          );
+          clearImage();
+          Navigator.pop(context, true);
+        } else {
+          showSnackBar(context, res);
+        }
+      } catch (err) {
         setState(() {
           isLoading = false;
         });
         showSnackBar(
           context,
-          'Posted!',
+          err.toString(),
         );
-        clearImage();
-        Navigator.pop(context, true);
-      } else {
-        showSnackBar(context, res);
       }
-    } catch (err) {
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(
-        context,
-        err.toString(),
-      );
     }
   }
 
@@ -171,6 +191,31 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
     );
   }
 
+  bool isInSuggestions(String type) {
+    List suggestions = [
+      'Bird',
+      'Cat',
+      'Chinchilla',
+      'Crab',
+      'Dog',
+      'Frog',
+      'Gerbil',
+      'Guinea pig',
+      'Hamster',
+      'Mouse',
+      'Rabbit',
+      'Tortoise',
+      'Turtle',
+      'Others',
+    ];
+    for (String str in suggestions) {
+      if (str == type) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,13 +257,18 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                     maxLines: 1,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 12.0, bottom: 24.0),
+                    padding: const EdgeInsets.only(left: 12.0, bottom: 12.0),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("Gender*"),
+                            Text("Gender*",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blueGrey
+                              ),
+                            ),
                           ],
                         ),
                         Row(
@@ -230,47 +280,56 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                                 });
                               },
                               child: Container(
+                                height: 51,
+                                width: 120,
                                 decoration: BoxDecoration(
+                                  color: Colors.white,
                                   // color: isMale ? Colors.transparent : Colors.pink,
-                                  borderRadius: BorderRadius.circular(4.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                   border: Border.all(
                                       width: 2.0,
                                       color: isMale
                                           ? Colors.black12
                                           : Colors.pink),
                                 ),
-                                child: Row(children: [
-                                  Text("Female"),
-                                  Icon(
-                                    Icons.female,
-                                    color: Colors.red,
-                                  )
-                                ]),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Female"),
+                                      Icon(
+                                        Icons.female,
+                                        color: Colors.red,
+                                      )
+                                    ]),
                               ),
                             ),
                             InkWell(
+
                               onTap: () {
                                 setState(() {
                                   isMale = true;
                                 });
                               },
                               child: Container(
+                                height: 51,
+                                width: 120,
                                 decoration: BoxDecoration(
-                                  // color: isMale ? Colors.pink : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(4.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                   border: Border.all(
                                       width: 2.0,
                                       color: isMale
                                           ? Colors.pink
                                           : Colors.black12),
                                 ),
-                                child: Row(children: [
-                                  Text("Male"),
-                                  Icon(
-                                    Icons.male,
-                                    color: Colors.blue,
-                                  )
-                                ]),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Male"),
+                                      Icon(
+                                        Icons.male,
+                                        color: Colors.blue,
+                                      )
+                                    ]),
                               ),
                             )
                           ],
@@ -280,17 +339,27 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: 12.0, right: 12.0, bottom: 20.0),
+                        left: 12.0, right: 12.0, bottom: 12.0),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("Location*"),
+                            Text("Location*",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blueGrey
+                              ),
+                            ),
                           ],
                         ),
                         Container(
-                          color: Color(0xffF0F0F0),
+                          height: 51,
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueGrey.shade200),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
@@ -307,12 +376,14 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                                     width: 370,
                                   ),
                                   Positioned(
-                                    top: 2,
+                                    top: 14,
                                     left: 2,
                                     child: Text(
                                       _locationController.text,
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 20),
+                                          fontSize: 16,
+                                          color: Colors.blueGrey
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -325,17 +396,24 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: 12.0, right: 12.0, bottom: 20.0),
+                        left: 12.0, right: 12.0, bottom: 12),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Date*"),
-                          ],
+                        Text("Date*",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blueGrey
+                          ),
                         ),
                         Container(
-                          color: Color(0xffF0F0F0),
+                          height: 51,
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueGrey.shade200),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
@@ -352,12 +430,14 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                                     width: 370,
                                   ),
                                   Positioned(
-                                    top: 2,
+                                    top: 14,
                                     left: 2,
                                     child: Text(
                                       _dateController.text,
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 20),
+                                          fontSize: 16,
+                                          color: Colors.blueGrey
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -368,39 +448,135 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                       ],
                     ),
                   ),
-                  CustomTextfield2(
-                    infoText: "Breed*",
-                    hintText: "Breed",
-                    textInputType: TextInputType.text,
-                    textEditingController: _breedController,
-                    inputFormatters: [],
-                    maxLines: 1,
-                  ),
-                  RewardTextfield(
-                    infoText: "Reward",
-                    hintText: "Reward",
-                    textInputType: TextInputType.datetime,
-                    textEditingController: _rewardController,
-                    maxLines: 1,
-                  ),
-                  CustomTextfield2(
-                    infoText: "Description*",
-                    hintText: "Description",
-                    textInputType: TextInputType.text,
-                    textEditingController: _descriptionController,
-                    inputFormatters: [],
-                    maxLines: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: CustomMadeButton(
-                      isLoading: isLoading,
-                      text: "Post",
-                      onPressed: () => postImage(),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(bottom: 14),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12.0),
+                                child: Text("Enter your pet's type of animal*", style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.blueGrey
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                margin: EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      offset: Offset(0, 10),
+                                    ),
+                                  ],
+                                ),
+                                child: Form(
+                                  key: _searchFormKey,
+                                  child: SearchField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter the type of animal';
+                                      } else if (!isInSuggestions(value)) {
+                                        return 'Please select a suitable type of animal';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    hint: 'Search',
+                                    hasOverlay: false,
+                                    searchInputDecoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.blueGrey.shade200,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 2,
+                                          color: Colors.blue.withOpacity(0.8),
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    maxSuggestionsInViewPort: 4,
+                                    itemHeight: 40,
+                                    suggestionsDecoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    onSubmit: (value) {
+                                      setState(() {
+                                        _breed = value;
+                                      });
+                                    },
+                                    onSuggestionTap: (SearchFieldListItem value) {
+                                      setState(() {
+                                        _breed = value.searchKey;
+                                      });
+                                    },
+                                    suggestions: [
+                                      'Bird',
+                                      'Cat',
+                                      'Chinchilla',
+                                      'Crab',
+                                      'Dog',
+                                      'Frog',
+                                      'Gerbil',
+                                      'Guinea pig',
+                                      'Hamster',
+                                      'Mouse',
+                                      'Rabbit',
+                                      'Tortoise',
+                                      'Turtle',
+                                      'Others',
+                                    ].map((e) => SearchFieldListItem(e)).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        RewardTextfield(
+                          infoText: "Reward",
+                          hintText: "Reward",
+                          textInputType: TextInputType.datetime,
+                          textEditingController: _rewardController,
+                          maxLines: 1,
+                        ),
+                        CustomTextfield2(
+                          infoText: "Description*",
+                          hintText: "Description",
+                          textInputType: TextInputType.text,
+                          textEditingController: _descriptionController,
+                          inputFormatters: [],
+                          maxLines: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: CustomMadeButton(
+                            isLoading: isLoading,
+                            text: "Post",
+                            onPressed: () => postImage(),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                 ],
               ),

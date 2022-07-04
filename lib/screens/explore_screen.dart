@@ -1,10 +1,15 @@
+import 'package:find_my_pet_sg/config/constants.dart';
+import 'package:find_my_pet_sg/models/filter_model.dart';
+import 'package:find_my_pet_sg/models/post_type_model.dart';
 import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/widgets/custom_dialog_box.dart';
+import 'package:find_my_pet_sg/widgets/full_posts.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:find_my_pet_sg/models/filter_model.dart';
+import 'package:find_my_pet_sg/models/category.dart';
 import '../widgets/lost_pet_post.dart';
 import '../widgets/found_pet_post.dart';
 import '../widgets/search_textfield.dart';
@@ -45,17 +50,23 @@ class _ExploreScreenState extends State<ExploreScreen>
   void _activateListeners() {
     final String username = widget._user!['name'].toString();
     FirebaseDatabase.instance.ref().child(username).onChildChanged.listen((event) {
-      print(event.snapshot.value);
       //final String message = event.snapshot.value as String;
       //NotificationService().showNotification(1, "new message ", message, 2);
     });
   }
+  List<Filter?> filters = [];
+
+  _callback(List<Filter?> newFilters) {
+    filters = newFilters;
+    setState((){});
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.pink,
+        backgroundColor: pink(),
         onPressed: () {
           showDialog(
               context: context,
@@ -78,7 +89,7 @@ class _ExploreScreenState extends State<ExploreScreen>
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.only(left: 12, top: 18, bottom: 10),
-              child: SearchTextField(),
+              child: SearchTextField(callback: _callback),
             ),
           ),
           Divider(
@@ -86,56 +97,10 @@ class _ExploreScreenState extends State<ExploreScreen>
             thickness: 2,
             color: Colors.white,
           ),
-          Expanded(
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('posts')
-                  .orderBy("dateTimePosted", descending: true)
-                  .snapshots(),
-              builder: (context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (ctx, index) => Container(
-                    child: snapshot.data!.docs[index].data()['type'] == "lost"
-                        ? LostPetPost(
-                            snap: snapshot.data!.docs[index].data(),
-                            user: widget._user,
-                          )
-                        : FoundPetPost(
-                            snap: snapshot.data!.docs[index].data(),
-                            user: widget._user,
-                          ),
-                  ),
-                );
-              },
-            ),
-          ),
+          FullPosts(user: widget._user, filters: filters),
         ],
       ),
     );
     // )
-
-    // Column(
-    //   children: [
-    //     SafeArea(
-    //       child: Padding(
-    //         padding: const EdgeInsets.only(left: 12, top: 18, bottom: 10),
-    //         child: SearchTextField(),
-    //       ),
-    //     ),
-    //     Divider(
-    //       height: 1,
-    //       thickness: 2,
-    //       color: Colors.pink,
-    //     ),
-    //   ],
-    // ),
-    // );
   }
 }

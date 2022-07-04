@@ -125,16 +125,9 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text(
-          "FindMyPetSG",
-          style: TextStyle(
-            fontSize: 38,
-            color: Color(0xFFf26579),
-            fontFamily: 'Open Sans Extra Bold',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: Container(),
         actions: [
           IconButton(
               color: Color(0xFFf26579),

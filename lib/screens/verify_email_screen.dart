@@ -33,7 +33,6 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   void initState() {
     super.initState();
     _isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    print(FirebaseAuth.instance.currentUser!.email);
     if (!_isEmailVerified) {
       sendVerificationEmail();
 
@@ -61,7 +60,6 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   }
   Future sendVerificationEmail() async {
     try {
-      print(FirebaseAuth.instance.currentUser!.email);
       final user = FirebaseAuth.instance.currentUser!;
       await user.sendEmailVerification();
       setState(() => _canResendEmail = false);

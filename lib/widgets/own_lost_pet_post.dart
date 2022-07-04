@@ -60,7 +60,6 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
     final StorageMethods storageMethods = StorageMethods();
     for (int i = 0; i < numberOfImagesInPost; i++) {
       String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(widget.username, widget.postIndex, i);
-      print(prevRef);
       storageMethods.deleteImageFromStorage(prevRef);
     }
      DatabaseMethods.deleteStorageRefAtIndex(widget.username, widget.postIndex);

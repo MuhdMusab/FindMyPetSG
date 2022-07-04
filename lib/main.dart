@@ -1,3 +1,4 @@
+import 'package:find_my_pet_sg/config/theme.dart';
 import 'package:find_my_pet_sg/helper/authenticate.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/mainpage.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +17,7 @@ void main() async {
   // FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
   // firebaseAppCheck.installAppCheckProviderFactory(
   //     PlayIntegrityAppCheckProviderFactory.getInstance());
-  runApp(const MyApp());
-
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -39,21 +40,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => GoogleSignInProvider(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.white,
-          scaffoldBackgroundColor: Colors.white,
-          primarySwatch: white,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+    return
+      ChangeNotifierProvider(
+        create: (context) => GoogleSignInProvider(),
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
+          theme: theme(),
+          home: MainPage(),
         ),
-        home: MainPage(),
-      ),
-    );
-
+      );
   }
 }
 

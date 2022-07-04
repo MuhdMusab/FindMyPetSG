@@ -4,15 +4,7 @@ PreferredSizeWidget appBarMain(BuildContext context) {
   return AppBar(
     automaticallyImplyLeading: false,
    centerTitle: true,
-   title: Text(
-     "FindMyPetSG",
-     style: TextStyle(
-       fontSize: 38,
-       color: Color(0xFFf26579),
-       fontFamily: 'Open Sans Extra Bold',
-       fontWeight: FontWeight.bold,
-     ),
-   ),
+    title: Container(),
   );
 }
 

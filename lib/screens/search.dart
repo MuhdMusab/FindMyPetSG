@@ -57,7 +57,6 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.grey.withOpacity(0.15),
-      appBar: appBarMain(context),
       body: StreamBuilder(
         stream: FirebaseDatabase(databaseURL: 'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
             .ref().child('chatroom').child(username).onValue,
@@ -77,7 +76,6 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
                   final chatrooms = Map<dynamic, dynamic>.from(
                       (snapshot.data! as dynamic).snapshot.value);
                   List temp = [];
-                  //print(temp);
                   Map<dynamic, dynamic>? otherChatters;
                   chatrooms.forEach((key, value) {
                     otherChatters = Map<String, dynamic>.from(value);

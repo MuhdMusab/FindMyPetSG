@@ -60,7 +60,7 @@ class _NonCurvedImageSliderCarouselState
             Column(
               children: [
                 SizedBox(height: 360),
-                buildIndicator(),
+                widget.imageArray.length == 1 ? Container() : buildIndicator(),
               ],
             ),
           ],

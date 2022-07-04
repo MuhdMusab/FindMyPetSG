@@ -58,6 +58,8 @@ dependencies:
   google_maps_webservice: ^0.0.19
   tuple: ^2.0.0
   searchfield: ^0.6.6
+  flutter_bloc: ^8.0.1
+  equatable: ^2.0.3
 
 
 

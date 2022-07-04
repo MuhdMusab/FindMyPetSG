@@ -59,8 +59,6 @@ signIn() async {
         .then((result) async {
       if (result != null) {
         if (!(FirebaseAuth.instance.currentUser!.emailVerified)) {
-          print(FirebaseAuth.instance.currentUser!.email);
-          print(FirebaseAuth.instance.currentUser!.emailVerified);
          Navigator.pushReplacement(context, MaterialPageRoute(
            builder: (context) => VerifyEmailPage(
            ),

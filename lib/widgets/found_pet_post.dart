@@ -1,17 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:find_my_pet_sg/helper/custom_icons_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:find_my_pet_sg/widgets/arrow_back_button_2.dart';
 import 'package:find_my_pet_sg/widgets/image_slider_carousel.dart';
 import 'package:find_my_pet_sg/widgets/noncurved_image_slider_carousel.dart';
 import 'package:find_my_pet_sg/models/user.dart' as model;
-import '../services/firestore_methods.dart';
-import '../utils/showSnackBar.dart';
 import 'package:find_my_pet_sg/modal/chatroom.dart';
 import 'package:find_my_pet_sg/modal/chatroomdao.dart';
 import 'package:find_my_pet_sg/modal/messagedao.dart';
@@ -36,7 +32,6 @@ class FoundPetPost extends StatefulWidget {
 class _FoundPetPostState extends State<FoundPetPost> {
   @override
   Widget build(BuildContext context) {
-    // final model.User user = Provider.of<UserProvider>(context).getUser;
     return Padding(
       padding:
           const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20.0, top: 10.0),

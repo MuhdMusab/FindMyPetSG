@@ -22,7 +22,7 @@ class ChatHeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (users.isEmpty) {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.only(left: 12, right: 12, bottom: 200),
         decoration: BoxDecoration(
           color: Colors.grey.withOpacity(0.3),
           borderRadius: BorderRadius.only(
@@ -55,7 +55,7 @@ class ChatHeaderWidget extends StatelessWidget {
       );
     } else {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.only(left: 12, right: 12, top: 40, bottom: 12),
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,

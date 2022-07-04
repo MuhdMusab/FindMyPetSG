@@ -61,7 +61,7 @@ class _ImageSliderCarouselState extends State<ImageSliderCarousel> {
                   Column(
                     children: [
                       SizedBox(height: 170),
-                      buildIndicator(),
+                      widget.imageArray.length == 1 ? Container() : buildIndicator(),
                     ],
                   ),
                 ],

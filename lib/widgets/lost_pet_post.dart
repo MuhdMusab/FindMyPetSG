@@ -26,31 +26,11 @@ import 'arrow_back_button_3.dart';
 class LostPetPost extends StatefulWidget {
   final snap;
   final QueryDocumentSnapshot<Object?>? user;
-  // final String name;
-  // final String postalCode;
-  // final String description;
-  // final String location;
-  // final String type; // cat dog bird others
-  // final String date;
-  // final String exactLocation;
-  // final bool isMale;
-  // final int reward;
-  // final imageArray;
 
   const LostPetPost({
     Key? key,
     required this.snap,
     required this.user,
-    // required this.location,
-    // required this.date,
-    // required this.name,
-    // required this.imageArray,
-    // required this.reward,
-    // required this.postalCode,
-    // required this.description,
-    // required this.type,
-    // required this.exactLocation,
-    // required this.isMale,
   }) : super(key: key);
 
   @override
@@ -153,7 +133,7 @@ class _LostPetPostState extends State<LostPetPost> {
                               height: 24,
                               width: 70,
                               decoration: BoxDecoration(
-                                  color: Color(0xFFffc4d4).withOpacity(1),
+                                  color: Color(0xFFffc4d4),
                                   borderRadius: BorderRadius.circular(8.0)),
                               child: Center(
                                 child: Text(
@@ -255,17 +235,6 @@ class FullLostPetPost extends StatefulWidget {
 }
 
 class _FullLostPetPostState extends State<FullLostPetPost> {
-  // deletePost(String postId) async {
-  //   try {
-  //     await FireStoreMethods().deletePost(postId);
-  //   } catch (err) {
-  //     showSnackBar(
-  //       context,
-  //       err.toString(),
-  //     );
-  //   }
-  // }
-
   late GoogleMapController _googleMapController;
 
   void _showLocation() {

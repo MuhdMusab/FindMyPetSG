@@ -38,7 +38,6 @@ class FireStoreMethods {
           'posts',
           file.readAsBytesSync(),
         );
-        print(await DatabaseMethods.getPostsLength(username));
         await DatabaseMethods.addPost(username, urls[0], postLength);
         await DatabaseMethods.addStorageReference(
             username, urls[1], storageRefsLength);
@@ -95,7 +94,6 @@ class FireStoreMethods {
           'posts',
           file.readAsBytesSync(),
         );
-        print(await DatabaseMethods.getPostsLength(username));
         await DatabaseMethods.addPost(username, urls[0], postLength);
         await DatabaseMethods.addStorageReference(
             username, urls[1], storageRefsLength);

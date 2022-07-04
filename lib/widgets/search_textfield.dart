@@ -1,10 +1,16 @@
+import 'package:find_my_pet_sg/screens/filter_screen.dart';
 import 'package:flutter/material.dart';
 // import 'package:fluttericon/fontelico_icons.dart';
 // import 'package:fluttericon/typicons_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class SearchTextField extends StatefulWidget {
-  const SearchTextField({Key? key}) : super(key: key);
+  final Function callback;
+
+  const SearchTextField({
+    Key? key,
+    required this.callback,
+  }) : super(key: key);
 
   @override
   State<SearchTextField> createState() => SearchTextfield();
@@ -77,7 +83,13 @@ class SearchTextfield extends State<SearchTextField> {
                     Icon(Icons.tune, color: Colors.black45),
                   ],
                 ),
-                onPressed: () => {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return FilterScreen(callback: widget.callback);
+                      }));
+                },
               ),
             ),
           ],

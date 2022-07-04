@@ -39,7 +39,6 @@ class _HomeState extends State<Home> {
   // void _activateListeners() {
   //   final String username = widget._user!['name'].toString();
   //   FirebaseDatabase.instance.ref().child(username).onChildAdded.listen((event) {
-  //     print(event.snapshot.value.toString() + " poop");
   //     // final String message = event.snapshot.value as String;
   //     // NotificationService().showNotification(1, "new message ", message, 2);
   //   });

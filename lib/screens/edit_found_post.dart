@@ -42,7 +42,6 @@ class EditFoundPostScreen extends StatefulWidget {
 }
 
 class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
-  List<File>? _files;
   bool isLoading = false;
 
 
@@ -67,19 +66,7 @@ class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
       _dateController.dispose();
     }
 
-    void setImageCallback(List<File> files) {
-      setState(() {
-        _files = files;
-      });
-    }
-
-    void clearImage() {
-      setState(() {
-        _files = null;
-      });
-    }
-
-    void postImage() async {
+    void uploadChanges() async {
       setState(() {
         isLoading = true;
       });
@@ -153,17 +140,6 @@ class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
             Expanded(
               child: ListView(
                 children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: Stack(
-                      children: [
-                        UploadSliderCarousel(
-                            setImageCallback: setImageCallback),
-                      ],
-                    ),
-                  ),
                   SizedBox(
                     height: 10,
                   ),
@@ -288,7 +264,7 @@ class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
                           child: CustomMadeButton(
                             isLoading: isLoading,
                             text: "Post",
-                            onPressed: () => postImage(),
+                            onPressed: () => uploadChanges(),
                           ),
                         ),
                         SizedBox(

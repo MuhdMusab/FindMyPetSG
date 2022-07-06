@@ -81,6 +81,7 @@ class FireStoreMethods {
       String username,
       DateTime dateTimePosted,
       String breed,
+      String name,
       ) async {
     // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
     String res = "Some error occurred";
@@ -104,7 +105,7 @@ class FireStoreMethods {
       Post post = Post(
           type: type,
           description: description,
-          name: "",
+          name: name,
           date: date,
           location: location,
           latitude: latitude,

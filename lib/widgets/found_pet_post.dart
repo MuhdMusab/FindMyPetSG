@@ -193,6 +193,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
           body: Stack(
             children: [
               GoogleMap(
+
                 mapToolbarEnabled: false,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(

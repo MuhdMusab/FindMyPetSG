@@ -74,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
   TextEditingController userNameTextEditingController = TextEditingController();
 
   Future showImageSource(BuildContext context, Storage storage, String username) async {
-    return showModalBottomSheet(
+    showModalBottomSheet(
         context: context,
         builder: (context) => Column(
           mainAxisSize: MainAxisSize.min,
@@ -103,6 +103,8 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                 String profilePicLink = await storage.downloadURL();
                 DatabaseMethods.editProfilePicLink(username, profilePicLink);
                 FilePickerStatus.done;
+                Navigator.pop(context);
+                setState(() {});
               },
             ),
           ],
@@ -110,9 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     );
   }
 
-  _callback() {
-    setState(() {});
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +122,9 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     final image = Image.asset("assets/images/default_user_icon.png");
     final chatroomDao = ChatroomDao();
     int postLength = 0;
-
+    _callback() {
+      setState(() {});
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -237,11 +239,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
-                      // TextStyle(
-                      //   fontFamily: GoogleFonts.roboto,
-                      //   fontWeight: FontWeight.bold,
-                      //   fontSize: 18,
-                      // ),
                     );
                   }
 
@@ -262,7 +259,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                   int postIndex = 0;
                   ListView listView = ListView.builder(
                     itemBuilder: (ctx, index) =>
-
                     index < snapshot.data!.docs.length && snapshot.data!.docs[index].data()['username'] == username
                         ? snapshot.data!.docs[index].data()['type'] == 'lost'
                           ? OwnLostPetPost(snapshot: snapshot.data!.docs[index].data(),
@@ -278,22 +274,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                   return listView;
                 }
             ),
-            // child: FutureBuilder<Map<String, dynamic>>(
-            //   future: DatabaseMethods.getUserPosts(username),
-            //   builder: (context,
-            //       AsyncSnapshot<Map<String, dynamic>> snapshot) {
-            //     if (snapshot.connectionState == ConnectionState.waiting) {
-            //       return const Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     }
-            //     return ListView.builder(
-            //       itemCount: snapshot.data!.length,
-            //       itemBuilder: (ctx, index) => OwnSliderCarousel(postIndex: index,
-            //           username: username, posts: snapshot.data![index.toString()], callback: _callback),
-            //     );
-            //   },
-            // ),
           ),
         ],
       ),

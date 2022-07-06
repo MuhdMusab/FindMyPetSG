@@ -60,6 +60,7 @@ dependencies:
   searchfield: ^0.6.6
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
+  firebase_messaging: ^11.4.4
 
 
 

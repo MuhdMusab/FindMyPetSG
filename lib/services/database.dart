@@ -91,7 +91,7 @@ class DatabaseMethods {
     Map<String, dynamic> mapOfStorageRefs = await getUserStorageReference(username);
     int postsLength = await getStorageReferenceLength(username);
     if (postIndex == postsLength - 1) {
-      mapOfStorageRefs.remove(postIndex.toString());
+      mapOfStorageRefs.remove((postsLength - 1).toString());
     } else {
       dynamic lastPost = mapOfStorageRefs[(postsLength - 1).toString()];
       mapOfStorageRefs[postIndex.toString()] = lastPost;

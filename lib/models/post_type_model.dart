@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:find_my_pet_sg/models/filter_model.dart';
 
 class PostType extends Filter {

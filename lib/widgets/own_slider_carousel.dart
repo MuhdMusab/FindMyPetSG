@@ -5,21 +5,8 @@ import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:find_my_pet_sg/widgets/upload_slider_carousel.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/models/user.dart' as model;
-import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
-import '../services/firestore_methods.dart';
 import '../utils/pickImage.dart';
-import '../utils/showSnackBar.dart';
-import '../widgets/arrow_back_button.dart';
-import '../widgets/custom_textfield.dart';
-import '../widgets/custom_textfield_2.dart';
-import '../widgets/reward_textfield.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OwnSliderCarousel extends StatefulWidget {
   //final imageArray;
@@ -44,7 +31,6 @@ class OwnSliderCarousel extends StatefulWidget {
 
 class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
   int activeIndex = 0;
-  int _currentPostSize = 0;
 
   _selectImage(BuildContext parentContext, int postIndex) async {
     return showDialog(
@@ -226,7 +212,6 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                               ),
                             ],
                           ),
-
                         ),
                         Container(
                             child: Row(

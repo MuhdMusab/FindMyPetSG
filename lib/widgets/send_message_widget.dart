@@ -20,22 +20,6 @@ class SendMessageWidget extends StatefulWidget {
 }
 
 class _SendMessageWidgetState extends State<SendMessageWidget> {
-
-
-  // void _scrollToBottom() {
-  //   if (widget.scrollController!.hasClients) {
-  //     print('a');
-  //     widget.scrollController!.jumpTo(widget.scrollController!.position.maxScrollExtent);
-  //     // widget.scrollController!.animateTo(
-  //     //   widget.scrollController!.position.maxScrollExtent,
-  //     //   duration: const Duration(milliseconds: 300),
-  //     //   curve: Curves.easeOut,
-  //     // );
-  //   } else {
-  //     print('b');
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Row(

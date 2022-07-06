@@ -35,19 +35,6 @@ class _ArrowBackButton3State extends State<ArrowBackButton3> {
             Navigator.pop(context);
           },
         )
-        // IconButton(
-        //   color: Colors.transparent,
-        //   icon: Icon(
-        //     Icons.arrow_back_rounded,
-        //     color: iconColor,
-        //     size: 30,
-        //   ),
-        //   focusColor: Colors.pink,
-        //   onPressed: () {
-        //     ionColor = Colors.pink;
-        //     Navigator.pop(context);
-        //   },
-        // )
       ],
     );
   }

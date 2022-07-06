@@ -1,17 +1,10 @@
-import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/models/filter_model.dart';
 import 'package:find_my_pet_sg/models/post_type_model.dart';
-import 'package:find_my_pet_sg/services/notification_service.dart';
-import 'package:find_my_pet_sg/widgets/custom_dialog_box.dart';
-import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:find_my_pet_sg/models/filter_model.dart';
 import 'package:find_my_pet_sg/models/category.dart';
 import '../widgets/lost_pet_post.dart';
 import '../widgets/found_pet_post.dart';
-import '../widgets/search_textfield.dart';
 
 class FullPosts extends StatefulWidget {
   List<Filter?> filters;
@@ -42,7 +35,6 @@ class _FullPostsState extends State<FullPosts> {
               child: CircularProgressIndicator(),
             );
           }
-
           return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (ctx, index) {
@@ -69,14 +61,14 @@ class _FullPostsState extends State<FullPosts> {
                 return Container(
                     child: postTypeBool && categoryBool
                         ? snapshot.data!.docs[index].data()['type'] == "lost"
-                          ? LostPetPost(
-                              snap: snapshot.data!.docs[index].data(),
-                              user: widget.user,
-                            )
-                          : FoundPetPost(
-                              snap: snapshot.data!.docs[index].data(),
-                              user: widget.user,
-                            )
+                        ? LostPetPost(
+                      snap: snapshot.data!.docs[index].data(),
+                      user: widget.user,
+                    )
+                        : FoundPetPost(
+                      snap: snapshot.data!.docs[index].data(),
+                      user: widget.user,
+                    )
                         : Container()
                 );
               }

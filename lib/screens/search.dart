@@ -1,23 +1,10 @@
-import 'package:find_my_pet_sg/modal/chatroom.dart';
-import 'package:find_my_pet_sg/modal/person.dart';
-import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
 import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
-import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:find_my_pet_sg/helper/homehelper.dart';
-import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/modal/messages.dart';
-import 'package:intl/intl.dart';
-import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:find_my_pet_sg/modal/message2.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:find_my_pet_sg/modal/messagedao.dart';
-import 'package:find_my_pet_sg/widgets/message_widget.dart';
 
 class SearchScreen extends StatefulWidget {
   QueryDocumentSnapshot<Object?>? _user;
@@ -29,26 +16,11 @@ class SearchScreen extends StatefulWidget {
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
-//http://10.0.2.2:3000
-//'http://localhost:3000'
-//'http://192.168.1.255:3000'
+
 class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClientMixin<SearchScreen> {
 
   @override
   bool get wantKeepAlive => true;
-
-  // void initState() {
-  //   super.initState();
-  //   _activateListeners();
-  // }
-  //
-  // void _activateListeners() {
-  //   final String username = widget._user!['name'].toString();
-  //   FirebaseDatabase.instance.ref().child(username).onChildChanged.listen((event) {
-  //     final String message = event.snapshot.value as String;
-  //     NotificationService().showNotification(1, "new message ", message, 2);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +53,6 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
                     otherChatters = Map<String, dynamic>.from(value);
                     temp.add(otherChatters?.values.first);
                   });
-                  final chat = Chatroom.fromJson(otherChatters!);
                   return Column(
                     children: [
                       ChatHeaderWidget(users: temp, username: username),

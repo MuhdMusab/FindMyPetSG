@@ -1,6 +1,5 @@
 import "package:firebase_auth/firebase_auth.dart";
 import "package:find_my_pet_sg/modal/person.dart";
-import 'package:flutter/services.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -8,6 +7,7 @@ class AuthMethods {
   Person ? _userFromFireBaseUser(User user) {
     return user != null ? Person(userId: user.uid) : null;
   }
+
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -24,21 +24,6 @@ class AuthMethods {
       }
     }
   }
-  // Future signUpWithEmailAndPassword(String email, String password) async {
-  //   try {
-  //     UserCredential result = await _auth.createUserWithEmailAndPassword
-  //       (email: email, password: password);
-  //     User ? firebaseUser = result.user;
-  //     return _userFromFireBaseUser(firebaseUser!);
-  //   } catch (e){
-  //     if (e is PlatformException) {
-  //       if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-  //         return "A";
-  //       }
-  //     }
-  //     return null;
-  //   }
-  // }
 
   Future resetPass(String email) async {
     try {

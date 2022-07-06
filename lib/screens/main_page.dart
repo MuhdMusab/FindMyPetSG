@@ -1,5 +1,5 @@
 import 'package:find_my_pet_sg/services/database.dart';
-import 'package:find_my_pet_sg/screens/googlesignupusername.dart';
+import 'package:find_my_pet_sg/screens/google_signup_username.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/helper/authenticate.dart';
 import 'package:find_my_pet_sg/screens/verify_email_screen.dart';

@@ -1,13 +1,9 @@
-import 'package:equatable/equatable.dart';
 import 'package:find_my_pet_sg/models/filter_model.dart';
 import '../models/category.dart';
 import '../models/post_type_model.dart';
 
 class Filters {
-
   Filters();
-
-
   @override
   static List<Filter?> filters() {
     return

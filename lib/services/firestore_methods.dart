@@ -124,19 +124,4 @@ class FireStoreMethods {
     }
     return res;
   }
-
-// Future<String> editLostPost(
-//     String type,
-//     String description,
-//     List<File> files,
-//     String name,
-//     String location,
-//     String breed,
-//     String date,
-//     int reward,
-//     int age,
-//     bool isMale,
-//     String username,) async {
-//
-// }
 }

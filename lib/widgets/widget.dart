@@ -30,7 +30,6 @@ InputDecoration circularFieldInputDecoration(String hintText) {
     hintStyle: TextStyle(
       color: Colors.black87,
     ),
-    //border: InputBorder.none,
   );
 }
 
@@ -65,7 +64,6 @@ TextStyle mediumTextStyle() {
 typedef F<String> = List<String> Function<String>(String);
 
 Container inputTextFieldCircular(String str, TextEditingController ctrl, BuildContext context, String ? Function(String ?) validator, double radius) {
-  //String ? Function(String ?) ? func
   return Container(
     width: MediaQuery.of(context).size.width - 100,
     alignment: Alignment.center,

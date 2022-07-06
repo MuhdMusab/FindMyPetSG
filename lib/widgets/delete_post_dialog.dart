@@ -1,9 +1,6 @@
 import 'dart:ui';
-import 'package:find_my_pet_sg/screens/create_lost_post_screen.dart';
-import 'package:find_my_pet_sg/screens/create_found_post_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DeletePostDialog extends StatefulWidget {
   final String title;
@@ -36,14 +33,14 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
               borderRadius: BorderRadius.circular(Constants.padding),
               boxShadow: [
-                BoxShadow(
-                    color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+                const BoxShadow(
+                    color: Colors.black, offset: const Offset(0, 10), blurRadius: 10),
               ]),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -51,16 +48,16 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
               Center(
                 child: Text(
                   widget.title,
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, ),
+                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600, ),
 
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   ElevatedButton(
@@ -73,9 +70,9 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       primary: const Color(0xfff26579),
-                      fixedSize: Size(150, 50),
+                      fixedSize: const Size(150, 50),
                     ),
-                    child: Text(
+                    child: const Text(
                       "Delete",
                       style: TextStyle(
                         fontSize: 18,
@@ -84,7 +81,7 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -93,10 +90,10 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      primary: Color(0xFFff9dab),
-                      fixedSize: Size(150, 50),
+                      primary: const Color(0xFFff9dab),
+                      fixedSize: const Size(150, 50),
                     ),
-                    child: Text(
+                    child: const Text(
                       "Cancel",
                       style: TextStyle(
                         fontSize: 18,
@@ -107,7 +104,7 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 22,
               ),
             ],

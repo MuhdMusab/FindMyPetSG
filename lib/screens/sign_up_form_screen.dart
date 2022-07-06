@@ -2,7 +2,6 @@ import 'package:find_my_pet_sg/helper/authenticate.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
-import 'package:find_my_pet_sg/services/auth.dart';
 import 'package:find_my_pet_sg/screens/verify_email_screen.dart';
 import "package:firebase_auth/firebase_auth.dart";
 
@@ -53,7 +52,7 @@ class _SignUpFormState extends State<SignUpForm> {
         setState(() {
           final text = 'Username is taken';
           final snackBar = SnackBar(
-            duration: Duration(seconds: 60),
+            duration: const Duration(seconds: 60),
             content: Text(text),
             action: SnackBarAction(
               label: 'Dismiss',
@@ -70,7 +69,7 @@ class _SignUpFormState extends State<SignUpForm> {
         setState(() {
           final text = 'Email is taken';
           final snackBar = SnackBar(
-            duration: Duration(seconds: 60),
+            duration: const Duration(seconds: 60),
             content: Text(text),
             action: SnackBarAction(
               label: 'Dismiss',
@@ -100,7 +99,7 @@ class _SignUpFormState extends State<SignUpForm> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => VerifyEmailPage(
+                builder: (context) => const VerifyEmailPage(
                 ),
               ),
             );
@@ -117,18 +116,18 @@ class _SignUpFormState extends State<SignUpForm> {
       appBar: appBarMain(context),
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/formbackground.png"),
               fit: BoxFit.cover,
             ),
           ),
-          padding: EdgeInsets.symmetric(vertical: 150, horizontal: 50),
+          padding: const EdgeInsets.symmetric(vertical: 150, horizontal: 50),
           alignment: Alignment.center,
           child: Column(
             children: [
               Container(
-                child: Text(
+                child: const Text(
                   "SIGN UP",
                   style: TextStyle(
                     color: Colors.black,
@@ -138,12 +137,12 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
                 alignment: Alignment.centerLeft,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                child: Text(
+                child: const Text(
                   "Username",
                   style: TextStyle(
                     color: Colors.black,
@@ -151,7 +150,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Form(
@@ -165,43 +164,43 @@ class _SignUpFormState extends State<SignUpForm> {
                       decoration: InputDecoration(
                         fillColor: Colors.grey.withOpacity(0.1),
                         filled: true,
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           vertical: 15,
                           horizontal: 15,
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.white,
                             width: 0,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.white,
                             width: 0,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.white,
                             width: 0,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         hintText: "username",
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           color: Colors.black54,
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 13,
                     ),
                     Container(
                       alignment: Alignment.centerLeft,
-                      child: Text(
+                      child: const Text(
                         "Email",
                         style: TextStyle(
                           color: Colors.black,
@@ -209,7 +208,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     TextFormField(
@@ -219,43 +218,43 @@ class _SignUpFormState extends State<SignUpForm> {
                       decoration: InputDecoration(
                         fillColor: Colors.grey.withOpacity(0.1),
                         filled: true,
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           vertical: 15,
                           horizontal: 15,
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.white,
                             width: 0,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.white,
                             width: 0,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.white,
                             width: 0,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         hintText: "email",
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           color: Colors.black54,
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 13,
                     ),
                     Container(
                       alignment: Alignment.centerLeft,
-                      child: Text(
+                      child: const Text(
                         "Password",
                         style: TextStyle(
                           color: Colors.black,
@@ -263,7 +262,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     TextFormField(
@@ -274,33 +273,33 @@ class _SignUpFormState extends State<SignUpForm> {
                       decoration: InputDecoration(
                         fillColor: Colors.grey.withOpacity(0.1),
                         filled: true,
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           vertical: 15,
                           horizontal: 15,
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.white,
                             width: 0,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.white,
                             width: 0,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.white,
                             width: 0,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         hintText: "password",
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           color: Colors.black54,
                         ),
                         suffixIcon: GestureDetector(
@@ -318,7 +317,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     GestureDetector(
@@ -328,18 +327,18 @@ class _SignUpFormState extends State<SignUpForm> {
                       child: Container(
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width - 50,
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           vertical: 12,
                           horizontal: 12,
                         ),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            const Color(0xfff26579),
-                            const Color(0xfff26579),
+                          gradient: const LinearGradient(colors: [
+                            Color(0xfff26579),
+                            Color(0xfff26579),
                           ]),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Sign up",
                           style: TextStyle(
                               color: Colors.white,
@@ -362,8 +361,8 @@ class _SignUpFormState extends State<SignUpForm> {
                           );
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: const Text(
                             "Sign in",
                             style: TextStyle(
                               color: Color(0xfff26579),

@@ -5,7 +5,6 @@ import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/widgets/date_field_picker.dart';
 import 'package:find_my_pet_sg/widgets/gender_field_picker.dart';
 import 'package:find_my_pet_sg/widgets/location_field_picker.dart';
-import 'package:find_my_pet_sg/widgets/upload_slider_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:find_my_pet_sg/models/user.dart' as model;
@@ -43,8 +42,6 @@ class EditFoundPostScreen extends StatefulWidget {
 
 class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
   bool isLoading = false;
-
-
   final _searchFormKey = GlobalKey<FormState>();
 
   @override

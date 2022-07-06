@@ -43,8 +43,6 @@ class EditLostPostScreen extends StatefulWidget {
 
 class _EditLostPostScreenState extends State<EditLostPostScreen> {
   bool isLoading = false;
-
-
   final _searchFormKey = GlobalKey<FormState>();
 
   @override
@@ -70,7 +68,6 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
       _rewardController.dispose();
       _ageController.dispose();
     }
-
 
     void uploadChanges() async {
       setState(() {

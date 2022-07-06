@@ -5,7 +5,7 @@ import 'package:find_my_pet_sg/modal/person.dart';
 import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
 import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
 import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
-import 'package:find_my_pet_sg/widgets/message_widget2.dart';
+import 'package:find_my_pet_sg/widgets/message_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:find_my_pet_sg/modal/messages.dart';
 import 'package:intl/intl.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:find_my_pet_sg/modal/message2.dart';
+import 'package:find_my_pet_sg/modal/message_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:find_my_pet_sg/modal/messagedao.dart';
@@ -46,8 +46,8 @@ class _MessageListState extends State<MessageList> {
         query: widget.messageDao.getOwnMessageQuery(),
         itemBuilder: (context, snapshot, animation, index) {
           final json = snapshot.value as Map<dynamic, dynamic>;
-          final message = Message2.fromJson(json);
-          return MessageWidget2(message: message.text, isMe: message.isMe, date: message.date, messageDao: widget.messageDao);
+          final message = Message.fromJson(json);
+          return MessageWidget(message: message.text, isMe: message.isMe, date: message.date, messageDao: widget.messageDao);
         },
       ),
     );

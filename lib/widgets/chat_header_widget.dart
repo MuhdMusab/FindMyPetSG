@@ -1,12 +1,7 @@
 import 'package:find_my_pet_sg/modal/messagedao.dart';
 import 'package:find_my_pet_sg/screens/chat_screen.dart';
-import 'package:find_my_pet_sg/screens/mainpage.dart';
-import 'package:find_my_pet_sg/screens/search.dart';
-import 'package:find_my_pet_sg/services/storage_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:flutter/material.dart';
-import 'package:find_my_pet_sg/modal/person.dart';
-import 'package:find_my_pet_sg/widgets/pop_up_icon.dart';
 
 class ChatHeaderWidget extends StatelessWidget {
   final List users;
@@ -83,7 +78,7 @@ class ChatHeaderWidget extends StatelessWidget {
                     );
                   } else {
                     final otherUser = users[index - 1];
-                    final Storage storage = Storage(otherUser);
+                    final StorageMethods storage = StorageMethods(username: otherUser);
                     return Container(
                       margin: const EdgeInsets.only(right: 12),
                       child: GestureDetector(
@@ -119,6 +114,5 @@ class ChatHeaderWidget extends StatelessWidget {
         ),
       );
     }
-
   }
 }

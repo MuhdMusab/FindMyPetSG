@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:find_my_pet_sg/modal/message2.dart';
+import 'package:find_my_pet_sg/modal/message_model.dart';
 
 class MessageDao {
   String? ownUsername;
@@ -28,11 +28,11 @@ class MessageDao {
         .ref().child(otherUsername!).child(ownUsername!).child('messages');
   }
 
-  void saveOwnMessage(Message2 message) {
+  void saveOwnMessage(Message message) {
     getOwnMessageRef().push().set(message.toJson());
   }
 
-  void saveOtherMessage(Message2 message) {
+  void saveOtherMessage(Message message) {
     getOtherMessageRef().push().set(message.toJson());
   }
 

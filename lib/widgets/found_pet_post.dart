@@ -33,11 +33,11 @@ class _FoundPetPostState extends State<FoundPetPost> {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20.0, top: 10.0),
+      const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20.0,),
       child: Material(
         child: InkWell(
           customBorder:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           splashColor: Colors.black38,
           onTap: () => {
             Navigator.push(
@@ -88,7 +88,7 @@ class _FoundPetPostState extends State<FoundPetPost> {
                             ),
                             Container(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              const EdgeInsets.symmetric(horizontal: 4.0),
                               height: 24,
                               width: 70,
                               decoration: BoxDecoration(
@@ -119,7 +119,7 @@ class _FoundPetPostState extends State<FoundPetPost> {
                 Stack(children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
+                    const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -224,7 +224,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                     ),
                     backgroundColor: Colors.pink,
                     onPressed: () => _googleMapController.animateCamera(
-                            CameraUpdate.newCameraPosition(CameraPosition(
+                        CameraUpdate.newCameraPosition(CameraPosition(
                           target: LatLng(
                             widget.foundPetPost.snap['latitude'],
                             widget.foundPetPost.snap['longtitude'],
@@ -347,7 +347,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
             ),
             InkWell(
               customBorder:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               onTap: _showLocation,
               splashColor: Colors.black12,
               child: Container(
@@ -396,9 +396,11 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
               ),
             ),
             const SizedBox(height: 10),
-            InkWell(
+            widget.foundPetPost.user!['name'].toString() == widget.foundPetPost.snap['username']
+                ? Container()
+                : InkWell(
               customBorder:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               onTap: () {},
               splashColor: Colors.black12,
               child: Container(
@@ -419,7 +421,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                 child: GestureDetector(
                   onTap: () async {
                     final ownUsername =
-                        widget.foundPetPost.user!['name'].toString();
+                    widget.foundPetPost.user!['name'].toString();
                     final otherUsername = widget.foundPetPost.snap['username'];
                     final messageDao = MessageDao(ownUsername, otherUsername);
                     if (ownUsername == otherUsername) {
@@ -469,7 +471,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                           children: [
                             const Padding(
                               padding:
-                                  EdgeInsets.only(right: 10.0, top: 2.0),
+                              EdgeInsets.only(right: 10.0, top: 2.0),
                               child: const Icon(MdiIcons.message, color: Colors.pink),
                             )
                           ],

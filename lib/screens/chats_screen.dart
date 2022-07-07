@@ -24,7 +24,6 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
 
   @override
   Widget build(BuildContext context) {
-    //WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     final String username = widget._user!['name'].toString();
     super.build(context);
     return Scaffold(

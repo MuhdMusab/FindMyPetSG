@@ -1,5 +1,7 @@
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/screens/filter_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class SearchTextField extends StatefulWidget {
   final Function callback;
@@ -19,48 +21,40 @@ class SearchTextfield extends State<SearchTextField> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Flexible(
-              child: TextField(
-                cursorHeight: 20,
-                cursorColor: Colors.pink,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(top: 5),
-                  filled: true,
-                  fillColor: Colors.black12,
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                    borderSide:
-                    BorderSide(color: Colors.transparent, width: 1.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                    borderSide:
-                    BorderSide(color: Colors.transparent, width: 1.0),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                    borderSide:
-                    BorderSide(color: Colors.transparent, width: 1.0),
-                  ),
-                  border: InputBorder.none,
-                  isDense: true,
-                  hintText: "Search",
-                  hintStyle: TextStyle(color: Colors.black38, fontSize: 16.0),
-                  prefixIcon: Padding(
-                    padding:
-                    const EdgeInsets.only(left: 2.0, top: 4.0, bottom: 2.0),
-                    child: Icon(
-                      Icons.search_outlined,
-                      size: 26.0,
-                      color: Colors.black38,
-                    ),
-                  ),
-                  prefixIconConstraints: BoxConstraints(
-                    maxHeight: 60,
-                    maxWidth: 60,
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(right: 8, left: 16, bottom: 1),
+              child: MaterialButton(
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                minWidth: 10,
+                height: 34.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  side: BorderSide(color: pink()),
                 ),
+                color: Colors.white,
+                child: Row(
+                  children: [
+                    Text(
+                        "Map",
+                      style: TextStyle(
+                        fontFamily: 'Futura',
+                        color: pink(),
+                        fontWeight: FontWeight.bold,
+                        fontSize:20,
+                      ),
+                    ),
+                    Icon(MdiIcons.mapMarker, color: pink()),
+                  ],
+                ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return FilterScreen(callback: widget.callback);
+                      }));
+                },
               ),
             ),
             Padding(
@@ -73,11 +67,11 @@ class SearchTextfield extends State<SearchTextField> {
                   borderRadius: BorderRadius.circular(30.0),
                   side: BorderSide(color: Colors.black26),
                 ),
-                color: Colors.white,
+                color: pink(),
                 child: Row(
                   children: [
-                    Text("Filter ", style: TextStyle(color: Colors.black45)),
-                    Icon(Icons.tune, color: Colors.black45),
+                    Text("Filter ", style: TextStyle(color: Colors.white)),
+                    Icon(Icons.tune, color: Colors.white),
                   ],
                 ),
                 onPressed: () {

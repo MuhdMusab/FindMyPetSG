@@ -1,14 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/screens/filter_screen.dart';
+import 'package:find_my_pet_sg/screens/maps_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class SearchTextField extends StatefulWidget {
   final Function callback;
+  final QueryDocumentSnapshot<Object?>? user;
 
   const SearchTextField({
     Key? key,
     required this.callback,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -37,7 +41,7 @@ class SearchTextfield extends State<SearchTextField> {
                 child: Row(
                   children: [
                     Text(
-                        "Map",
+                      "Map",
                       style: TextStyle(
                         fontFamily: 'Futura',
                         color: pink(),
@@ -52,7 +56,7 @@ class SearchTextfield extends State<SearchTextField> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return FilterScreen(callback: widget.callback);
+                        return MapsScreen(user: widget.user);
                       }));
                 },
               ),
@@ -65,12 +69,18 @@ class SearchTextfield extends State<SearchTextField> {
                 height: 34.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
-                  side: BorderSide(color: Colors.black26),
+                  side: BorderSide(color: pink()),
                 ),
                 color: pink(),
                 child: Row(
                   children: [
-                    Text("Filter ", style: TextStyle(color: Colors.white)),
+                    Text("Filter ", style: TextStyle(
+                      fontFamily: 'Futura',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize:20,
+                    ),
+                    ),
                     Icon(Icons.tune, color: Colors.white),
                   ],
                 ),

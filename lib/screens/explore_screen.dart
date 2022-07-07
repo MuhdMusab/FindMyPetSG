@@ -89,7 +89,7 @@ class _ExploreScreenState extends State<ExploreScreen>
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.only(left: 12, top: 18, bottom: 10),
-              child: SearchTextField(callback: _callback),
+              child: SearchTextField(callback: _callback, user: widget._user),
             ),
           ),
           Divider(

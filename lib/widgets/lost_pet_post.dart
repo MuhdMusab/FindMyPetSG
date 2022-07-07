@@ -40,7 +40,6 @@ class LostPetPost extends StatefulWidget {
 class _LostPetPostState extends State<LostPetPost> {
   @override
   Widget build(BuildContext context) {
-    // final model.User user = Provider.of<UserProvider>(context).getUser;
     return Padding(
       padding:
       const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20.0,),

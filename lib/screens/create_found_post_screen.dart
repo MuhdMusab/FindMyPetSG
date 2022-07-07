@@ -70,6 +70,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
     setState(() {
       _breed = animal;
     });
+    print(_breed);
   }
 
   void postImage() async {

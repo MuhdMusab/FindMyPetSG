@@ -49,7 +49,6 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
   final TextEditingController _rewardController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   String? _breed;
-  final _searchFormKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -72,6 +71,7 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
     setState(() {
       _breed = animal;
     });
+    print(_breed);
   }
 
   void postImage() async {
@@ -79,7 +79,7 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
       isLoading = true;
     });
     // start the loading
-    if (!_searchFormKey.currentState!.validate() ||_descriptionController.text.trim().length == 0
+    if (_descriptionController.text.trim().length == 0
         || _locationController.text.trim().length == 0 || _breed == null || _breed == "" ||
         _dateController.text.trim().length == 0  || _ageController.text.trim().length == 0
         || _nameController.text.trim().length == 0) {

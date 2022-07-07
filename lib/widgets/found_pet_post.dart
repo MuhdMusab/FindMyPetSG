@@ -7,7 +7,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:find_my_pet_sg/widgets/arrow_back_button_2.dart';
 import 'package:find_my_pet_sg/widgets/image_slider_carousel.dart';
 import 'package:find_my_pet_sg/widgets/noncurved_image_slider_carousel.dart';
-import 'package:find_my_pet_sg/models/user.dart' as model;
 import 'package:find_my_pet_sg/modal/chatroom.dart';
 import 'package:find_my_pet_sg/modal/chatroomdao.dart';
 import 'package:find_my_pet_sg/modal/messagedao.dart';
@@ -78,13 +77,13 @@ class _FoundPetPostState extends State<FoundPetPost> {
                             Container() :
                             Text(
                               widget.snap['name'],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                                 fontSize: 20,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             Container(
@@ -93,10 +92,10 @@ class _FoundPetPostState extends State<FoundPetPost> {
                               height: 24,
                               width: 70,
                               decoration: BoxDecoration(
-                                  color: Color(0xFFffc4d4).withOpacity(1),
+                                  color: const Color(0xFFffc4d4).withOpacity(1),
                                   borderRadius: BorderRadius.circular(8.0)),
-                              child: Center(
-                                child: Text(
+                              child: const Center(
+                                child: const Text(
                                   'Found',
                                   style: TextStyle(
                                     color: Color(
@@ -107,7 +106,7 @@ class _FoundPetPostState extends State<FoundPetPost> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                           ],
@@ -126,7 +125,7 @@ class _FoundPetPostState extends State<FoundPetPost> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.location_on,
                             color: Color(0xFFFf5757),
                           ),
@@ -143,7 +142,7 @@ class _FoundPetPostState extends State<FoundPetPost> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.calendar_today,
                           color: Color(0xFFFf5757),
                         ),
@@ -193,6 +192,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
           body: Stack(
             children: [
               GoogleMap(
+
                 mapToolbarEnabled: false,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
@@ -213,7 +213,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                 zoomControlsEnabled: false,
                 zoomGesturesEnabled: true,
               ),
-              Positioned(top: 50, left: 4, child: ArrowBackButton3()),
+              const Positioned(top: 50, left: 4, child: const ArrowBackButton3()),
               Positioned(
                 right: 10,
                 bottom: 80,
@@ -249,8 +249,8 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
               child: Stack(children: [
                 NonCurvedImageSliderCarousel(
                     imageArray: widget.foundPetPost.snap['photoUrls']),
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0, left: 8),
+                const Padding(
+                  padding: EdgeInsets.only(top: 12.0, left: 8),
                   child: ArrowBackButton2(),
                 ),
               ]),
@@ -264,7 +264,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                   Container() :
                   Text(
                     widget.foundPetPost.snap['name'],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                       fontSize: 20,
@@ -328,7 +328,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                       padding: const EdgeInsets.only(right: 4.0),
                       child: Text(
                         widget.foundPetPost.snap['date'],
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black45,
                           fontSize: 16,
                         ),
@@ -342,7 +342,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                 )
               ],
             ),
-            Divider(
+            const Divider(
               color: Colors.black,
             ),
             InkWell(
@@ -384,8 +384,8 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10.0, top: 2.0),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 10.0, top: 2.0),
                             child: Icon(MdiIcons.mapMarker, color: Colors.pink),
                           )
                         ],
@@ -395,7 +395,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             InkWell(
               customBorder:
                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -467,10 +467,10 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Padding(
+                            const Padding(
                               padding:
-                                  const EdgeInsets.only(right: 10.0, top: 2.0),
-                              child: Icon(MdiIcons.message, color: Colors.pink),
+                                  EdgeInsets.only(right: 10.0, top: 2.0),
+                              child: const Icon(MdiIcons.message, color: Colors.pink),
                             )
                           ],
                         )

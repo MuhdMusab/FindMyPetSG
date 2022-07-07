@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/screens/search.dart';
-import 'package:find_my_pet_sg/services/notification_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/screens/profile_screen.dart';
 import 'package:find_my_pet_sg/screens/explore_screen.dart';
-import 'package:find_my_pet_sg/helper/custom_icons_icons.dart';
+import '../helper/custom_icons_icons.dart';
 
 class Home extends StatefulWidget {
   QueryDocumentSnapshot<Object?>? _user;

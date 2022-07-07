@@ -1,6 +1,6 @@
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/screens/home.dart';
-import 'package:find_my_pet_sg/screens/mainpage.dart';
+import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:find_my_pet_sg/screens/sign_up_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';

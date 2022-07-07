@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
-import 'package:find_my_pet_sg/services/storage_service.dart';
-import 'package:find_my_pet_sg/screens/mainpage.dart';
-import 'package:find_my_pet_sg/widgets/widget.dart';
+import '../helper/google_sign_in_provider.dart';
+import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -22,11 +18,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Color(0xFFf26579),
         ),
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Settings",
           style: TextStyle(
             fontSize: 20,
@@ -38,87 +34,87 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 50,
             child: Row(children:
             [
-              Icon(Icons.notifications_none,
+              const Icon(Icons.notifications_none,
                 size: 32,
               ),
-              SizedBox(width: 3,),
-              Text('Notifications',
+              const SizedBox(width: 3,),
+              const Text('Notifications',
                 style: TextStyle(
                   fontSize: 17,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               IconButton(onPressed: () => {},
-                  icon: Icon(Icons.navigate_next,
+                  icon: const Icon(Icons.navigate_next,
                     size: 30,
                   )
               ),
             ],
             ),
           ),
-          Container(child: Divider(),
-            padding: EdgeInsets.symmetric(horizontal: 20),
+          Container(child: const Divider(),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 50,
             child: Row(children:
             [
-              Icon(Icons.lock_outline,
+              const Icon(Icons.lock_outline,
                 size: 32,
               ),
-              SizedBox(width: 3,),
-              Text('Privacy & Security',
+              const SizedBox(width: 3,),
+              const Text('Privacy & Security',
                 style: TextStyle(
                   fontSize: 17,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               IconButton(onPressed: () => {},
-                  icon: Icon(Icons.navigate_next,
+                  icon: const Icon(Icons.navigate_next,
                     size: 30,
                   )
               ),
             ],
             ),
           ),
-          Container(child: Divider(),
-            padding: EdgeInsets.symmetric(horizontal: 20),
+          Container(child: const Divider(),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 50,
             child: Row(children:
             [
-              FaIcon(FontAwesomeIcons.circleQuestion,
+              const FaIcon(FontAwesomeIcons.circleQuestion,
                 size: 32,
               ),
-              SizedBox(width: 5,),
-              Text('About',
+              const SizedBox(width: 5,),
+              const Text('About',
                 style: TextStyle(
                   fontSize: 17,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               IconButton(onPressed: () => {},
-                  icon: Icon(Icons.navigate_next,
+                  icon: const Icon(Icons.navigate_next,
                     size: 30,
                   )
               ),
             ],
             ),
           ),
-          Container(child: Divider(),
-            padding: EdgeInsets.symmetric(horizontal: 20),
+          Container(child: const Divider(),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             height: 50,
             child: Row(children:
             [
@@ -131,18 +127,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       context,
                       MaterialPageRoute(
 
-                        builder: (context) => MainPage(),
+                        builder: (context) => const MainPage(),
                       ),
                     );
                   },
-                  padding: EdgeInsets.only(left: 8),
-                  icon: Icon(Icons.logout,
+                  padding: const EdgeInsets.only(left: 8),
+                  icon: const Icon(Icons.logout,
                     size: 32,
                     color: Color(0xFFf26579),
                   )
               ),
-              SizedBox(width: 0,),
-              Text('Logout',
+              const SizedBox(width: 0,),
+              const Text('Logout',
                 style: TextStyle(
                   fontSize: 17,
                   color: Color(0xFFf26579),

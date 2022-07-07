@@ -13,11 +13,6 @@ class ImageSliderCarousel extends StatefulWidget {
 
 class _ImageSliderCarouselState extends State<ImageSliderCarousel> {
   int activeIndex = 0;
-  // final ImagesInCarousel = [
-  //   'images/cat.jpg',
-  //   'images/catt.jpg',
-  //   'images/cattt.jpg',
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +38,10 @@ class _ImageSliderCarouselState extends State<ImageSliderCarousel> {
                         setState(() => activeIndex = index),
                   ),
                   itemBuilder: (context, index, realIndex) {
-                    // final ImageInCarousel = widget.imageArray[index];
                     return Image.network(
                       widget.imageArray[index],
                       fit: BoxFit.cover,
                     );
-                    // return buildImage(ImageInCarousel, index);
                   },
                 ),
               ],

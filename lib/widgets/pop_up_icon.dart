@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:find_my_pet_sg/services/storage_service.dart';
+import 'package:find_my_pet_sg/services/storage_methods.dart';
 
 class PopupIcon extends StatefulWidget {
   IconData? icon;
   Color? color;
   String? text;
-  Storage? storage;
+  StorageMethods? storage;
 
   PopupIcon({
     Key? key,
@@ -26,7 +26,7 @@ class _PopupIconState extends State<PopupIcon> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(5.0),
+      margin: const EdgeInsets.all(5.0),
       height: 140,
       width: 100,
       child: Center(
@@ -35,11 +35,11 @@ class _PopupIconState extends State<PopupIcon> {
             AnimatedOpacity(
               opacity: onIt ? 1.0 : 0.0,
               curve: onIt ? Curves.easeOutBack : Curves.easeIn,
-              duration: Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 200),
               child: AnimatedAlign(
                 curve: onIt ? Curves.easeOutBack : Curves.easeIn,
-                alignment: onIt ? Alignment(0.0, -1.0) : Alignment(0.0, 0.0),
-                duration: Duration(milliseconds: 200),
+                alignment: onIt ? const Alignment(0.0, -1.0) : const Alignment(0.0, 0.0),
+                duration: const Duration(milliseconds: 200),
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -66,7 +66,7 @@ class _PopupIconState extends State<PopupIcon> {
                       child: Center(
                         child: Text(
                           widget.text!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w500,
@@ -81,40 +81,40 @@ class _PopupIconState extends State<PopupIcon> {
             Align(
               child: GestureDetector(
                 onLongPress: () {
-            setState(() {
-              onIt = true;
-            });
-          },
+                  setState(() {
+                    onIt = true;
+                  });
+                },
                 onLongPressCancel: () {
                   setState(() {
                     onIt = false;
                   });
                 },
-                  child: AnimatedContainer(
-                    height: 10.0,
-                    width: 10.0,
-                    duration: Duration(milliseconds: 375),
-                    decoration: BoxDecoration(
-                      color: onIt ? widget.color : Colors.white,
-                      borderRadius: BorderRadius.circular(50.0),
-                    ),
-                    child: FutureBuilder(
-                        future: widget.storage!.downloadURL(),
-                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done &&
-                              snapshot.hasData) {
-                            return CircleAvatar(
-                              backgroundImage: NetworkImage(snapshot.data!),
-                            );
-                          } else {
-                            return CircleAvatar(
-                              backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-                            );
-                          }
+                child: AnimatedContainer(
+                  height: 10.0,
+                  width: 10.0,
+                  duration: const Duration(milliseconds: 375),
+                  decoration: BoxDecoration(
+                    color: onIt ? widget.color : Colors.white,
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  child: FutureBuilder(
+                      future: widget.storage!.downloadURL(),
+                      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.hasData) {
+                          return CircleAvatar(
+                            backgroundImage: NetworkImage(snapshot.data!),
+                          );
+                        } else {
+                          return const CircleAvatar(
+                            backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+                          );
                         }
-                    ),
+                      }
                   ),
                 ),
+              ),
             ),
           ],
         ),

@@ -1,18 +1,17 @@
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/screens/forgot_password_screen.dart';
-import 'package:find_my_pet_sg/screens/googlesignupusername.dart';
+import 'package:find_my_pet_sg/screens/google_signup_username.dart';
 import 'package:find_my_pet_sg/screens/sign_in_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
-import 'package:find_my_pet_sg/screens/mainpage.dart';
+import '../helper/google_sign_in_provider.dart';
+import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:provider/provider.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggle;
-  SignIn(this.toggle);
+  SignIn(this.toggle, {Key? key}) : super(key: key);
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -24,11 +23,11 @@ class _SignInState extends State<SignIn> {
     //await Future.delayed(Duration(seconds: 1));
     if (await DatabaseMethods.containsEmail(email)) {
       Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => MainPage(),
+        builder: (context) => const MainPage(),
       ));
     } else {
       Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => GoogleSignUpUsername(),
+        builder: (context) => const GoogleSignUpUsername(),
       ));
     }
   }
@@ -39,9 +38,9 @@ class _SignInState extends State<SignIn> {
         appBar: appBarMain(context),
         body: SingleChildScrollView(
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
+                image: const AssetImage(
                     "assets/images/signinpage.png"
                 ),
                 fit: BoxFit.cover,
@@ -55,13 +54,13 @@ class _SignInState extends State<SignIn> {
                 children: [
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ForgotPassword(),
+                      builder: (context) => const ForgotPassword(),
                     )),
                     child: Container(
                       alignment: Alignment.centerRight,
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Text(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: const Text(
                           "Forgot Password?",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
@@ -73,13 +72,13 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: (context) => SignInForm()
+                          builder: (context) => const SignInForm()
                       ));
                     },
                     style: ElevatedButton.styleFrom(
@@ -87,7 +86,7 @@ class _SignInState extends State<SignIn> {
                       primary: const Color(0xfff26579),
                       fixedSize: Size(MediaQuery.of(context).size.width - 50, 66),
                     ),
-                    child: Text(
+                    child: const Text(
                       "Sign in",
                       style: TextStyle(
                           color: Colors.white,
@@ -97,11 +96,11 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   ElevatedButton.icon(
-                    icon: FaIcon(FontAwesomeIcons.google, color: Colors.red,),
+                    icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red,),
                     onPressed: () {
                       final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                       provider.googleLogin();
@@ -112,7 +111,7 @@ class _SignInState extends State<SignIn> {
                       primary: Colors.white,
                       fixedSize: Size(MediaQuery.of(context).size.width - 50, 66),
                     ),
-                    label: Text(
+                    label: const Text(
                       "Sign in with Google",
                       style: TextStyle(
                           color: Colors.black,
@@ -122,7 +121,7 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -132,10 +131,10 @@ class _SignInState extends State<SignIn> {
                             widget.toggle();
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Text("Sign up",
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: const Text("Sign up",
                               style: TextStyle(
-                                color: Color(0xfff26579),
+                                color: const Color(0xfff26579),
                                 fontSize: 17,
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.bold,
@@ -146,7 +145,7 @@ class _SignInState extends State<SignIn> {
                         ),
                       ]
                   ),
-                  SizedBox(height: 50,),
+                  const SizedBox(height: 50,),
                 ],
               ),
             ),

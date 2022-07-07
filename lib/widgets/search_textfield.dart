@@ -1,8 +1,5 @@
 import 'package:find_my_pet_sg/screens/filter_screen.dart';
 import 'package:flutter/material.dart';
-// import 'package:fluttericon/fontelico_icons.dart';
-// import 'package:fluttericon/typicons_icons.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class SearchTextField extends StatefulWidget {
   final Function callback;

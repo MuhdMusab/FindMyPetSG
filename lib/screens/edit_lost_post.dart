@@ -42,10 +42,7 @@ class EditLostPostScreen extends StatefulWidget {
 }
 
 class _EditLostPostScreenState extends State<EditLostPostScreen> {
-  List<File>? _files;
   bool isLoading = false;
-
-
   final _searchFormKey = GlobalKey<FormState>();
 
   @override
@@ -72,19 +69,7 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
       _ageController.dispose();
     }
 
-    void setImageCallback(List<File> files) {
-      setState(() {
-        _files = files;
-      });
-    }
-
-    void clearImage() {
-      setState(() {
-        _files = null;
-      });
-    }
-
-    void postImage() async {
+    void uploadChanges() async {
       setState(() {
         isLoading = true;
       });
@@ -167,17 +152,6 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
             Expanded(
               child: ListView(
                 children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: Stack(
-                      children: [
-                        UploadSliderCarousel(
-                            setImageCallback: setImageCallback),
-                      ],
-                    ),
-                  ),
                   SizedBox(
                     height: 10,
                   ),
@@ -318,7 +292,7 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
                           child: CustomMadeButton(
                             isLoading: isLoading,
                             text: "Post",
-                            onPressed: () => postImage(),
+                            onPressed: () => uploadChanges(),
                           ),
                         ),
                         SizedBox(

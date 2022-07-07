@@ -1,8 +1,7 @@
 import 'package:find_my_pet_sg/modal/messagedao.dart';
 import 'package:find_my_pet_sg/screens/chat_screen.dart';
 import 'package:find_my_pet_sg/services/notification_service.dart';
-import 'package:find_my_pet_sg/services/storage_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -53,14 +52,14 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
     physics: BouncingScrollPhysics(),
     itemBuilder: (context, index) {
       final otherUser = widget.users[index];
-      Storage storage = Storage(otherUser);
+      StorageMethods storage = StorageMethods(username: otherUser);
       MessageDao messageDao = MessageDao(widget.username, otherUser);
       return Container(
         height: 75,
         child: ListTile(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ChatScreen(username: otherUser, messageDao: MessageDao(widget.username, otherUser),), fullscreenDialog: true
+                builder: (context) => ChatScreen(username: otherUser, messageDao: MessageDao(widget.username, otherUser),), fullscreenDialog: true
             ));
           },
           leading: FutureBuilder(
@@ -94,7 +93,6 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
                     NotificationService().showNotification(1, "new message from " + otherUser, map['text'], 2);
                     return Text(map['text'], maxLines: 1,);
                   }
-
                 } else {
                   final map = (snapshot.data!.value as Map<dynamic, dynamic>).values.first;
                   if (map['isMe']) {
@@ -108,9 +106,7 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
               } else {
                 return Text("");
               }
-            }
-
-            ,
+            },
           ),
         ),
       );

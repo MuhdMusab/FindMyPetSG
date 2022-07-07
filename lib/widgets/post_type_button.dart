@@ -1,4 +1,3 @@
-import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:flutter/material.dart';
 
 class PostTypeButton extends StatefulWidget {

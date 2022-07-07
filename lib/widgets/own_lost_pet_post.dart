@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
+import '../helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/edit_lost_post.dart';
 import 'package:find_my_pet_sg/screens/settings_screen.dart';
 import 'package:find_my_pet_sg/services/auth.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
-import 'package:find_my_pet_sg/services/storage_service.dart';
-import 'package:find_my_pet_sg/screens/mainpage.dart';
+import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:find_my_pet_sg/widgets/delete_post_dialog.dart';
 import 'package:find_my_pet_sg/widgets/own_slider_carousel.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';

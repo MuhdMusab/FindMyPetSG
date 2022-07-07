@@ -63,31 +63,5 @@ class _TypeOfAnimalButtonState extends State<TypeOfAnimalButton> {
         ],
       ),
     );
-    // return
-    //   ElevatedButton(
-    //     onPressed: () {
-    //       setState(() {
-    //         enabled = !enabled;
-    //         widget.callback(widget.index);
-    //       });
-    //     },
-    //     style: ElevatedButton.styleFrom(
-    //       shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(30),
-    //       ),
-    //       primary: enabled ? Color(0xFFff9dab)
-    //           : Colors.white,
-    //       fixedSize: Size(150, 50),
-    //     ),
-    //     child: Text(
-    //       widget.text,
-    //       style: TextStyle(
-    //         fontFamily: 'Futura',
-    //         color: Color(0xFF2b2e4a),
-    //         fontWeight: FontWeight.bold,
-    //         fontSize: 16,
-    //       ),
-    //     ),
-    //   );
   }
 }

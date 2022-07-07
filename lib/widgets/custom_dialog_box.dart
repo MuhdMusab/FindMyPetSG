@@ -14,16 +14,6 @@ class CustomDialogBox extends StatefulWidget {
     required this.title,
     required this.text,
     required this.user,
-    // required this.location,
-    // required this.date,
-    // required this.name,
-    // required this.imageArray,
-    // required this.reward,
-    // required this.postalCode,
-    // required this.description,
-    // required this.type,
-    // required this.exactLocation,
-    // required this.isMale,
   }) : super(key: key);
 
   @override
@@ -35,7 +25,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Constants.padding),
+        borderRadius: BorderRadius.circular(20.0),
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -51,7 +41,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
-              borderRadius: BorderRadius.circular(Constants.padding),
+              borderRadius: BorderRadius.circular(20.0),
               boxShadow: [
                 BoxShadow(
                     color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
@@ -142,10 +132,4 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
       ],
     );
   }
-}
-
-class Constants {
-  Constants._();
-  static const double padding = 20;
-  static const double avatarRadius = 45;
 }

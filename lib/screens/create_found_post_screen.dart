@@ -99,6 +99,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
           widget._user!['name'].toString(),
           DateTime.now(),
           _breed!,
+          _nameController.text == null || _nameController.text == "" ? "" : _nameController.text.trim(),
         );
         if (res == "success") {
           setState(() {

@@ -1,33 +1,15 @@
 import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/settings_screen.dart';
-import 'package:find_my_pet_sg/services/auth.dart';
 import 'package:find_my_pet_sg/services/database.dart';
-import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
-import 'package:find_my_pet_sg/services/storage_service.dart';
-import 'package:find_my_pet_sg/screens/mainpage.dart';
 import 'package:find_my_pet_sg/widgets/own_lost_pet_post.dart';
 import 'package:find_my_pet_sg/widgets/own_found_pet_post.dart';
-import 'package:find_my_pet_sg/widgets/own_slider_carousel.dart';
-import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/modal/chatroom.dart';
-import 'package:find_my_pet_sg/modal/chatroomdao.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import '../widgets/lost_pet_post.dart';
-import '../widgets/found_pet_post.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileScreen extends StatefulWidget {
   QueryDocumentSnapshot<Object?>? _user;
@@ -43,11 +25,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveClientMixin<ProfileScreen> {
   @override
   bool get wantKeepAlive => true;
-
   StreamSubscription<DocumentSnapshot>? subscription;
   List<DocumentSnapshot>? myList;
-
-  //final DocumentReference documentReference = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.);
+  TextEditingController userNameTextEditingController = TextEditingController();
 
   @override
   void dispose() {
@@ -62,26 +42,15 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     // _activateListeners();
   }
 
-  // void _activateListeners() {
-  //   final String username = widget._user!['name'].toString();
-  //   FirebaseDatabase.instance.ref().child(username).onValue.listen((event) {
-  //     final String message = event.snapshot.value as String;
-  //     NotificationService().showNotification(1, "new message ", message, 2);
-  //   });
-  // }
-  ChatroomDao _chatroomDao = ChatroomDao();
-  ScrollController _scrollController = ScrollController();
-  TextEditingController userNameTextEditingController = TextEditingController();
-
-  Future showImageSource(BuildContext context, Storage storage, String username) async {
-    return showModalBottomSheet(
+  Future showImageSource(BuildContext context, StorageMethods storage, String username) async {
+    showModalBottomSheet(
         context: context,
         builder: (context) => Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.image),
-              title: Text('Choose image from Gallery'),
+              leading: const Icon(Icons.image),
+              title: const Text('Choose image from Gallery'),
               onTap: () async {
                 final img = await FilePicker.platform.pickFiles(
                     allowMultiple: false,
@@ -103,6 +72,8 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                 String profilePicLink = await storage.downloadURL();
                 DatabaseMethods.editProfilePicLink(username, profilePicLink);
                 FilePickerStatus.done;
+                Navigator.pop(context);
+                setState(() {});
               },
             ),
           ],
@@ -110,19 +81,15 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     );
   }
 
-  _callback() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
     final String username = widget._user!['name'].toString();
-    final Storage storage = Storage(username);
-    final image = Image.asset("assets/images/default_user_icon.png");
-    final chatroomDao = ChatroomDao();
+    final StorageMethods storage = StorageMethods(username: username);
     int postLength = 0;
-
+    _callback() {
+      setState(() {});
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -130,21 +97,21 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
         title: Container(),
         actions: [
           IconButton(
-              color: Color(0xFFf26579),
+              color: const Color(0xFFf26579),
               onPressed: () => {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SettingsScreen(),
+                      builder: (context) => const SettingsScreen(),
                     ))
               },
-              icon: Icon(Icons.settings)
+              icon: const Icon(Icons.settings)
           )
         ],
       ),
       body: Column(
         children: [
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Align(
             alignment: Alignment.center,
             child: Stack(
@@ -170,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                             );
                           } else {
                             return Ink.image(
-                              image: AssetImage("assets/images/default_user_icon.png",),
+                              image: const AssetImage("assets/images/default_user_icon.png",),
                               fit: BoxFit.cover,
                               width: 100,
                               height: 100,
@@ -190,13 +157,13 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                   right: 2,
                   child: ClipOval(
                     child: Container(
-                      padding: EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(3),
                       color: Colors.white,
                       child: ClipOval(
                         child: Container(
-                          padding: EdgeInsets.all(7),
+                          padding: const EdgeInsets.all(7),
                           color: Colors.blue,
-                          child: Icon(
+                          child: const Icon(
                             Icons.edit,
                             size: 18,
                             color: Colors.white,
@@ -209,17 +176,17 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
               ],
             ),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Text(
             "Hello, " + widget._user!['name'],
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
           ),
-          SizedBox(height: 30,),
+          const SizedBox(height: 30,),
           Padding(
-            padding: EdgeInsets.only(left: 30),
+            padding: const EdgeInsets.only(left: 30),
             child: Align(
               alignment: Alignment.bottomLeft,
               child: FutureBuilder<Map<String, dynamic>>(
@@ -237,19 +204,14 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
-                      // TextStyle(
-                      //   fontFamily: GoogleFonts.roboto,
-                      //   fontWeight: FontWeight.bold,
-                      //   fontSize: 18,
-                      // ),
                     );
                   }
 
               ),
             ),
           ),
-          SizedBox(height: 20,),
-          Divider(
+          const SizedBox(height: 20,),
+          const Divider(
             height: 1,
             thickness: 2,
             color: Colors.white,
@@ -278,22 +240,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                   return listView;
                 }
             ),
-            // child: FutureBuilder<Map<String, dynamic>>(
-            //   future: DatabaseMethods.getUserPosts(username),
-            //   builder: (context,
-            //       AsyncSnapshot<Map<String, dynamic>> snapshot) {
-            //     if (snapshot.connectionState == ConnectionState.waiting) {
-            //       return const Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     }
-            //     return ListView.builder(
-            //       itemCount: snapshot.data!.length,
-            //       itemBuilder: (ctx, index) => OwnSliderCarousel(postIndex: index,
-            //           username: username, posts: snapshot.data![index.toString()], callback: _callback),
-            //     );
-            //   },
-            // ),
           ),
         ],
       ),

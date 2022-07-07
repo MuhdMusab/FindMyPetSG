@@ -3,22 +3,8 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:find_my_pet_sg/widgets/upload_slider_carousel.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-// import 'package:find_my_pet_sg/widgets/arrow_back_button.dart';
-import 'package:find_my_pet_sg/models/user.dart' as model;
-import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
-import '../services/firestore_methods.dart';
 import '../utils/pickImage.dart';
-import '../utils/showSnackBar.dart';
-import '../widgets/arrow_back_button.dart';
-import '../widgets/custom_textfield.dart';
-import '../widgets/custom_textfield_2.dart';
-import '../widgets/reward_textfield.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UploadSliderCarousel extends StatefulWidget {
   //final imageArray;
@@ -38,11 +24,6 @@ class UploadSliderCarousel extends StatefulWidget {
 class _UploadSliderCarouselState extends State<UploadSliderCarousel> {
   int activeIndex = 0;
   List<File> croppedFiles = [];
-  // final ImagesInCarousel = [
-  //   'images/cat.jpg',
-  //   'images/catt.jpg',
-  //   'images/cattt.jpg',
-  // ];
 
   _selectImage(BuildContext parentContext) async {
     return showDialog(
@@ -190,10 +171,6 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> {
                                     "assets/images/uploadcameraimage.png",
                                     fit: BoxFit.cover,
                                   );
-                                  // return Image.network(
-                                  //   'https://i.pinimg.com/originals/f9/58/18/f95818f914844d2b1cf7a45b232061d1.jpg',
-                                  //   fit: BoxFit.fill,
-                                  // );
                                 } else {
                                   return Image.file(
                                     croppedFiles[index],

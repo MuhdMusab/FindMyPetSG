@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../helper/google_sign_in_provider.dart';
+import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

@@ -3,7 +3,7 @@ import 'package:find_my_pet_sg/modal/person.dart';
 import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
 import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
 import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
-import 'package:find_my_pet_sg/widgets/message_widget2.dart';
+import 'package:find_my_pet_sg/widgets/message_widget.dart';
 import 'package:find_my_pet_sg/widgets/send_message_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:find_my_pet_sg/modal/messages.dart';
 import 'package:intl/intl.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:find_my_pet_sg/modal/message2.dart';
+import 'package:find_my_pet_sg/modal/message_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:find_my_pet_sg/modal/messagedao.dart';
@@ -46,8 +46,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _sendMessage() {
     if (_canSendMessage()) {
-      final ownMessage = Message2(_messageInputController.text, DateTime.now(), true);
-      final otherMessage = Message2(_messageInputController.text, DateTime.now(), false);
+      final ownMessage = Message(_messageInputController.text, DateTime.now(), true);
+      final otherMessage = Message(_messageInputController.text, DateTime.now(), false);
       widget.messageDao.saveOwnMessage(ownMessage);
       widget.messageDao.saveOtherMessage(otherMessage);
       _messageInputController.clear();

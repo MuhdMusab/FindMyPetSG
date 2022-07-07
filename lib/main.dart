@@ -1,7 +1,7 @@
 import 'package:find_my_pet_sg/config/theme.dart';
 import 'package:find_my_pet_sg/helper/authenticate.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
-import 'package:find_my_pet_sg/screens/mainpage.dart';
+import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:find_my_pet_sg/screens/verify_email_screen.dart';
 import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';

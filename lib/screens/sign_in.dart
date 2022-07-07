@@ -5,7 +5,7 @@ import 'package:find_my_pet_sg/screens/sign_in_form_screen.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import "package:flutter/material.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../helper/google_sign_in_provider.dart';
+import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:provider/provider.dart';
 

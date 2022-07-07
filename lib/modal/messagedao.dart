@@ -59,12 +59,4 @@ class MessageDao {
   Future<DataSnapshot> getMostRecentMessage() async {
     return getOwnMessageQuery().orderByKey().limitToLast(1).get();
   }
-
-  // Future<DataSnapshot> getMostRecentMessage2() async {
-  //   return getOwnMessageQuery().onChildAdded.listen((event) { return event;});
-  // }
-
-  // void temp() {
-  //   getOwnMessageQuery().onChildAdded.listen((event) { });
-  // }
 }

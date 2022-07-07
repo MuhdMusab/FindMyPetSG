@@ -21,9 +21,11 @@ class UploadSliderCarousel extends StatefulWidget {
   State<UploadSliderCarousel> createState() => _UploadSliderCarouselState();
 }
 
-class _UploadSliderCarouselState extends State<UploadSliderCarousel> {
+class _UploadSliderCarouselState extends State<UploadSliderCarousel> with AutomaticKeepAliveClientMixin<UploadSliderCarousel> {
   int activeIndex = 0;
   List<File> croppedFiles = [];
+  @override
+  bool get wantKeepAlive => true;
 
   _selectImage(BuildContext parentContext) async {
     return showDialog(
@@ -87,11 +89,11 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> {
                 child: const Text('Take a photo'),
                 onPressed: () async {
 
-                    Navigator.pop(context);
-                    XFile? file = await ImagePicker.platform.getImageFromSource(
-                        source: ImageSource.camera);
-                    croppedFiles[activeIndex] = (await cropSquareImage(File(file!.path)));
-                    widget.setImageCallback!(croppedFiles);
+                  Navigator.pop(context);
+                  XFile? file = await ImagePicker.platform.getImageFromSource(
+                      source: ImageSource.camera);
+                  croppedFiles[activeIndex] = (await cropSquareImage(File(file!.path)));
+                  widget.setImageCallback!(croppedFiles);
                 }),
             SimpleDialogOption(
                 padding: const EdgeInsets.all(20),
@@ -118,6 +120,7 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Material(
         child: InkWell(
             customBorder:

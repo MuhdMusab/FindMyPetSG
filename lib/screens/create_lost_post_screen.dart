@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:find_my_pet_sg/widgets/animal_search_delegate.dart';
 import 'package:find_my_pet_sg/widgets/upload_slider_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,6 +65,12 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
   void setImageCallback(List<File> files) {
     setState(() {
       _files = files;
+    });
+  }
+
+  void setAnimalTypeCallback(String animal) {
+    setState(() {
+      _breed = animal;
     });
   }
 
@@ -453,96 +460,56 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          padding: EdgeInsets.only(bottom: 14),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 12.0, right: 12.0, bottom: 12.0),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12.0),
-                                child: Text("Enter your pet's type of animal*", style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blueGrey
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text("Type of Animal*", style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.blueGrey
                                   ),
-                                ),
+                                  ),
+                                ],
                               ),
                               Container(
-                                width: double.infinity,
-                                margin: EdgeInsets.symmetric(horizontal: 12),
+                                height: 51,
+                                padding: EdgeInsets.symmetric(horizontal: 12),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  border: Border.all(color: Colors.blueGrey.shade200),
                                   borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.2),
-                                      blurRadius: 10,
-                                      offset: Offset(0, 10),
-                                    ),
-                                  ],
                                 ),
-                                child: Form(
-                                  key: _searchFormKey,
-                                  child: SearchField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter the type of animal';
-                                      } else if (!isInSuggestions(value)) {
-                                        return 'Please select a suitable type of animal';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    hint: 'Search',
-                                    hasOverlay: false,
-                                    searchInputDecoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.blueGrey.shade200,
-                                          width: 1,
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(4.0),
+                                    onTap: () => showSearch(context: context, delegate: AnimalSearchDelegate(callback: setAnimalTypeCallback)),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(4.0),
+                                            color: Colors.transparent,
+                                          ),
+                                          height: 30,
+                                          width: 370,
                                         ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 2,
-                                          color: Colors.blue.withOpacity(0.8),
+                                        Positioned(
+                                          top: 14,
+                                          left: 2,
+                                          child: Text(
+                                            _breed == null || _breed!.isEmpty ? "" : _breed!,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.blueGrey
+                                            ),
+                                          ),
                                         ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
+                                      ],
                                     ),
-                                    maxSuggestionsInViewPort: 4,
-                                    itemHeight: 40,
-                                    suggestionsDecoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    onSubmit: (value) {
-                                      setState(() {
-                                        _breed = value;
-                                      });
-                                    },
-                                    onSuggestionTap: (SearchFieldListItem value) {
-                                      setState(() {
-                                        _breed = value.searchKey;
-                                      });
-                                    },
-                                    suggestions: [
-                                      'Bird',
-                                      'Cat',
-                                      'Chinchilla',
-                                      'Crab',
-                                      'Dog',
-                                      'Frog',
-                                      'Gerbil',
-                                      'Guinea pig',
-                                      'Hamster',
-                                      'Mouse',
-                                      'Rabbit',
-                                      'Tortoise',
-                                      'Turtle',
-                                      'Others',
-                                    ].map((e) => SearchFieldListItem(e)).toList(),
                                   ),
                                 ),
                               ),

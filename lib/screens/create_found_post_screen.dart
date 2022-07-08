@@ -74,62 +74,74 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
   }
 
   void postImage() async {
-    setState(() {
-      isLoading = true;
-    });
-    // start the loading
-    if (_descriptionController.text.trim().length == 0 || _locationController.text.trim().length == 0 ||
-        _breed == null || _dateController.text.trim().length == 0) {
-      ScaffoldMessenger.of(context)
-        ..removeCurrentSnackBar();
-      showSnackBar(context, "Incomplete fields given");
-      setState(() {
-        isLoading = false;
-      });
-    } else if (_files!.length == 0) {
-      ScaffoldMessenger.of(context)
-        ..removeCurrentSnackBar();
-      showSnackBar(context, "Please upload at least one image");
-      setState(() {
-        isLoading = false;
-      });
+    if (isLoading) {
+
     } else {
-      try {
-        // upload to storage and db
-        String res = await FireStoreMethods().uploadFoundPost(
-          "found",
-          _descriptionController.text.trim(),
-          _files!,
-          _locationController.text.trim(),
-          latitude,
-          longtitude,
-          _dateController.text.trim(),
-          widget._user!['name'].toString(),
-          DateTime.now(),
-          _breed!,
-          _nameController.text == null || _nameController.text == "" ? "" : _nameController.text.trim(),
-        );
-        if (res == "success") {
+      setState(() {
+        isLoading = true;
+      });
+      // start the loading
+      if (_descriptionController.text
+          .trim()
+          .length == 0 || _locationController.text
+          .trim()
+          .length == 0 ||
+          _breed == null || _dateController.text
+          .trim()
+          .length == 0) {
+        ScaffoldMessenger.of(context)
+          ..removeCurrentSnackBar();
+        showSnackBar(context, "Incomplete fields given");
+        setState(() {
+          isLoading = false;
+        });
+      } else if (_files!.length == 0) {
+        ScaffoldMessenger.of(context)
+          ..removeCurrentSnackBar();
+        showSnackBar(context, "Please upload at least one image");
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        try {
+          // upload to storage and db
+          String res = await FireStoreMethods().uploadFoundPost(
+            "found",
+            _descriptionController.text.trim(),
+            _files!,
+            _locationController.text.trim(),
+            latitude,
+            longtitude,
+            _dateController.text.trim(),
+            widget._user!['name'].toString(),
+            DateTime.now(),
+            _breed!,
+            _nameController.text == null || _nameController.text == ""
+                ? ""
+                : _nameController.text.trim(),
+          );
+          if (res == "success") {
+            setState(() {
+              isLoading = false;
+            });
+            showSnackBar(
+              context,
+              'Posted!',
+            );
+            clearImage();
+            Navigator.pop(context, true);
+          } else {
+            showSnackBar(context, res);
+          }
+        } catch (err) {
           setState(() {
             isLoading = false;
           });
           showSnackBar(
             context,
-            'Posted!',
+            err.toString(),
           );
-          clearImage();
-          Navigator.pop(context, true);
-        } else {
-          showSnackBar(context, res);
         }
-      } catch (err) {
-        setState(() {
-          isLoading = false;
-        });
-        showSnackBar(
-          context,
-          err.toString(),
-        );
       }
     }
   }
@@ -366,7 +378,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                   color: Colors.transparent,
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(4.0),
-                                    onTap: () => showSearch(context: context, delegate: AnimalSearchDelegate(callback: setAnimalTypeCallback)),
+                                    onTap: () => showSearch(context: context, delegate: AnimalSearchDelegate(callback: setAnimalTypeCallback, callback2: (String temp) {})),
                                     child: Stack(
                                       children: [
                                         Container(

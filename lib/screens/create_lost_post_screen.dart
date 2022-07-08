@@ -75,67 +75,82 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
   }
 
   void postImage() async {
-    setState(() {
-      isLoading = true;
-    });
-    // start the loading
-    if (_descriptionController.text.trim().length == 0
-        || _locationController.text.trim().length == 0 || _breed == null || _breed == "" ||
-        _dateController.text.trim().length == 0  || _ageController.text.trim().length == 0
-        || _nameController.text.trim().length == 0) {
-      ScaffoldMessenger.of(context)
-        ..removeCurrentSnackBar();
-      showSnackBar(context, "Incomplete fields given");
-      setState(() {
-        isLoading = false;
-      });
-    } else if (_files == null) {
-      ScaffoldMessenger.of(context)
-        ..removeCurrentSnackBar();
-      showSnackBar(context, "Please upload at least one image");
-      setState(() {
-        isLoading = false;
-      });
+    if (isLoading) {
+
     } else {
-      try {
-        // upload to storage and db
-        String res = await FireStoreMethods().uploadLostPost(
-          "lost",
-          _descriptionController.text.trim(),
-          _files!,
-          _nameController.text.trim(),
-          _locationController.text.trim(),
-          latitude,
-          longtitude,
-          _breed!,
-          _dateController.text.trim(),
-            _rewardController.text.trim() == "" ? 0 : int.parse(_rewardController.text.trim()),
-          int.parse(_ageController.text.trim()),
-          isMale,
-          widget._user!['name'].toString(),
-          DateTime.now(),
-        );
-        if (res == "success") {
+      setState(() {
+        isLoading = true;
+      });
+      // start the loading
+      if (_descriptionController.text
+          .trim()
+          .length == 0
+          || _locationController.text
+              .trim()
+              .length == 0 || _breed == null || _breed == "" ||
+          _dateController.text
+              .trim()
+              .length == 0 || _ageController.text
+          .trim()
+          .length == 0
+          || _nameController.text
+              .trim()
+              .length == 0) {
+        ScaffoldMessenger.of(context)
+          ..removeCurrentSnackBar();
+        showSnackBar(context, "Incomplete fields given");
+        setState(() {
+          isLoading = false;
+        });
+      } else if (_files == null) {
+        ScaffoldMessenger.of(context)
+          ..removeCurrentSnackBar();
+        showSnackBar(context, "Please upload at least one image");
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        try {
+          // upload to storage and db
+          String res = await FireStoreMethods().uploadLostPost(
+            "lost",
+            _descriptionController.text.trim(),
+            _files!,
+            _nameController.text.trim(),
+            _locationController.text.trim(),
+            latitude,
+            longtitude,
+            _breed!,
+            _dateController.text.trim(),
+            _rewardController.text.trim() == "" ? 0 : int.parse(
+                _rewardController.text.trim()),
+            int.parse(_ageController.text.trim()),
+            isMale,
+            widget._user!['name'].toString(),
+            DateTime.now(),
+          );
+          if (res == "success") {
+            setState(() {
+              isLoading = false;
+            });
+            showSnackBar(
+              context,
+              'Posted!',
+            );
+            clearImage();
+            Navigator.pop(context, true);
+          } else {
+            showSnackBar(context, res);
+          }
+        } catch (err) {
           setState(() {
             isLoading = false;
           });
           showSnackBar(
             context,
-            'Posted!',
+            err.toString(),
           );
-          clearImage();
-          Navigator.pop(context, true);
-        } else {
-          showSnackBar(context, res);
         }
-      } catch (err) {
-        setState(() {
-          isLoading = false;
-        });
-        showSnackBar(
-          context,
-          err.toString(),
-        );
       }
     }
   }
@@ -311,7 +326,6 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                               ),
                             ),
                             InkWell(
-
                               onTap: () {
                                 setState(() {
                                   isMale = true;
@@ -486,7 +500,7 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                                   color: Colors.transparent,
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(4.0),
-                                    onTap: () => showSearch(context: context, delegate: AnimalSearchDelegate(callback: setAnimalTypeCallback)),
+                                    onTap: () => showSearch(context: context, delegate: AnimalSearchDelegate(callback: setAnimalTypeCallback, callback2: (String temp) {})),
                                     child: Stack(
                                       children: [
                                         Container(

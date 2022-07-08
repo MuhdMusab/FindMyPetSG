@@ -81,12 +81,23 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     );
   }
 
+  _getNumberOfPosts(AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+    final int totalNumberOfPosts = snapshot.data!.docs.length;
+    int numberOfPosts = 0;
+    final String username = widget._user!['name'].toString();
+    for (int i = 0; i < totalNumberOfPosts; i++) {
+      if (snapshot.data!.docs[i].data()['username'] == username) {
+        numberOfPosts++;
+      }
+    }
+    return numberOfPosts;
+  }
   @override
   Widget build(BuildContext context) {
     super.build(context);
     final String username = widget._user!['name'].toString();
     final StorageMethods storage = StorageMethods(username: username);
-    int postLength = 0;
+    int postIndex = 0;
     _callback() {
       setState(() {});
     }
@@ -109,139 +120,125 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
           )
         ],
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 10,),
-          Align(
-            alignment: Alignment.center,
-            child: Stack(
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            return Column(
               children: [
-                ClipOval(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: FutureBuilder(
-                        future: storage.downloadURL(),
-                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                const SizedBox(height: 10,),
+                Align(
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      ClipOval(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: FutureBuilder(
+                              future: storage.downloadURL(),
+                              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
 
-                            return Ink.image(
-                              image: NetworkImage(snapshot.data!),
-                              fit: BoxFit.cover,
-                              width: 100,
-                              height: 100,
-                              child: InkWell(
-                                onTap: () async {
-                                  showImageSource(context, storage, username);
-                                },
-                              ),
-                            );
-                          } else {
-                            return Ink.image(
-                              image: const AssetImage("assets/images/default_user_icon.png",),
-                              fit: BoxFit.cover,
-                              width: 100,
-                              height: 100,
-                              child: InkWell(
-                                onTap: () async {
-                                  showImageSource(context, storage, username);
-                                },
-                              ),
-                            );
-                          }
-                        }
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 1,
-                  right: 2,
-                  child: ClipOval(
-                    child: Container(
-                      padding: const EdgeInsets.all(3),
-                      color: Colors.white,
-                      child: ClipOval(
-                        child: Container(
-                          padding: const EdgeInsets.all(7),
-                          color: Colors.blue,
-                          child: const Icon(
-                            Icons.edit,
-                            size: 18,
-                            color: Colors.white,
+                                  return Ink.image(
+                                    image: NetworkImage(snapshot.data!),
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    height: 100,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        showImageSource(context, storage, username);
+                                      },
+                                    ),
+                                  );
+                                } else {
+                                  return Ink.image(
+                                    image: const AssetImage("assets/images/default_user_icon.png",),
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    height: 100,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        showImageSource(context, storage, username);
+                                      },
+                                    ),
+                                  );
+                                }
+                              }
                           ),
                         ),
                       ),
-                    ),
+                      Positioned(
+                        bottom: 1,
+                        right: 2,
+                        child: ClipOval(
+                          child: Container(
+                            padding: const EdgeInsets.all(3),
+                            color: Colors.white,
+                            child: ClipOval(
+                              child: Container(
+                                padding: const EdgeInsets.all(7),
+                                color: Colors.blue,
+                                child: const Icon(
+                                  Icons.edit,
+                                  size: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 10,),
-          Text(
-            "Hello, " + widget._user!['name'],
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          const SizedBox(height: 30,),
-          Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: FutureBuilder<Map<String, dynamic>>(
-                  future: DatabaseMethods.getUserPosts(username),
-                  builder: (context,
-                      AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      //do nothing
-                    } else {
-                      postLength = snapshot.data!.length;
-                    }
-                    return Text(
-                      "Your posts (" + postLength.toString() + ")",
+                ),
+                const SizedBox(height: 10,),
+                Text(
+                  "Hello, " + widget._user!['name'],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(height: 30,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child:
+                    Text(
+                      "Your posts (" + _getNumberOfPosts(snapshot).toString() + ")",
                       style: GoogleFonts.roboto(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
-                    );
-                  }
-
-              ),
-            ),
-          ),
-          const SizedBox(height: 20,),
-          const Divider(
-            height: 1,
-            thickness: 2,
-            color: Colors.white,
-          ),
-          Expanded(
-            child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('posts').snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                  int postIndex = 0;
-                  ListView listView = ListView.builder(
-                    itemBuilder: (ctx, index) =>
-
-                    index < snapshot.data!.docs.length && snapshot.data!.docs[index].data()['username'] == username
-                        ? snapshot.data!.docs[index].data()['type'] == 'lost'
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20,),
+                const Divider(
+                  height: 1,
+                  thickness: 2,
+                  color: Colors.white,
+                ),
+                Expanded(
+                    child:
+                    ListView.builder(
+                      itemBuilder: (ctx, index) =>
+                      index < snapshot.data!.docs.length && snapshot.data!.docs[index].data()['username'] == username
+                          ? snapshot.data!.docs[index].data()['type'] == 'lost'
                           ? OwnLostPetPost(snapshot: snapshot.data!.docs[index].data(),
-                              postIndex: postIndex++, username: username, callback: _callback,
-                                postId: snapshot.data!.docs[index].data()['postId'],)
+                        postIndex: postIndex++, username: username, callback: _callback,
+                        postId: snapshot.data!.docs[index].data()['postId'],)
                           : OwnFoundPetPost(snapshot: snapshot.data!.docs[index].data(),
-                              postIndex: postIndex++, username: username, callback: _callback,
-                                postId: snapshot.data!.docs[index].data()['postId'],)
+                        postIndex: postIndex++, username: username, callback: _callback,
+                        postId: snapshot.data!.docs[index].data()['postId'],)
                           : Container(),
-                    itemCount: snapshot.data!.docs.length,
-                  );
-                  postLength = postIndex + 1;
-                  return listView;
-                }
-            ),
-          ),
-        ],
+                      itemCount: snapshot.data!.docs.length,
+                    )
+                ),
+              ],
+            );
+          }
       ),
     );
   }

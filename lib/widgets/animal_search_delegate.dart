@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class AnimalSearchDelegate extends SearchDelegate {
   final Function callback;
+  final Function callback2;
 
   AnimalSearchDelegate({
-    required this.callback
+    required this.callback,
+    required this.callback2
   });
 
   List<String> searchTerms = [
@@ -60,6 +62,7 @@ class AnimalSearchDelegate extends SearchDelegate {
           title: Text(result),
             onTap: () {
               callback(result);
+              callback2(result);
               Navigator.pop(context);
             }
         );
@@ -83,6 +86,7 @@ class AnimalSearchDelegate extends SearchDelegate {
             title: Text(result),
             onTap: () {
               callback(result);
+              callback2(result);
               Navigator.pop(context);
             }
         );

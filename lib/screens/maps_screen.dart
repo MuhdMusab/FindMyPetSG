@@ -1,18 +1,25 @@
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_my_pet_sg/utils/showSnackBar.dart';
 import 'package:find_my_pet_sg/widgets/arrow_back_button_3.dart';
 import 'package:find_my_pet_sg/widgets/found_pet_post.dart';
 import 'package:find_my_pet_sg/widgets/image_slider_carousel.dart';
 import 'package:find_my_pet_sg/widgets/lost_pet_post.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
+import 'package:google_maps_webservice/geocoding.dart';
 
 class MapsScreen extends StatefulWidget {
   final QueryDocumentSnapshot<Object?>? user;
-
+  final Position currentPosition;
   const MapsScreen({
     Key? key,
     required this.user,
+    required this.currentPosition,
   }) : super(key: key);
 
   @override
@@ -21,14 +28,19 @@ class MapsScreen extends StatefulWidget {
 
 class _MapsScreenState extends State<MapsScreen> {
   late GoogleMapController _googleMapController;
-
   CustomInfoWindowController _customInfoWindowController =
       CustomInfoWindowController();
 
   @override
   void dispose() {
-    _customInfoWindowController.dispose();
     super.dispose();
+    _googleMapController.dispose();
+    _customInfoWindowController.dispose();
+  }
+
+  void initState() {
+    super.initState();
+    // this should not be done in build method.
   }
 
   Set<Marker> buildMarkers(
@@ -56,35 +68,7 @@ class _MapsScreenState extends State<MapsScreen> {
                       ),
                 LatLng(snapshot.data!.docs[i].data()['latitude'],
                     snapshot.data!.docs[i].data()['longtitude']));
-          }
-
-          // onTap: () => showDialog(
-          //     context: context,
-          //     builder: (BuildContext context) {
-          //       return Dialog(
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(20.0),
-          //         ),
-          //         elevation: 0,
-          //         backgroundColor: Colors.transparent,
-          //         child: Container(
-          //           width: 400,
-          //           height: 330,
-          //           child: snapshot.data!.docs[i].data()['type'] == "lost"
-          //               ? LostPetPost(
-          //             snap: snapshot.data!.docs[i].data(),
-          //             user: widget.user,
-          //           )
-          //               : FoundPetPost(
-          //             snap: snapshot.data!.docs[i].data(),
-          //             user: widget.user,
-          //           )
-          //         ),
-          //
-          //       );
-          //     }
-          // )
-          ));
+          }));
     }
     return markers;
   }
@@ -107,6 +91,7 @@ class _MapsScreenState extends State<MapsScreen> {
             return Stack(
               children: [
                 GoogleMap(
+                  myLocationEnabled: true,
                   onTap: (position) {
                     _customInfoWindowController.hideInfoWindow!();
                   },
@@ -116,17 +101,18 @@ class _MapsScreenState extends State<MapsScreen> {
                   onMapCreated: (GoogleMapController controller) async {
                     _customInfoWindowController.googleMapController =
                         controller;
+                    _googleMapController = controller;
                   },
                   mapToolbarEnabled: false,
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(1.290270, 103.851959),
+                    target: LatLng(widget.currentPosition.latitude,
+                        widget.currentPosition.longitude),
                     zoom: 16,
                   ),
                   markers: buildMarkers(snapshot),
                   zoomControlsEnabled: false,
                   zoomGesturesEnabled: true,
                 ),
-                Positioned(top: 50, left: 4, child: ArrowBackButton3()),
                 Positioned(
                   right: 10,
                   bottom: 80,
@@ -136,20 +122,20 @@ class _MapsScreenState extends State<MapsScreen> {
                         color: Colors.white,
                       ),
                       backgroundColor: Colors.pink,
-                      onPressed: () => _googleMapController.animateCamera(
-                              CameraUpdate.newCameraPosition(CameraPosition(
-                            target: LatLng(
-                              0,
-                              0,
-                            ),
-                            zoom: 16,
-                          )))),
+                      onPressed: () {
+                        _googleMapController.animateCamera(
+                            CameraUpdate.newCameraPosition(CameraPosition(
+                                target: LatLng(widget.currentPosition.latitude,
+                                    widget.currentPosition.longitude),
+                                zoom: 16)));
+                      }),
                 ),
                 CustomInfoWindow(
                   controller: _customInfoWindowController,
                   width: 400,
                   height: 330,
                 ),
+                Positioned(top: 50, left: 4, child: ArrowBackButton3()),
               ],
             );
           }),

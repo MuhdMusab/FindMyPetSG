@@ -3,6 +3,7 @@ import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/screens/filter_screen.dart';
 import 'package:find_my_pet_sg/screens/maps_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class SearchTextField extends StatefulWidget {
@@ -20,6 +21,16 @@ class SearchTextField extends StatefulWidget {
 }
 
 class SearchTextfield extends State<SearchTextField> {
+  Future<Position> getUserCurrentLocation() async {
+    await Geolocator.requestPermission()
+        .then((value) {})
+        .onError((error, stackTrace) {
+      print("error" + error.toString());
+    });
+
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,18 +57,20 @@ class SearchTextfield extends State<SearchTextField> {
                         fontFamily: 'Futura',
                         color: pink(),
                         fontWeight: FontWeight.bold,
-                        fontSize:20,
+                        fontSize: 20,
                       ),
                     ),
                     Icon(MdiIcons.mapMarker, color: pink()),
                   ],
                 ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return MapsScreen(user: widget.user);
-                      }));
+                onPressed: () async {
+                  Position position = await getUserCurrentLocation();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return MapsScreen(
+                      user: widget.user,
+                      currentPosition: position,
+                    );
+                  }));
                 },
               ),
             ),
@@ -74,22 +87,22 @@ class SearchTextfield extends State<SearchTextField> {
                 color: pink(),
                 child: Row(
                   children: [
-                    Text("Filter ", style: TextStyle(
-                      fontFamily: 'Futura',
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize:20,
-                    ),
+                    Text(
+                      "Filter ",
+                      style: TextStyle(
+                        fontFamily: 'Futura',
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                     Icon(Icons.tune, color: Colors.white),
                   ],
                 ),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return FilterScreen(callback: widget.callback);
-                      }));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return FilterScreen(callback: widget.callback);
+                  }));
                 },
               ),
             ),

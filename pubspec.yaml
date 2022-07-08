@@ -60,8 +60,7 @@ dependencies:
   searchfield: ^0.6.6
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
-
-
+  custom_info_window: ^1.0.1
 
 dev_dependencies:
   flutter_test:

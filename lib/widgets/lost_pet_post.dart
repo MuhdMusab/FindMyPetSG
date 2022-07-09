@@ -41,18 +41,22 @@ class _LostPetPostState extends State<LostPetPost> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-      const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20.0,),
+      padding: const EdgeInsets.only(
+        left: 8.0,
+        right: 8.0,
+        bottom: 20.0,
+      ),
       child: Material(
         child: InkWell(
           customBorder:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           splashColor: Colors.black38,
           onTap: () => {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => FullLostPetPost(lostPetPost: widget), fullscreenDialog: true))
+                    builder: (context) => FullLostPetPost(lostPetPost: widget),
+                    fullscreenDialog: true))
           },
           child: Container(
             decoration: BoxDecoration(
@@ -94,41 +98,41 @@ class _LostPetPostState extends State<LostPetPost> {
                             ),
                             widget.snap['isMale']
                                 ? Container(
-                              height: 20,
-                              width: 20,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.circular(100.0),
-                                  color: Colors.blue),
-                              child: Center(
-                                child: Icon(
-                                  Icons.male,
-                                  color: Colors.white,
-                                  size: 18,
-                                ),
-                              ),
-                            )
+                                    height: 20,
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100.0),
+                                        color: Colors.blue),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.male,
+                                        color: Colors.white,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  )
                                 : Container(
-                              height: 20,
-                              width: 20,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.circular(100.0),
-                                  color: Colors.pink),
-                              child: Center(
-                                child: Icon(
-                                  Icons.female,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
+                                    height: 20,
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100.0),
+                                        color: Colors.pink),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.female,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
                             SizedBox(
                               width: 10,
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
                               height: 24,
                               width: 70,
                               decoration: BoxDecoration(
@@ -151,25 +155,25 @@ class _LostPetPostState extends State<LostPetPost> {
                             ),
                             widget.snap['reward'] > 0
                                 ? Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 4.0),
-                              height: 24,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                  color: Color(0xFFffc4d4),
-                                  borderRadius:
-                                  BorderRadius.circular(8.0)),
-                              child: Center(
-                                child: Text(
-                                  'Reward',
-                                  style: TextStyle(
-                                    color: Color(0xFFFf5757),
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            )
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 4.0),
+                                    height: 24,
+                                    width: 70,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius:
+                                            BorderRadius.circular(8.0)),
+                                    child: Center(
+                                      child: Text(
+                                        'Reward',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 : Container(),
                           ],
                         ),
@@ -181,7 +185,7 @@ class _LostPetPostState extends State<LostPetPost> {
                 Stack(children: [
                   Padding(
                     padding:
-                    const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
+                        const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -239,54 +243,57 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
   void _showLocation() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) {
-        return Scaffold(
-          body: Stack(
-            children: [
-              GoogleMap(
-                mapToolbarEnabled: false,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                    widget.lostPetPost.snap['latitude'],
-                    widget.lostPetPost.snap['longtitude'],
-                  ),
-                  zoom: 16,
-                ),
-                markers: {
-                  Marker(
-                      markerId: const MarkerId("lostLocation"),
-                      position: LatLng(
+      MaterialPageRoute(
+          builder: (context) {
+            return Scaffold(
+              body: Stack(
+                children: [
+                  GoogleMap(
+                    mapToolbarEnabled: false,
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(
                         widget.lostPetPost.snap['latitude'],
                         widget.lostPetPost.snap['longtitude'],
-                      ))
-                },
-                onMapCreated: (controller) => _googleMapController = controller,
-                zoomControlsEnabled: false,
-                zoomGesturesEnabled: true,
-              ),
-              Positioned(top: 50, left: 4, child: ArrowBackButton3()),
-              Positioned(
-                right: 10,
-                bottom: 80,
-                child: FloatingActionButton(
-                    child: const Icon(
-                      Icons.center_focus_strong,
-                      color: Colors.white,
+                      ),
+                      zoom: 16,
                     ),
-                    backgroundColor: Colors.pink,
-                    onPressed: () => _googleMapController.animateCamera(
-                        CameraUpdate.newCameraPosition(CameraPosition(
-                          target: LatLng(
+                    markers: {
+                      Marker(
+                          markerId: const MarkerId("lostLocation"),
+                          position: LatLng(
                             widget.lostPetPost.snap['latitude'],
                             widget.lostPetPost.snap['longtitude'],
-                          ),
-                          zoom: 16,
-                        )))),
+                          ))
+                    },
+                    onMapCreated: (controller) =>
+                        _googleMapController = controller,
+                    zoomControlsEnabled: false,
+                    zoomGesturesEnabled: true,
+                  ),
+                  Positioned(top: 50, left: 4, child: ArrowBackButton3()),
+                  Positioned(
+                    right: 10,
+                    bottom: 80,
+                    child: FloatingActionButton(
+                        child: const Icon(
+                          Icons.center_focus_strong,
+                          color: Colors.white,
+                        ),
+                        backgroundColor: Colors.pink,
+                        onPressed: () => _googleMapController.animateCamera(
+                                CameraUpdate.newCameraPosition(CameraPosition(
+                              target: LatLng(
+                                widget.lostPetPost.snap['latitude'],
+                                widget.lostPetPost.snap['longtitude'],
+                              ),
+                              zoom: 16,
+                            )))),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-      }, fullscreenDialog: true),
+            );
+          },
+          fullscreenDialog: true),
     );
   }
 
@@ -322,33 +329,33 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                 ),
                 widget.lostPetPost.snap['isMale']
                     ? Container(
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      color: Colors.blue),
-                  child: Center(
-                    child: Icon(
-                      Icons.male,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ),
-                )
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100.0),
+                            color: Colors.blue),
+                        child: Center(
+                          child: Icon(
+                            Icons.male,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                        ),
+                      )
                     : Container(
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      color: Colors.pink),
-                  child: Center(
-                    child: Icon(
-                      Icons.female,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ),
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100.0),
+                            color: Colors.pink),
+                        child: Center(
+                          child: Icon(
+                            Icons.female,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
               ],
             ),
             Padding(
@@ -360,7 +367,8 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("Location: " + widget.lostPetPost.snap['location']),
+                        Text(
+                            "Location: " + widget.lostPetPost.snap['location']),
                       ],
                     ),
                   ),
@@ -428,26 +436,26 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                   children: [
                     widget.lostPetPost.snap['reward'] > 0
                         ? Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8.0, right: 4.0, bottom: 4.0),
-                      child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 4.0),
-                          height: 24,
-                          decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: Center(
-                            child: Text(
-                              '\$' +
-                                  widget.lostPetPost.snap['reward']
-                                      .toString(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                            ),
-                          )),
-                    )
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 4.0, bottom: 4.0),
+                            child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 4.0),
+                                height: 24,
+                                decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                child: Center(
+                                  child: Text(
+                                    '\$' +
+                                        widget.lostPetPost.snap['reward']
+                                            .toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                )),
+                          )
                         : Container(),
                   ],
                 )
@@ -457,8 +465,8 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
               color: Colors.black,
             ),
             InkWell(
-              customBorder:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6)),
               onTap: _showLocation,
               splashColor: Colors.black12,
               child: Container(
@@ -496,7 +504,8 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(right: 10.0, top: 2.0),
+                            padding:
+                                const EdgeInsets.only(right: 10.0, top: 2.0),
                             child: Icon(MdiIcons.mapMarker, color: Colors.pink),
                           )
                         ],
@@ -507,93 +516,101 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
               ),
             ),
             SizedBox(height: 10),
-            widget.lostPetPost.user!['name'].toString() == widget.lostPetPost.snap['username']
+            widget.lostPetPost.user!['name'].toString() ==
+                    widget.lostPetPost.snap['username']
                 ? Container()
                 : InkWell(
-              customBorder:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-              onTap: () {},
-              splashColor: Colors.black12,
-              child: Container(
-                width: 300,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(6.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
-                      spreadRadius: 0,
-                      blurRadius: 6,
-                      blurStyle: BlurStyle.outer,
-                    )
-                  ],
-                ),
-                child: GestureDetector(
-                  onTap: () async {
-                    final ownUsername =
-                    widget.lostPetPost.user!['name'].toString();
-                    final otherUsername = widget.lostPetPost.snap['username'];
-                    final messageDao = MessageDao(ownUsername, otherUsername);
-                    if (ownUsername == otherUsername) {
-                      //do nothing
-                    } else if ((await messageDao.getOwnChatQuery().get())
-                        .exists) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ChatScreen(
-                          username: otherUsername,
-                          messageDao: MessageDao(ownUsername, otherUsername),
-                        ), fullscreenDialog: true,
-                      ));
-                    } else {
-                      final chatroomDao = ChatroomDao();
-                      chatroomDao.addChatroom(
-                          ownUsername, Chatroom(otherUsername));
-                      chatroomDao.addChatroom(
-                          otherUsername, Chatroom(ownUsername));
-                      messageDao.getOwnChatQuery().ref.set("");
-                      messageDao.getOtherChatQuery().ref.set("");
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ChatScreen(
-                          username: otherUsername,
-                          messageDao: MessageDao(ownUsername, otherUsername),
-                        ), fullscreenDialog: true,
-                      ));
-                    }
-                  },
-                  child: Center(
-                    child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                    customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                    onTap: () {},
+                    splashColor: Colors.black12,
+                    child: Container(
+                      width: 300,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(6.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            spreadRadius: 0,
+                            blurRadius: 6,
+                            blurStyle: BlurStyle.outer,
+                          )
+                        ],
+                      ),
+                      child: GestureDetector(
+                        onTap: () async {
+                          final ownUsername =
+                              widget.lostPetPost.user!['name'].toString();
+                          final otherUsername =
+                              widget.lostPetPost.snap['username'];
+                          final messageDao =
+                              MessageDao(ownUsername, otherUsername);
+                          if (ownUsername == otherUsername) {
+                            //do nothing
+                          } else if ((await messageDao.getOwnChatQuery().get())
+                              .exists) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ChatScreen(
+                                username: otherUsername,
+                                messageDao:
+                                    MessageDao(ownUsername, otherUsername),
+                              ),
+                              fullscreenDialog: true,
+                            ));
+                          } else {
+                            final chatroomDao = ChatroomDao();
+                            chatroomDao.addChatroom(
+                                ownUsername, Chatroom(otherUsername));
+                            chatroomDao.addChatroom(
+                                otherUsername, Chatroom(ownUsername));
+                            messageDao.getOwnChatQuery().ref.set("");
+                            messageDao.getOtherChatQuery().ref.set("");
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ChatScreen(
+                                username: otherUsername,
+                                messageDao:
+                                    MessageDao(ownUsername, otherUsername),
+                              ),
+                              fullscreenDialog: true,
+                            ));
+                          }
+                        },
+                        child: Center(
+                          child: Stack(children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Message",
+                                    style: GoogleFonts.openSans(
+                                        color: Colors.pink, fontSize: 18),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(
-                                  "Message",
-                                  style: GoogleFonts.openSans(
-                                      color: Colors.pink, fontSize: 18),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 10.0, top: 2.0),
+                                  child: Icon(MdiIcons.message,
+                                      color: Colors.pink),
                                 )
                               ],
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding:
-                                const EdgeInsets.only(right: 10.0, top: 2.0),
-                                child: Icon(MdiIcons.message, color: Colors.pink),
-                              )
-                            ],
-                          )
-                        ]
+                            )
+                          ]),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10,)
+            SizedBox(
+              height: 10,
+            )
           ],
         ),
       ),

@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/screens/filter_screen.dart';
@@ -6,21 +9,22 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class SearchTextField extends StatefulWidget {
+class FilterButton extends StatefulWidget {
   final Function callback;
   final QueryDocumentSnapshot<Object?>? user;
-
-  const SearchTextField({
+  const FilterButton({
     Key? key,
     required this.callback,
     required this.user,
   }) : super(key: key);
 
   @override
-  State<SearchTextField> createState() => SearchTextfield();
+  State<FilterButton> createState() => _FilterButtonState();
 }
 
-class SearchTextfield extends State<SearchTextField> {
+class _FilterButtonState extends State<FilterButton> {
+  int value = 0;
+  late Position currentPosition;
   Future<Position> getUserCurrentLocation() async {
     await Geolocator.requestPermission()
         .then((value) {})
@@ -36,44 +40,8 @@ class SearchTextfield extends State<SearchTextField> {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8, left: 16, bottom: 1),
-              child: MaterialButton(
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                minWidth: 10,
-                height: 34.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  side: BorderSide(color: pink()),
-                ),
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    Text(
-                      "Map",
-                      style: TextStyle(
-                        fontFamily: 'Futura',
-                        color: pink(),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Icon(MdiIcons.mapMarker, color: pink()),
-                  ],
-                ),
-                onPressed: () async {
-                  Position position = await getUserCurrentLocation();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return MapsScreen(
-                      user: widget.user,
-                      currentPosition: position,
-                    );
-                  }));
-                },
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.only(right: 8, left: 16, bottom: 1),
               child: MaterialButton(

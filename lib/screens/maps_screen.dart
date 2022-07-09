@@ -15,11 +15,11 @@ import 'package:google_maps_webservice/geocoding.dart';
 
 class MapsScreen extends StatefulWidget {
   final QueryDocumentSnapshot<Object?>? user;
-  final Position currentPosition;
+  final LatLng currentLatLng;
   const MapsScreen({
     Key? key,
     required this.user,
-    required this.currentPosition,
+    required this.currentLatLng,
   }) : super(key: key);
 
   @override
@@ -75,8 +75,8 @@ class _MapsScreenState extends State<MapsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
+    return Expanded(
+      child: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('posts')
               .orderBy("dateTimePosted", descending: true)
@@ -91,6 +91,7 @@ class _MapsScreenState extends State<MapsScreen> {
             return Stack(
               children: [
                 GoogleMap(
+                  myLocationButtonEnabled: false,
                   myLocationEnabled: true,
                   onTap: (position) {
                     _customInfoWindowController.hideInfoWindow!();
@@ -105,8 +106,7 @@ class _MapsScreenState extends State<MapsScreen> {
                   },
                   mapToolbarEnabled: false,
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(widget.currentPosition.latitude,
-                        widget.currentPosition.longitude),
+                    target: widget.currentLatLng,
                     zoom: 16,
                   ),
                   markers: buildMarkers(snapshot),
@@ -114,7 +114,7 @@ class _MapsScreenState extends State<MapsScreen> {
                   zoomGesturesEnabled: true,
                 ),
                 Positioned(
-                  right: 10,
+                  right: 16,
                   bottom: 80,
                   child: FloatingActionButton(
                       child: const Icon(
@@ -125,9 +125,7 @@ class _MapsScreenState extends State<MapsScreen> {
                       onPressed: () {
                         _googleMapController.animateCamera(
                             CameraUpdate.newCameraPosition(CameraPosition(
-                                target: LatLng(widget.currentPosition.latitude,
-                                    widget.currentPosition.longitude),
-                                zoom: 16)));
+                                target: widget.currentLatLng, zoom: 16)));
                       }),
                 ),
                 CustomInfoWindow(
@@ -135,7 +133,6 @@ class _MapsScreenState extends State<MapsScreen> {
                   width: 400,
                   height: 330,
                 ),
-                Positioned(top: 50, left: 4, child: ArrowBackButton3()),
               ],
             );
           }),

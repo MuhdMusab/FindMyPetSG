@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/utils/showSnackBar.dart';
 import 'package:find_my_pet_sg/widgets/arrow_back_button_3.dart';
 import 'package:find_my_pet_sg/widgets/found_pet_post.dart';
@@ -13,13 +14,19 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:google_maps_webservice/geocoding.dart';
 
+import '../models/category.dart';
+import '../models/filter_model.dart';
+import '../models/post_type_model.dart';
+
 class MapsScreen extends StatefulWidget {
-  final QueryDocumentSnapshot<Object?>? user;
-  final LatLng currentLatLng;
-  const MapsScreen({
+  List<Filter?> filters;
+  QueryDocumentSnapshot<Object?>? user;
+  LatLng currentLatLng;
+  MapsScreen({
     Key? key,
     required this.user,
     required this.currentLatLng,
+    required this.filters,
   }) : super(key: key);
 
   @override
@@ -47,28 +54,64 @@ class _MapsScreenState extends State<MapsScreen> {
       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
     int numberOfPosts = snapshot.data!.docs.length;
     Set<Marker> markers = {};
-    for (int i = 0; i < numberOfPosts; i++) {
-      markers.add(Marker(
-          icon: snapshot.data!.docs[i].data()['type'] == "lost"
-              ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose)
-              : BitmapDescriptor.defaultMarker,
-          markerId: MarkerId(snapshot.data!.docs[i].data()['postId']),
-          position: LatLng(snapshot.data!.docs[i].data()['latitude'],
-              snapshot.data!.docs[i].data()['longtitude']),
-          onTap: () {
-            _customInfoWindowController.addInfoWindow!(
-                snapshot.data!.docs[i].data()['type'] == "lost"
-                    ? LostPetPost(
-                        snap: snapshot.data!.docs[i].data(),
-                        user: widget.user,
-                      )
-                    : FoundPetPost(
-                        snap: snapshot.data!.docs[i].data(),
-                        user: widget.user,
-                      ),
-                LatLng(snapshot.data!.docs[i].data()['latitude'],
-                    snapshot.data!.docs[i].data()['longtitude']));
-          }));
+    BitmapDescriptor lostBitmapDescriptor =
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
+    BitmapDescriptor foundBitmapDescriptor = BitmapDescriptor.defaultMarker;
+    for (int index = 0; index < numberOfPosts; index++) {
+      bool postTypeBool = true;
+      bool categoryBool = true;
+      if (widget.filters.isNotEmpty) {
+        postTypeBool = false;
+        categoryBool = false;
+        for (int i = 0; i < 16; i++) {
+          Filter filter = widget.filters[i]!;
+          if (filter.value) {
+            if (filter is Category) {
+              categoryBool = categoryBool ||
+                  snapshot.data!.docs[index].data()['breed'] ==
+                      (filter as Category).name;
+            } else {
+              postTypeBool = postTypeBool ||
+                  snapshot.data!.docs[index].data()['type'] ==
+                      (filter as PostType).postType;
+            }
+          }
+        }
+      }
+      if (postTypeBool && categoryBool) {
+        print("accepted");
+        if (snapshot.data!.docs[index].data()['type'] == "lost") {
+          markers.add(Marker(
+              icon: lostBitmapDescriptor,
+              markerId: MarkerId(snapshot.data!.docs[index].data()['postId']),
+              position: LatLng(snapshot.data!.docs[index].data()['latitude'],
+                  snapshot.data!.docs[index].data()['longtitude']),
+              onTap: () {
+                _customInfoWindowController.addInfoWindow!(
+                    LostPetPost(
+                      snap: snapshot.data!.docs[index].data(),
+                      user: widget.user,
+                    ),
+                    LatLng(snapshot.data!.docs[index].data()['latitude'],
+                        snapshot.data!.docs[index].data()['longtitude']));
+              }));
+        } else {
+          markers.add(Marker(
+              icon: foundBitmapDescriptor,
+              markerId: MarkerId(snapshot.data!.docs[index].data()['postId']),
+              position: LatLng(snapshot.data!.docs[index].data()['latitude'],
+                  snapshot.data!.docs[index].data()['longtitude']),
+              onTap: () {
+                _customInfoWindowController.addInfoWindow!(
+                    FoundPetPost(
+                      snap: snapshot.data!.docs[index].data(),
+                      user: widget.user,
+                    ),
+                    LatLng(snapshot.data!.docs[index].data()['latitude'],
+                        snapshot.data!.docs[index].data()['longtitude']));
+              }));
+        }
+      }
     }
     return markers;
   }
@@ -121,7 +164,7 @@ class _MapsScreenState extends State<MapsScreen> {
                         Icons.center_focus_strong,
                         color: Colors.white,
                       ),
-                      backgroundColor: Colors.pink,
+                      backgroundColor: pink(),
                       onPressed: () {
                         _googleMapController.animateCamera(
                             CameraUpdate.newCameraPosition(CameraPosition(
@@ -130,6 +173,7 @@ class _MapsScreenState extends State<MapsScreen> {
                 ),
                 CustomInfoWindow(
                   controller: _customInfoWindowController,
+                  offset: 0,
                   width: 400,
                   height: 330,
                 ),

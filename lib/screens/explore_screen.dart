@@ -29,9 +29,6 @@ const TextStyle _textStyle = TextStyle(
   letterSpacing: 2,
   fontStyle: FontStyle.italic,
 );
-int _selectedPageIndex = 0;
-List<Widget>? _pages;
-PageController? _pageController;
 
 class ExploreScreen extends StatefulWidget {
   QueryDocumentSnapshot<Object?>? _user;
@@ -186,10 +183,20 @@ class _ExploreScreenState extends State<ExploreScreen>
           ),
           (value == 1 && _userLocation != null)
               ? MapsScreen(
+                  filters: filters,
                   user: widget._user,
                   currentLatLng: LatLng(
                       _userLocation!.latitude!, _userLocation!.longitude!))
-              : FullPosts(user: widget._user, filters: filters),
+              : (value == 1 && _userLocation == null)
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 250.0),
+                      child: Text(
+                        "Enable Google's location services for map view",
+                        style: TextStyle(fontSize: 30, color: Colors.black45),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : FullPosts(user: widget._user, filters: filters),
         ],
       ),
     );

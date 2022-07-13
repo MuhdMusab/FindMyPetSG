@@ -4,9 +4,9 @@ class TypeOfAnimalButton extends StatefulWidget {
   final int index;
   final String text;
   final Function callback;
-  final bool allSelected;
+  bool allSelected;
 
-  const TypeOfAnimalButton({
+  TypeOfAnimalButton({
     Key? key,
     required this.index,
     required this.text,
@@ -19,11 +19,12 @@ class TypeOfAnimalButton extends StatefulWidget {
 }
 
 class _TypeOfAnimalButtonState extends State<TypeOfAnimalButton> {
-  bool enabled = false;
   @override
   Widget build(BuildContext context) {
     if (widget.allSelected) {
-        widget.callback(widget.index);
+        widget.callback(widget.index, true);
+    } else {
+      widget.callback(widget.index, false);
     }
     return Container(
       width: double.infinity,
@@ -50,12 +51,12 @@ class _TypeOfAnimalButtonState extends State<TypeOfAnimalButton> {
           SizedBox(
             height: 25,
             child: Checkbox(
-              value: enabled || widget.allSelected,
+              value: widget.allSelected,
               activeColor: Color(0xFFff9dab),
               onChanged: (bool? newValue) {
                 setState(() {
-                  enabled = !enabled;
-                  widget.callback(widget.index);
+                  widget.allSelected = !widget.allSelected;
+                  widget.callback(widget.index, newValue!);
                 });
               },
             ),

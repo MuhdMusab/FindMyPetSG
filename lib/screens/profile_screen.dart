@@ -138,31 +138,32 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                               future: storage.downloadURL(),
                               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                                 if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-
-                                  return Ink.image(
-                                    image: NetworkImage(snapshot.data!),
-                                    fit: BoxFit.cover,
-                                    width: 100,
-                                    height: 100,
-                                    child: InkWell(
-                                      onTap: () async {
-                                        showImageSource(context, storage, username);
-                                      },
-                                    ),
-                                  );
-                                } else {
-                                  return Ink.image(
-                                    image: const AssetImage("assets/images/default_user_icon.png",),
-                                    fit: BoxFit.cover,
-                                    width: 100,
-                                    height: 100,
-                                    child: InkWell(
-                                      onTap: () async {
-                                        showImageSource(context, storage, username);
-                                      },
-                                    ),
-                                  );
+                                  if (snapshot.data != 'fail') {
+                                    return Ink.image(
+                                      image: NetworkImage(snapshot.data!),
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 100,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          showImageSource(
+                                              context, storage, username);
+                                        },
+                                      ),
+                                    );
+                                  }
                                 }
+                                return Ink.image(
+                                  image: const AssetImage("assets/images/default_user_icon.png",),
+                                  fit: BoxFit.cover,
+                                  width: 100,
+                                  height: 100,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      showImageSource(context, storage, username);
+                                    },
+                                  ),
+                                );
                               }
                           ),
                         ),

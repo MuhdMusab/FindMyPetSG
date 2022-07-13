@@ -3,6 +3,7 @@ import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
+import 'package:find_my_pet_sg/helper/functions.dart';
 import 'package:find_my_pet_sg/utils/showSnackBar.dart';
 import 'package:find_my_pet_sg/widgets/arrow_back_button_3.dart';
 import 'package:find_my_pet_sg/widgets/found_pet_post.dart';
@@ -162,9 +163,11 @@ class _MapsScreenState extends State<MapsScreen> {
                   child: FloatingActionButton(
                       child: const Icon(
                         Icons.center_focus_strong,
+                        size: 30.0,
                         color: Colors.white,
                       ),
                       backgroundColor: pink(),
+                      heroTag: getRandomString(),
                       onPressed: () {
                         _googleMapController.animateCamera(
                             CameraUpdate.newCameraPosition(CameraPosition(
@@ -174,7 +177,7 @@ class _MapsScreenState extends State<MapsScreen> {
                 CustomInfoWindow(
                   controller: _customInfoWindowController,
                   offset: 0,
-                  width: 400,
+                  width: MediaQuery.of(context).size.width - 50,
                   height: 330,
                 ),
               ],

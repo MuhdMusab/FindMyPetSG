@@ -3,7 +3,7 @@ import 'package:find_my_pet_sg/screens/chat_screen.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:flutter/material.dart';
 
-class ChatHeaderWidget extends StatelessWidget {
+class ChatHeaderWidget extends StatefulWidget {
   final List users;
   final String username;
 
@@ -14,8 +14,17 @@ class ChatHeaderWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ChatHeaderWidget> createState() => _ChatHeaderWidgetState();
+}
+class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
+  CircleAvatar _circleAvatar = CircleAvatar(
+    radius: 25,
+    backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+  );
+
+  @override
   Widget build(BuildContext context) {
-    if (users.isEmpty) {
+    if (widget.users.isEmpty) {
       return Container(
         padding: EdgeInsets.only(left: 12, right: 12, bottom: 200),
         decoration: BoxDecoration(
@@ -66,7 +75,7 @@ class ChatHeaderWidget extends StatelessWidget {
               height: 60,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: users.length + 1,
+                itemCount: widget.users.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return Container(
@@ -77,29 +86,52 @@ class ChatHeaderWidget extends StatelessWidget {
                       ),
                     );
                   } else {
-                    final otherUser = users[index - 1];
-                    final StorageMethods storage = StorageMethods(username: otherUser);
+                    final otherUser = widget.users[index - 1];
+                    final StorageMethods storage = StorageMethods(
+                        username: otherUser);
                     return Container(
                       margin: const EdgeInsets.only(right: 12),
                       child: GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          final StorageMethods storage = StorageMethods(username: otherUser);
+                          String url = await storage.downloadURL();
+                          CircleAvatar _circleAvatar = url == 'fail'
+                              ? CircleAvatar(
+                            radius: 25,
+                            backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+                          )
+                              : CircleAvatar(
+                            radius: 25,
+                            backgroundImage: NetworkImage(url),
+                          );
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatScreen(username: otherUser, messageDao: MessageDao(username, otherUser)), fullscreenDialog: true
+                              builder: (context) =>
+                                  ChatScreen(
+                                    username: otherUser,
+                                    messageDao: MessageDao(
+                                        widget.username, otherUser),
+                                    circleAvatar: _circleAvatar,),
+                              fullscreenDialog: true
                           ));
                         },
                         child: FutureBuilder(
                             future: storage.downloadURL(),
-                            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done &&
+                            builder: (BuildContext context,
+                                AsyncSnapshot<String> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done &&
                                   snapshot.hasData) {
-                                return CircleAvatar(
-                                  radius: 24,
-                                  backgroundImage: NetworkImage(snapshot.data!),
+                                  _circleAvatar = CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage: NetworkImage(
+                                        snapshot.data!),
                                 );
+                                return _circleAvatar;
                               } else {
                                 return CircleAvatar(
-                                  radius: 24,
-                                  backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+                                  radius: 25,
+                                  backgroundImage: AssetImage(
+                                      "assets/images/default_user_icon.png"),
                                 );
                               }
                             }

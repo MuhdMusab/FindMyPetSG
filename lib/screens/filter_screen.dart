@@ -26,12 +26,12 @@ class _FilterScreenState extends State<FilterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    callback(int index) {
+    callback(int index, bool newBool) {
       Object filterObject = filters[index]!;
       if (filterObject is PostType) {
-        (filterObject as PostType).value = !(filterObject as PostType).value;
+        (filterObject as PostType).value = newBool;
       } else {
-        (filterObject as Category).value = !(filterObject as Category).value;
+        (filterObject as Category).value = newBool;
       }
     }
     return Scaffold(

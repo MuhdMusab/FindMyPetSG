@@ -160,7 +160,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                         },
                         borderColor: lightPink(),
                         colorBuilder: (i) =>
-                            i.isEven ? lightPink() : lightPink(),
+                        i.isEven ? lightPink() : lightPink(),
                         onChanged: (i) {
                           if (i == 0) {
                             setState(() {
@@ -184,9 +184,9 @@ class _ExploreScreenState extends State<ExploreScreen>
           (value == 1 && _userLocation != null)
               ? MapsScreen(
                   filters: filters,
-                  user: widget._user,
-                  currentLatLng: LatLng(
-                      _userLocation!.latitude!, _userLocation!.longitude!))
+              user: widget._user,
+              currentLatLng: LatLng(
+                  _userLocation!.latitude!, _userLocation!.longitude!))
               : (value == 1 && _userLocation == null)
                   ? Padding(
                       padding: const EdgeInsets.only(top: 250.0),
@@ -200,6 +200,5 @@ class _ExploreScreenState extends State<ExploreScreen>
         ],
       ),
     );
-    // )
   }
 }

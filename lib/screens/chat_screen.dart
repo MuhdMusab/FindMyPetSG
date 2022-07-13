@@ -23,10 +23,12 @@ import 'package:find_my_pet_sg/widgets/message_widget.dart';
 class ChatScreen extends StatefulWidget {
   final String username;
   final MessageDao messageDao;
+  final CircleAvatar circleAvatar;
 
   const ChatScreen({
     required this.username,
     required this.messageDao,
+    required this.circleAvatar,
     key,
   }) : super(key: key);
 
@@ -71,7 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          MessageList(messageDao: widget.messageDao, scrollController: _scrollController,),
+          MessageList(messageDao: widget.messageDao, scrollController: _scrollController, circleAvatar: widget.circleAvatar),
           SendMessageWidget(
             sendMessage: _sendMessage,
             textEditingController: _messageInputController,

@@ -9,11 +9,14 @@ class MessageWidget extends StatelessWidget {
   final bool isMe;
   final DateTime date;
   final MessageDao messageDao;
+  final CircleAvatar circleAvatar;
+
   const MessageWidget({
     required this.message,
     required this.isMe,
     required this.date,
-    required this.messageDao
+    required this.messageDao,
+    required this.circleAvatar,
   });
 
   @override
@@ -21,7 +24,6 @@ class MessageWidget extends StatelessWidget {
     final radius = Radius.circular(12);
     final borderRadius = BorderRadius.all(radius);
     final StorageMethods storage = StorageMethods(username: messageDao.otherUsername!);
-
     return Column(
       children: [
         Row(
@@ -29,23 +31,24 @@ class MessageWidget extends StatelessWidget {
           children: <Widget>[
             SizedBox(width: 12,),
             if (!isMe)
-              FutureBuilder(
-                  future: storage.downloadURL(),
-                  builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.hasData) {
-                      return CircleAvatar(
-                        radius: 25,
-                        backgroundImage: NetworkImage(snapshot.data!),
-                      );
-                    } else {
-                      return CircleAvatar(
-                        radius: 25,
-                        backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-                      );
-                    }
-                  }
-              ),
+              circleAvatar,
+              // FutureBuilder(
+              //     future: storage.downloadURL(),
+              //     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              //       if (snapshot.connectionState == ConnectionState.done &&
+              //           snapshot.hasData) {
+              //         return CircleAvatar(
+              //           radius: 25,
+              //           backgroundImage: NetworkImage(snapshot.data!),
+              //         );
+              //       } else {
+              //         return CircleAvatar(
+              //           radius: 25,
+              //           backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+              //         );
+              //       }
+              //     }
+              // ),
             Container(
               padding: EdgeInsets.all(16),
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -65,7 +68,6 @@ class MessageWidget extends StatelessWidget {
           child: Align(
               alignment: isMe ? Alignment.bottomRight : Alignment.bottomLeft,
               child: Text(
-                //DateFormat('yyyy-MM-dd, kk:mma').format(date).toString(),
                 DateFormat('kk:mma').format(date).toString(),
                 style: TextStyle(color: Colors.grey),
               )),
@@ -82,7 +84,9 @@ class MessageWidget extends StatelessWidget {
       children: <Widget>[
         Text(
           message,
-          style: TextStyle(color: isMe ? Colors.white : Colors.black),
+          style: TextStyle(
+            color: isMe ? Colors.white : Colors.black,
+          ),
           textAlign: isMe ? TextAlign.end : TextAlign.start,
         ),
 

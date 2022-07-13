@@ -25,7 +25,7 @@ class _PostTypeButtonState extends State<PostTypeButton> {
         onPressed: () {
           setState(() {
             enabled = !enabled;
-            widget.callback(widget.index);
+            widget.callback(widget.index, enabled);
           });
         },
         style: ElevatedButton.styleFrom(

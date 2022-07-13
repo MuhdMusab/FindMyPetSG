@@ -51,16 +51,15 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
             children: <Widget>[
               Text(
                 widget.title,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),
+                maxLines: 1,
               ),
               SizedBox(
                 height: 15,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
-                    width: 10,
-                  ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(
@@ -74,7 +73,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       primary: const Color(0xfff26579),
-                      fixedSize: Size(150, 50),
+                      fixedSize: Size(120, 50),
                     ),
                     child: Text(
                       "Lost",
@@ -99,7 +98,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       primary: Color(0xFFff9dab),
-                      fixedSize: Size(150, 50),
+                      fixedSize: Size(120, 50),
                     ),
                     child: Text(
                       "Found",

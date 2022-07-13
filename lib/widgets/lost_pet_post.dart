@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_my_pet_sg/services/storage_methods.dart';
 import '../helper/custom_icons_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -411,7 +412,10 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                   left: 8.0, right: 8.0, top: 4, bottom: 20),
               child: Container(
                 child: Text(widget.lostPetPost.snap['description'],
-                    style: GoogleFonts.robotoCondensed()),
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.robotoCondensed(
+
+                    )),
               ),
             ),
             Stack(
@@ -522,7 +526,67 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                 : InkWell(
                     customBorder: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6)),
-                    onTap: () {},
+              onTap: () async {
+                final ownUsername =
+                widget.lostPetPost.user!['name'].toString();
+                final otherUsername =
+                widget.lostPetPost.snap['username'];
+                final messageDao =
+                MessageDao(ownUsername, otherUsername);
+                if (ownUsername == otherUsername) {
+                  //do nothing
+                } else if ((await messageDao.getOwnChatQuery().get())
+                    .exists) {
+                  final StorageMethods storage = StorageMethods(username: otherUsername);
+                  String url = await storage.downloadURL();
+                  CircleAvatar _circleAvatar = url == 'fail'
+                      ? CircleAvatar(
+                    radius: 25,
+                    backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+                  )
+                      : CircleAvatar(
+                    radius: 25,
+                    backgroundImage: NetworkImage(url),
+                  );
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                      username: otherUsername,
+                      messageDao:
+                      MessageDao(ownUsername, otherUsername),
+                      circleAvatar: _circleAvatar,
+                    ),
+                    fullscreenDialog: true,
+                  ));
+                } else {
+                  final chatroomDao = ChatroomDao();
+                  chatroomDao.addChatroom(
+                      ownUsername, Chatroom(otherUsername));
+                  chatroomDao.addChatroom(
+                      otherUsername, Chatroom(ownUsername));
+                  messageDao.getOwnChatQuery().ref.set("");
+                  messageDao.getOtherChatQuery().ref.set("");
+                  final StorageMethods storage = StorageMethods(username: otherUsername);
+                  String url = await storage.downloadURL();
+                  CircleAvatar _circleAvatar = url == 'fail'
+                      ? CircleAvatar(
+                    radius: 25,
+                    backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+                  )
+                      : CircleAvatar(
+                    radius: 25,
+                    backgroundImage: NetworkImage(url),
+                  );
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                      username: otherUsername,
+                      messageDao:
+                      MessageDao(ownUsername, otherUsername),
+                      circleAvatar: _circleAvatar,
+                    ),
+                    fullscreenDialog: true,
+                  ));
+                }
+              },
                     splashColor: Colors.black12,
                     child: Container(
                       width: 300,
@@ -539,72 +603,33 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                           )
                         ],
                       ),
-                      child: GestureDetector(
-                        onTap: () async {
-                          final ownUsername =
-                              widget.lostPetPost.user!['name'].toString();
-                          final otherUsername =
-                              widget.lostPetPost.snap['username'];
-                          final messageDao =
-                              MessageDao(ownUsername, otherUsername);
-                          if (ownUsername == otherUsername) {
-                            //do nothing
-                          } else if ((await messageDao.getOwnChatQuery().get())
-                              .exists) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatScreen(
-                                username: otherUsername,
-                                messageDao:
-                                    MessageDao(ownUsername, otherUsername),
-                              ),
-                              fullscreenDialog: true,
-                            ));
-                          } else {
-                            final chatroomDao = ChatroomDao();
-                            chatroomDao.addChatroom(
-                                ownUsername, Chatroom(otherUsername));
-                            chatroomDao.addChatroom(
-                                otherUsername, Chatroom(ownUsername));
-                            messageDao.getOwnChatQuery().ref.set("");
-                            messageDao.getOtherChatQuery().ref.set("");
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatScreen(
-                                username: otherUsername,
-                                messageDao:
-                                    MessageDao(ownUsername, otherUsername),
-                              ),
-                              fullscreenDialog: true,
-                            ));
-                          }
-                        },
-                        child: Center(
-                          child: Stack(children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Message",
-                                    style: GoogleFonts.openSans(
-                                        color: Colors.pink, fontSize: 18),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                      child: Center(
+                        child: Stack(children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 10.0, top: 2.0),
-                                  child: Icon(MdiIcons.message,
-                                      color: Colors.pink),
+                                Text(
+                                  "Message",
+                                  style: GoogleFonts.openSans(
+                                      color: Colors.pink, fontSize: 18),
                                 )
                               ],
-                            )
-                          ]),
-                        ),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 10.0, top: 2.0),
+                                child: Icon(MdiIcons.message,
+                                    color: Colors.pink),
+                              )
+                            ],
+                          )
+                        ]),
                       ),
                     ),
                   ),

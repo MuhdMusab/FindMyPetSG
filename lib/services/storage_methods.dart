@@ -59,8 +59,13 @@ class StorageMethods {
   }
 
   Future<String> downloadURL() async {
-    return await _storage.ref(
-        'profile pics/$_username/$_username' + '_profile_picture')
-        .getDownloadURL();
+    try {
+      return await _storage.ref(
+          'profile pics/$_username/$_username' + '_profile_picture')
+          .getDownloadURL();
+    } catch (e) {
+      return 'fail';
+    }
+
   }
 }

@@ -177,14 +177,14 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
                                   height: 24,
                                   width: 70,
                                   decoration: BoxDecoration(
-                                      color: Color(0xFFffc4d4),
+                                      color: Colors.green,
                                       borderRadius:
                                       BorderRadius.circular(8.0)),
                                   child: Center(
                                     child: Text(
                                       'Reward',
                                       style: TextStyle(
-                                        color: Color(0xFFFf5757),
+                                        color: Colors.white,
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),

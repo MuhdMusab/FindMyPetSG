@@ -35,6 +35,12 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
       }
     });
   }
+
+  CircleAvatar _circleAvatar = CircleAvatar(
+    radius: 25,
+    backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -57,9 +63,24 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
       return Container(
         height: 75,
         child: ListTile(
-          onTap: () {
+          onTap: () async {
+            final StorageMethods storage = StorageMethods(username: otherUser);
+            String url = await storage.downloadURL();
+            CircleAvatar _circleAvatar = url == 'fail'
+                ? CircleAvatar(
+              radius: 25,
+              backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+            )
+                : CircleAvatar(
+              radius: 25,
+              backgroundImage: NetworkImage(url),
+            );
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ChatScreen(username: otherUser, messageDao: MessageDao(widget.username, otherUser),), fullscreenDialog: true
+                builder: (context) => ChatScreen(
+                    username: otherUser,
+                    messageDao: MessageDao(widget.username, otherUser),
+                    circleAvatar: _circleAvatar
+                ), fullscreenDialog: true
             ));
           },
           leading: FutureBuilder(
@@ -67,10 +88,11 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData) {
-                  return CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(snapshot.data!),
+                    _circleAvatar = CircleAvatar(
+                      radius: 25,
+                      backgroundImage: NetworkImage(snapshot.data!),
                   );
+                  return _circleAvatar;
                 } else {
                   return CircleAvatar(
                     radius: 25,
@@ -83,7 +105,6 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
           subtitle: FutureBuilder(
             future: messageDao.getMostRecentMessage(),
             builder: (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
-
               if (snapshot.data != null && snapshot.data!.value != null) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   final map = (snapshot.data!.value as Map<dynamic, dynamic>).values.first;

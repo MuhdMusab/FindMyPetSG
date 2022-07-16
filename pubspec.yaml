@@ -63,6 +63,11 @@ dependencies:
   custom_info_window: ^1.0.1
   animated_toggle_switch: ^0.5.2
   location: ^4.4.0
+  workmanager: ^0.5.0
+  flutter_geofence: ^0.4.4
+  intl: ^0.17.0
+
+
 
 dev_dependencies:
   flutter_test:

@@ -22,11 +22,11 @@ import '../models/post_type_model.dart';
 class MapsScreen extends StatefulWidget {
   List<Filter?> filters;
   QueryDocumentSnapshot<Object?>? user;
-  LatLng currentLatLng;
+  LatLng initialLatLng;
   MapsScreen({
     Key? key,
     required this.user,
-    required this.currentLatLng,
+    required this.initialLatLng,
     required this.filters,
   }) : super(key: key);
 
@@ -135,7 +135,7 @@ class _MapsScreenState extends State<MapsScreen> {
             return Stack(
               children: [
                 GoogleMap(
-                  myLocationButtonEnabled: false,
+                  myLocationButtonEnabled: true,
                   myLocationEnabled: true,
                   onTap: (position) {
                     _customInfoWindowController.hideInfoWindow!();
@@ -150,30 +150,30 @@ class _MapsScreenState extends State<MapsScreen> {
                   },
                   mapToolbarEnabled: false,
                   initialCameraPosition: CameraPosition(
-                    target: widget.currentLatLng,
+                    target: widget.initialLatLng,
                     zoom: 16,
                   ),
                   markers: buildMarkers(snapshot),
                   zoomControlsEnabled: false,
                   zoomGesturesEnabled: true,
                 ),
-                Positioned(
-                  right: 16,
-                  bottom: 80,
-                  child: FloatingActionButton(
-                      child: const Icon(
-                        Icons.center_focus_strong,
-                        size: 30.0,
-                        color: Colors.white,
-                      ),
-                      backgroundColor: pink(),
-                      heroTag: getRandomString(),
-                      onPressed: () {
-                        _googleMapController.animateCamera(
-                            CameraUpdate.newCameraPosition(CameraPosition(
-                                target: widget.currentLatLng, zoom: 16)));
-                      }),
-                ),
+                // Positioned(
+                //   right: 16,
+                //   bottom: 80,
+                //   child: FloatingActionButton(
+                //       child: const Icon(
+                //         Icons.center_focus_strong,
+                //         size: 30.0,
+                //         color: Colors.white,
+                //       ),
+                //       backgroundColor: pink(),
+                //       heroTag: getRandomString(),
+                //       onPressed: () {
+                //         _googleMapController.animateCamera(
+                //             CameraUpdate.newCameraPosition(CameraPosition(
+                //                 target: widget.currentLatLng, zoom: 16)));
+                //       }),
+                // ),
                 CustomInfoWindow(
                   controller: _customInfoWindowController,
                   offset: 0,

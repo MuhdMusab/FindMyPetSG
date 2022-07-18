@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
+import 'package:find_my_pet_sg/map_markers/map_markers.dart';
 import 'package:find_my_pet_sg/models/filter_model.dart';
 import 'package:find_my_pet_sg/models/post_type_model.dart';
 import 'package:find_my_pet_sg/screens/maps_screen.dart';
@@ -80,7 +81,7 @@ class _ExploreScreenState extends State<ExploreScreen>
       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
     /// Function to check if pet is went missing within past 3 days
     bool isRecent(DateTime dateOfLostPet) {
-      return DateTime.now().difference(dateOfLostPet).inDays <= 100;
+      return DateTime.now().difference(dateOfLostPet).inDays <= 3;
     }
 
     /// Function to check if is nearby and within 1000m
@@ -94,7 +95,7 @@ class _ExploreScreenState extends State<ExploreScreen>
       double lostPetLatitude = snapshot.data!.docs[index].get('latitude');
       double lostPetLongitude = snapshot.data!.docs[index].get('longtitude');
       DateTime dateOfLostPet =
-          DateFormat('yMd').parse(snapshot.data!.docs[index].get('date'));
+          DateFormat('d/M/y').parse(snapshot.data!.docs[index].get('date'));
       double distance = distanceAway(lostPetLatitude, lostPetLongitude);
       if (distance < 1000 && isRecent(dateOfLostPet)) {
         String name = (snapshot.data!.docs[index].get('name'));
@@ -146,6 +147,7 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   void initState() {
     super.initState();
+    buildMarkerIcons();
     _activateListeners();
     this._getUserPosition();
 

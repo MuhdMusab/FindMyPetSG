@@ -1,5 +1,7 @@
 import 'dart:async';
-import 'dart:ffi';
+// import 'dart:ffi';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
@@ -10,11 +12,14 @@ import 'package:find_my_pet_sg/widgets/found_pet_post.dart';
 import 'package:find_my_pet_sg/widgets/image_slider_carousel.dart';
 import 'package:find_my_pet_sg/widgets/lost_pet_post.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:google_maps_webservice/geocoding.dart';
+import 'package:intl/intl.dart';
 
+import '../map_markers/map_markers.dart';
 import '../models/category.dart';
 import '../models/filter_model.dart';
 import '../models/post_type_model.dart';
@@ -39,6 +44,34 @@ class _MapsScreenState extends State<MapsScreen> {
   CustomInfoWindowController _customInfoWindowController =
       CustomInfoWindowController();
 
+  BitmapDescriptor findCorrectMarkerIcon(
+      String lostPetPostType, String breed, String dateOfLostPet) {
+    DateTime lostDate = DateFormat('d/M/y').parse(dateOfLostPet);
+    bool isLostRecently = DateTime.now().difference(lostDate).inDays <= 3;
+    if (lostPetPostType == "lost") {
+      if (breed == "Dog") {
+        return isLostRecently ? lookoutDogMarker! : lostDogMarker!;
+      } else if (breed == "Cat") {
+        return isLostRecently ? lookoutCatMarker! : lostCatMarker!;
+      } else if (breed == "Bird") {
+        return isLostRecently ? lookoutBirdMarker! : lostBirdMarker!;
+      } else {
+        return isLostRecently ? lookoutOthersMarker! : lostOthersMarker!;
+      }
+    } else {
+      if (breed == "Dog") {
+        return foundDogMarker!;
+      } else if (breed == "Cat") {
+        return foundCatMarker!;
+      } else if (breed == "Bird") {
+        return foundBirdMarker!;
+      } else {
+        return foundOthersMarker!;
+      }
+    }
+    return foundCatMarker!;
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -55,12 +88,11 @@ class _MapsScreenState extends State<MapsScreen> {
       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
     int numberOfPosts = snapshot.data!.docs.length;
     Set<Marker> markers = {};
-    BitmapDescriptor lostBitmapDescriptor =
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
-    BitmapDescriptor foundBitmapDescriptor = BitmapDescriptor.defaultMarker;
     for (int index = 0; index < numberOfPosts; index++) {
       bool postTypeBool = true;
       bool categoryBool = true;
+      String lostPetBreed = snapshot.data!.docs[index].data()['breed'];
+      String lostPetPostType = snapshot.data!.docs[index].data()['type'];
       if (widget.filters.isNotEmpty) {
         postTypeBool = false;
         categoryBool = false;
@@ -68,22 +100,21 @@ class _MapsScreenState extends State<MapsScreen> {
           Filter filter = widget.filters[i]!;
           if (filter.value) {
             if (filter is Category) {
-              categoryBool = categoryBool ||
-                  snapshot.data!.docs[index].data()['breed'] ==
-                      (filter as Category).name;
+              categoryBool =
+                  categoryBool || lostPetBreed == (filter as Category).name;
             } else {
               postTypeBool = postTypeBool ||
-                  snapshot.data!.docs[index].data()['type'] ==
-                      (filter as PostType).postType;
+                  lostPetPostType == (filter as PostType).postType;
             }
           }
         }
       }
       if (postTypeBool && categoryBool) {
         print("accepted");
-        if (snapshot.data!.docs[index].data()['type'] == "lost") {
+        if (lostPetPostType == "lost") {
           markers.add(Marker(
-              icon: lostBitmapDescriptor,
+              icon: findCorrectMarkerIcon(lostPetPostType, lostPetBreed,
+                  snapshot.data!.docs[index].data()['date']),
               markerId: MarkerId(snapshot.data!.docs[index].data()['postId']),
               position: LatLng(snapshot.data!.docs[index].data()['latitude'],
                   snapshot.data!.docs[index].data()['longtitude']),
@@ -98,7 +129,8 @@ class _MapsScreenState extends State<MapsScreen> {
               }));
         } else {
           markers.add(Marker(
-              icon: foundBitmapDescriptor,
+              icon: findCorrectMarkerIcon(lostPetPostType, lostPetBreed,
+                  snapshot.data!.docs[index].data()['date']),
               markerId: MarkerId(snapshot.data!.docs[index].data()['postId']),
               position: LatLng(snapshot.data!.docs[index].data()['latitude'],
                   snapshot.data!.docs[index].data()['longtitude']),

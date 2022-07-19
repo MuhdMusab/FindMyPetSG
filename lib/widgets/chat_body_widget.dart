@@ -130,8 +130,6 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
                     if (map['isMe']) {
                       return Text("You: " + map['text'], maxLines: 1,);
                     } else {
-                      NotificationService().showNotification(
-                          1, "new message from " + otherUser, map['text'], 2);
                       return Text(map['text'], maxLines: 1,);
                     }
                   } else {
@@ -140,8 +138,6 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
                     if (map['isMe']) {
                       return Text("You: " + map['text'], maxLines: 1,);
                     } else {
-                      NotificationService().showNotification(
-                          1, "new message from " + otherUser, map['text'], 2);
                       return Text(map['text'], maxLines: 1,);
                     }
                   }

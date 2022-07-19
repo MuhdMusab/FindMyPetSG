@@ -55,7 +55,7 @@ class _ExploreScreenState extends State<ExploreScreen>
   @override
   bool get wantKeepAlive => true;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  new FlutterLocalNotificationsPlugin();
+      new FlutterLocalNotificationsPlugin();
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
 
@@ -158,26 +158,30 @@ class _ExploreScreenState extends State<ExploreScreen>
     this._getUserPosition();
     final service = FlutterBackgroundService();
     final String username = widget._user!['name'].toString();
-    DatabaseReference ref = FirebaseDatabase.instance.ref('chatroom').child(username);
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref('chatroom').child(username);
     Stream<DatabaseEvent> stream = ref.onValue;
     DateTime currTime = DateTime.now();
     stream.listen((DatabaseEvent event) {
-      Map<dynamic, dynamic> chatrooms = Map<dynamic, dynamic>.from(
-          (event as dynamic).snapshot.value);
+      Map<dynamic, dynamic> chatrooms =
+          Map<dynamic, dynamic>.from((event as dynamic).snapshot.value);
       Map<dynamic, dynamic>? otherChatters;
       chatrooms.forEach((key, value) {
         otherChatters = Map<String, dynamic>.from(value);
         String otherUser = otherChatters?.values.first;
-        DatabaseReference ref = FirebaseDatabase.instance.ref(otherUser).child(username).child('messages');
+        DatabaseReference ref = FirebaseDatabase.instance
+            .ref(otherUser)
+            .child(username)
+            .child('messages');
         ref.onChildAdded.listen((event) {
-          Map<dynamic, dynamic> currentMap = Map<dynamic, dynamic>.from(
-              (event as dynamic).snapshot.value);
+          Map<dynamic, dynamic> currentMap =
+              Map<dynamic, dynamic>.from((event as dynamic).snapshot.value);
           if (currentMap.containsKey('date')) {
             DateTime date = DateTime.parse(currentMap['date'] as String);
             if (date.difference(currTime).inSeconds > 0 && currentMap['isMe']) {
               Map<String, dynamic> map = {
                 'otherUser': otherUser,
-                'text' : currentMap['text'],
+                'text': currentMap['text'],
               };
               service.invoke('newMessage', map);
             }
@@ -185,22 +189,24 @@ class _ExploreScreenState extends State<ExploreScreen>
         });
       });
     });
-    CollectionReference<Map<String, dynamic>> a = FirebaseFirestore.instance.collection('posts');
+    CollectionReference<Map<String, dynamic>> a =
+        FirebaseFirestore.instance.collection('posts');
     a.snapshots().listen((QuerySnapshot<Map<String, dynamic>> event) {
       List<DocumentChange<Map<String, dynamic>>> a = event.docChanges;
       DateTime currTime = DateTime.now();
       for (DocumentChange<Map<String, dynamic>> doc in a) {
         if (doc.type == DocumentChangeType.added) {
           Map<String, dynamic> currMap = doc.doc.data()!;
-          double distanceBetweenUserAndPost = Geolocator.distanceBetween(userPosition!.latitude,
-              userPosition!.longitude, currMap['latitude'], currMap['longtitude']);
+          double distanceBetweenUserAndPost = Geolocator.distanceBetween(
+              userPosition!.latitude,
+              userPosition!.longitude,
+              currMap['latitude'],
+              currMap['longtitude']);
           print(distanceBetweenUserAndPost);
           if (distanceBetweenUserAndPost <= 1000) {
             if (currMap.containsKey('dateTimePosted')) {
               Timestamp timestamp = currMap['dateTimePosted'];
-              if (currTime
-                  .difference(timestamp.toDate())
-                  .inHours <= 1) {
+              if (currTime.difference(timestamp.toDate()).inHours <= 1) {
                 if (currMap.containsKey('name')) {
                   Map<String, dynamic> map = {
                     'name': currMap['name'],
@@ -227,20 +233,20 @@ class _ExploreScreenState extends State<ExploreScreen>
     /// Check when user turns on/off GPS
     _serviceStatusStreamSubscription =
         Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
-          if (status == ServiceStatus.disabled) {
-            setState(() {
-              userPosition = null;
-            });
-            showSnackBar(context, "Location disabled");
-          } else {
-            _getUserPosition();
-            showSnackBar(context, "Location enabled");
-          }
+      if (status == ServiceStatus.disabled) {
+        setState(() {
+          userPosition = null;
         });
+        showSnackBar(context, "Location disabled");
+      } else {
+        _getUserPosition();
+        showSnackBar(context, "Location enabled");
+      }
+    });
 
     /// When app is running, everytime user moves by 500m, variable userPosition is updated
     _positionStreamSubscription = Geolocator.getPositionStream(
-        locationSettings: LocationSettings(distanceFilter: 500))
+            locationSettings: LocationSettings(distanceFilter: 500))
         .listen((Position? position) {
       if (position == null) {
         print('unknown');
@@ -262,121 +268,125 @@ class _ExploreScreenState extends State<ExploreScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('posts')
-          .orderBy("dateTimePosted", descending: true)
-          .snapshots(),
-      builder: (context,
-          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (userPosition != null) {
-          sendLookoutNotification(snapshot);
-        }
-
-        return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: pink(),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialogBox(
-                        title: "Have you Lost or Found a pet?",
-                        text: "yes",
-                        user: widget._user);
-                  });
-            },
-            child: new Icon(
-              Icons.add,
-              size: 40.0,
-              color: Colors.white,
-            ),
-            elevation: 8.0,
-          ),
-          body: Column(
-            children: [
-              SafeArea(
-                child: Stack(children: [
-                  Padding(
-                    padding:
-                    const EdgeInsets.only(left: 12, top: 18, bottom: 10),
-                    child: FilterButton(
-                      callback: _callback,
-                      user: widget._user,
-                    ),
-                  ),
-                  Positioned(
-                    top: 14,
-                    right: 10,
-                    child: Container(
-                        height: 40,
-                        child: AnimatedToggleSwitch<int>.size(
-                            current: value,
-                            values: [0, 1],
-                            indicatorBorderRadius: BorderRadius.zero,
-                            borderWidth: 1.0,
-                            borderRadius: BorderRadius.circular(8.0),
-                            iconOpacity: 0.2,
-                            indicatorSize: Size.fromWidth(60),
-                            iconSize: const Size.square(40),
-                            iconBuilder: (value, size) {
-                              IconData data = MdiIcons.mapMarker;
-                              if (value.isEven) data = Icons.list;
-                              return Icon(
-                                data,
-                                size: min(size.width, size.height),
-                                color: Colors.pink,
-                              );
-                            },
-                            borderColor: lightPink(),
-                            colorBuilder: (i) =>
-                            i.isEven ? lightPink() : lightPink(),
-                            onChanged: (i) {
-                              if (i == 0) {
-                                setState(() {
-                                  value = 0;
-                                });
-                              } else {
-                                // _getUserLocation();
-                                setState(() {
-                                  value = 1;
-                                });
-                              }
-                            })),
-                  ),
-                ]),
-              ),
-              Divider(
-                height: 1,
-                thickness: 2,
-                color: Colors.white,
-              ),
-              (value == 1 && userPosition != null)
-                  ? MapsScreen(
-                  filters: filters,
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: pink(),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return CustomDialogBox(
+                    title: "Have you Lost or Found a pet?",
+                    text: "yes",
+                    user: widget._user);
+              });
+        },
+        child: new Icon(
+          Icons.add,
+          size: 40.0,
+          color: Colors.white,
+        ),
+        elevation: 8.0,
+      ),
+      body: Column(
+        children: [
+          SafeArea(
+            child: Stack(children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 12, top: 18, bottom: 10),
+                child: FilterButton(
+                  callback: _callback,
                   user: widget._user,
-                  initialLatLng: LatLng(
-                      userPosition!.latitude!, userPosition!.longitude!))
-                  : (value == 1 && userPosition == null)
-                  ? Padding(
-                padding: const EdgeInsets.only(top: 250.0),
-                child: Text(
-                  "Turn on Google's location services and enable location permission for map view",
-                  style:
-                  TextStyle(fontSize: 30, color: Colors.black45),
-                  textAlign: TextAlign.center,
                 ),
-              )
-                  : FullPosts(user: widget._user, filters: filters),
-            ],
+              ),
+              Positioned(
+                top: 14,
+                right: 10,
+                child: Container(
+                    height: 40,
+                    child: AnimatedToggleSwitch<int>.size(
+                        current: value,
+                        values: [0, 1],
+                        indicatorBorderRadius: BorderRadius.zero,
+                        borderWidth: 1.0,
+                        borderRadius: BorderRadius.circular(8.0),
+                        iconOpacity: 0.2,
+                        indicatorSize: Size.fromWidth(60),
+                        iconSize: const Size.square(40),
+                        iconBuilder: (value, size) {
+                          IconData data = MdiIcons.mapMarker;
+                          if (value.isEven) data = Icons.list;
+                          return Icon(
+                            data,
+                            size: min(size.width, size.height),
+                            color: Colors.pink,
+                          );
+                        },
+                        borderColor: lightPink(),
+                        colorBuilder: (i) =>
+                            i.isEven ? lightPink() : lightPink(),
+                        onChanged: (i) {
+                          if (i == 0) {
+                            setState(() {
+                              value = 0;
+                            });
+                          } else {
+                            // _getUserLocation();
+                            setState(() {
+                              value = 1;
+                            });
+                          }
+                        })),
+              ),
+            ]),
           ),
-        );
-      },
+          Divider(
+            height: 1,
+            thickness: 2,
+            color: Colors.white,
+          ),
+          StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .orderBy("dateTimePosted", descending: true)
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (userPosition != null) {
+                  sendLookoutNotification(snapshot);
+                }
+
+                return (value == 1 && userPosition != null)
+                    ? MapsScreen(
+                        filters: filters,
+                        user: widget._user,
+                        initialLatLng: LatLng(
+                            userPosition!.latitude!, userPosition!.longitude!),
+                        snapshot: snapshot,
+                      )
+                    : (value == 1 && userPosition == null)
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 250.0),
+                            child: Text(
+                              "Turn on GPS and enable location permission for map view",
+                              style: TextStyle(
+                                  fontSize: 30, color: Colors.black45),
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        : FullPosts(
+                            user: widget._user,
+                            filters: filters,
+                            snapshot: snapshot,
+                          );
+              }),
+        ],
+      ),
     );
   }
 }

@@ -28,11 +28,13 @@ class MapsScreen extends StatefulWidget {
   List<Filter?> filters;
   QueryDocumentSnapshot<Object?>? user;
   LatLng initialLatLng;
+  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
   MapsScreen({
     Key? key,
     required this.user,
     required this.initialLatLng,
     required this.filters,
+    required this.snapshot,
   }) : super(key: key);
 
   @override
@@ -152,69 +154,55 @@ class _MapsScreenState extends State<MapsScreen> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('posts')
-              .orderBy("dateTimePosted", descending: true)
-              .snapshots(),
-          builder: (context,
-              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return Stack(
-              children: [
-                GoogleMap(
-                  myLocationButtonEnabled: true,
-                  myLocationEnabled: true,
-                  onTap: (position) {
-                    _customInfoWindowController.hideInfoWindow!();
-                  },
-                  onCameraMove: (position) {
-                    _customInfoWindowController.onCameraMove!();
-                  },
-                  onMapCreated: (GoogleMapController controller) async {
-                    _customInfoWindowController.googleMapController =
-                        controller;
-                    _googleMapController = controller;
-                  },
-                  mapToolbarEnabled: false,
-                  initialCameraPosition: CameraPosition(
-                    target: widget.initialLatLng,
-                    zoom: 16,
-                  ),
-                  markers: buildMarkers(snapshot),
-                  zoomControlsEnabled: false,
-                  zoomGesturesEnabled: true,
-                ),
-                // Positioned(
-                //   right: 16,
-                //   bottom: 80,
-                //   child: FloatingActionButton(
-                //       child: const Icon(
-                //         Icons.center_focus_strong,
-                //         size: 30.0,
-                //         color: Colors.white,
-                //       ),
-                //       backgroundColor: pink(),
-                //       heroTag: getRandomString(),
-                //       onPressed: () {
-                //         _googleMapController.animateCamera(
-                //             CameraUpdate.newCameraPosition(CameraPosition(
-                //                 target: widget.currentLatLng, zoom: 16)));
-                //       }),
-                // ),
-                CustomInfoWindow(
-                  controller: _customInfoWindowController,
-                  offset: 0,
-                  width: MediaQuery.of(context).size.width - 50,
-                  height: 330,
-                ),
-              ],
-            );
-          }),
+      child: Stack(
+        children: [
+          GoogleMap(
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
+            onTap: (position) {
+              _customInfoWindowController.hideInfoWindow!();
+            },
+            onCameraMove: (position) {
+              _customInfoWindowController.onCameraMove!();
+            },
+            onMapCreated: (GoogleMapController controller) async {
+              _customInfoWindowController.googleMapController = controller;
+              _googleMapController = controller;
+            },
+            mapToolbarEnabled: false,
+            initialCameraPosition: CameraPosition(
+              target: widget.initialLatLng,
+              zoom: 16,
+            ),
+            markers: buildMarkers(widget.snapshot),
+            zoomControlsEnabled: false,
+            zoomGesturesEnabled: true,
+          ),
+          // Positioned(
+          //   right: 16,
+          //   bottom: 80,
+          //   child: FloatingActionButton(
+          //       child: const Icon(
+          //         Icons.center_focus_strong,
+          //         size: 30.0,
+          //         color: Colors.white,
+          //       ),
+          //       backgroundColor: pink(),
+          //       heroTag: getRandomString(),
+          //       onPressed: () {
+          //         _googleMapController.animateCamera(
+          //             CameraUpdate.newCameraPosition(CameraPosition(
+          //                 target: widget.currentLatLng, zoom: 16)));
+          //       }),
+          // ),
+          CustomInfoWindow(
+            controller: _customInfoWindowController,
+            offset: 0,
+            width: MediaQuery.of(context).size.width - 50,
+            height: 330,
+          ),
+        ],
+      ),
     );
   }
 }

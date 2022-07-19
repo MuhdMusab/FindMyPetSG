@@ -1,4 +1,5 @@
 import 'package:find_my_pet_sg/modal/messagedao.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/modal/message_model.dart';
@@ -10,13 +11,15 @@ class MessageWidget extends StatelessWidget {
   final DateTime date;
   final MessageDao messageDao;
   final CircleAvatar circleAvatar;
+  String? imageUrl;
 
-  const MessageWidget({
+  MessageWidget({
     required this.message,
     required this.isMe,
     required this.date,
     required this.messageDao,
     required this.circleAvatar,
+    this.imageUrl,
   });
 
   @override
@@ -32,29 +35,12 @@ class MessageWidget extends StatelessWidget {
             SizedBox(width: 12,),
             if (!isMe)
               circleAvatar,
-              // FutureBuilder(
-              //     future: storage.downloadURL(),
-              //     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              //       if (snapshot.connectionState == ConnectionState.done &&
-              //           snapshot.hasData) {
-              //         return CircleAvatar(
-              //           radius: 25,
-              //           backgroundImage: NetworkImage(snapshot.data!),
-              //         );
-              //       } else {
-              //         return CircleAvatar(
-              //           radius: 25,
-              //           backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-              //         );
-              //       }
-              //     }
-              // ),
             Container(
               padding: EdgeInsets.all(16),
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               constraints: BoxConstraints(maxWidth: 200),
               decoration: BoxDecoration(
-                color: isMe ? Color(0xfff26579) : Colors.grey[100],
+                color: isMe ? pink() : Colors.grey[100],
                 borderRadius: isMe
                     ? borderRadius.subtract(BorderRadius.only(bottomRight: radius))
                     : borderRadius.subtract(BorderRadius.only(bottomLeft: radius)),
@@ -81,7 +67,10 @@ class MessageWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment:
       isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: <Widget>[
+      children:
+      imageUrl != ''
+      ? <Widget>[
+        Image.network(imageUrl!),
         Text(
           message,
           style: TextStyle(
@@ -89,8 +78,26 @@ class MessageWidget extends StatelessWidget {
           ),
           textAlign: isMe ? TextAlign.end : TextAlign.start,
         ),
-
+      ]
+          : <Widget>[
+        Text(
+          message,
+          style: TextStyle(
+            color: isMe ? Colors.white : Colors.black,
+          ),
+          textAlign: isMe ? TextAlign.end : TextAlign.start,
+        ),
       ],
+
+      // <Widget>[
+      //   Text(
+      //     message,
+      //     style: TextStyle(
+      //       color: isMe ? Colors.white : Colors.black,
+      //     ),
+      //     textAlign: isMe ? TextAlign.end : TextAlign.start,
+      //   ),
+      // ],
     );
   }
 }

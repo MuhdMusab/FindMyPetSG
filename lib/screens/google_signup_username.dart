@@ -1,4 +1,5 @@
 import 'package:find_my_pet_sg/services/database.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/screens/home.dart';
 import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:find_my_pet_sg/screens/sign_up_form_screen.dart';
@@ -149,8 +150,8 @@ class _GoogleSignUpUsernameState extends State<GoogleSignUpUsername> {
                 ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                    const Color(0xfff26579),
-                    const Color(0xfff26579),
+                    pink(),
+                    pink(),
                   ]),
                   borderRadius: BorderRadius.circular(20),
                 ),

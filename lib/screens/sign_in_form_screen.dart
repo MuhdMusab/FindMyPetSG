@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import '../helper/authenticate.dart';
 import '../helper/homehelper.dart';
 import 'package:find_my_pet_sg/services/database.dart';
@@ -264,9 +265,9 @@ signIn() async {
                           horizontal: 12,
                         ),
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(colors: [
-                            Color(0xfff26579),
-                            Color(0xfff26579),
+                          gradient: LinearGradient(colors: [
+                            pink(),
+                            pink(),
                           ]),
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -294,10 +295,10 @@ signIn() async {
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: const Text(
+                          child: Text(
                             "Sign up",
                             style: TextStyle(
-                              color: const Color(0xfff26579),
+                              color: pink(),
                               fontSize: 17,
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold,

@@ -1,4 +1,5 @@
 import '../helper/google_sign_in_provider.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/screens/forgot_password_screen.dart';
 import 'package:find_my_pet_sg/screens/google_signup_username.dart';
@@ -81,7 +82,7 @@ class _SignUpState extends State<SignUp> {
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
-                    primary: const Color(0xfff26579),
+                    primary: pink(),
                     fixedSize: Size(MediaQuery.of(context).size.width - 50, 66),
                   ),
                   child: const Text(
@@ -130,9 +131,9 @@ class _SignUpState extends State<SignUp> {
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: const Text("Sign in",
+                          child: Text("Sign in",
                             style: TextStyle(
-                              color: const Color(0xfff26579),
+                              color: pink(),
                               fontSize: 17,
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold,

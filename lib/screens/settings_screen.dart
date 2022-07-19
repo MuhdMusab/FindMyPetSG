@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,15 +19,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(
-          color: Color(0xFFf26579),
+        iconTheme: IconThemeData(
+          color: pink(),
         ),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "Settings",
           style: TextStyle(
             fontSize: 20,
-            color: Color(0xFFf26579),
+            color: pink(),
             fontFamily: 'Open Sans Extra Bold',
             fontWeight: FontWeight.bold,
           ),
@@ -132,16 +133,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     );
                   },
                   padding: const EdgeInsets.only(left: 8),
-                  icon: const Icon(Icons.logout,
+                  icon: Icon(Icons.logout,
                     size: 32,
-                    color: Color(0xFFf26579),
+                    color: pink(),
                   )
               ),
               const SizedBox(width: 0,),
-              const Text('Logout',
+              Text('Logout',
                 style: TextStyle(
                   fontSize: 17,
-                  color: Color(0xFFf26579),
+                  color: pink(),
                 ),
               ),
             ],

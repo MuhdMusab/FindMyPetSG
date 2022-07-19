@@ -1,4 +1,5 @@
 import '../helper/authenticate.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
@@ -332,9 +333,9 @@ class _SignUpFormState extends State<SignUpForm> {
                           horizontal: 12,
                         ),
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(colors: [
-                            Color(0xfff26579),
-                            Color(0xfff26579),
+                          gradient: LinearGradient(colors: [
+                            pink(),
+                            pink(),
                           ]),
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -362,10 +363,10 @@ class _SignUpFormState extends State<SignUpForm> {
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: const Text(
+                          child: Text(
                             "Sign in",
                             style: TextStyle(
-                              color: Color(0xfff26579),
+                              color: pink(),
                               fontSize: 17,
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold,

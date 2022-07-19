@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import '../helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/edit_found_post.dart';
 import 'package:find_my_pet_sg/screens/settings_screen.dart';
@@ -54,14 +55,16 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
     //user, access post index, delete post index, get last post index and shift
     //user, delete storageRefs, get last storage ref index and shift
     int numberOfImagesInPost = await DatabaseMethods.getNumberOfImagesInPost(widget.username, widget.postId);
+    print('Number of images in post: $numberOfImagesInPost');
     final StorageMethods storageMethods = StorageMethods();
     for (int i = 0; i < numberOfImagesInPost; i++) {
       String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(widget.username, widget.postIndex, i);
       storageMethods.deleteImageFromStorage(prevRef);
     }
-    DatabaseMethods.deleteStorageRefAtIndex(widget.username, widget.postIndex);
     DatabaseMethods.deleteUserPostAtIndex(widget.username, widget.postIndex);
+    DatabaseMethods.deleteStorageRefAtIndex(widget.username, widget.postIndex);
     DatabaseMethods.deleteUserPost(widget.username, widget.postId);
+    widget.callback();
   }
 
   @override
@@ -121,14 +124,14 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
                                   height: 24,
                                   width: 70,
                                   decoration: BoxDecoration(
-                                      color: Color(0xFFffc4d4).withOpacity(1),
+                                      color: lightPink().withOpacity(1),
                                       borderRadius: BorderRadius.circular(8.0)),
                                   child: Center(
                                     child: Text(
                                       'Found',
                                       style: TextStyle(
                                         color: Color(
-                                            0xFFFf5757), //ff5757 Color(0xFFf26579)
+                                            0xFFFf5757), //ff5757 pink()
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),

@@ -115,6 +115,7 @@ class DatabaseMethods {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(username).get();
     Map<String, dynamic> mapOfStorageRefs = snapshot['storageRefs'];
     print(mapOfStorageRefs);
+    print(mapOfStorageRefs[mapIndex.toString()]);
     return mapOfStorageRefs[mapIndex.toString()][refIndex];
   }
 

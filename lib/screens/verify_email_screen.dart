@@ -1,4 +1,5 @@
 import 'package:find_my_pet_sg/screens/home.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +123,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                   onPressed: () => _canResendEmail ? sendVerificationEmail: null,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
-                    primary: const Color(0xfff26579),
+                    primary: pink(),
                   ),
                   icon: const Icon(
                     Icons.email,
@@ -154,9 +155,9 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Cancel',
-                    style: TextStyle(fontSize: 24, color: Color(0xfff26579),),
+                    style: TextStyle(fontSize: 24, color: pink(),),
                   ),
                 ),
               ),

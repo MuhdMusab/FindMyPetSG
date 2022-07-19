@@ -16,13 +16,15 @@ class HighlightedMessageWidget extends StatefulWidget {
   final bool isMe;
   final DateTime date;
   final MessageDao messageDao;
+  String? imageUrl;
 
-  const HighlightedMessageWidget({
+  HighlightedMessageWidget({
     Key? key,
     required this.message,
     required this.isMe,
     required this.date,
-    required this.messageDao
+    required this.messageDao,
+    this.imageUrl
   }) : super(key: key);
 
   @override
@@ -59,9 +61,12 @@ class _HighlightedMessageWidgetState extends State<HighlightedMessageWidget> {
                 BoxShadow(
                     color: Colors.black, offset: Offset(0, 5), blurRadius: 10),
               ]),
-          child: Column(
+          child:
+          widget.imageUrl != ''
+          ? Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              Image.network(widget.imageUrl!),
               Text(
                 widget.message,
                 textAlign: TextAlign.center,
@@ -81,6 +86,30 @@ class _HighlightedMessageWidgetState extends State<HighlightedMessageWidget> {
                ),
                ),
              )
+            ],
+          )
+          : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                widget.message,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: widget.isMe ? Colors.white : Colors.black,
+                ),
+              ),
+              SizedBox(height: 10,),
+              Align(
+                alignment: widget.isMe ?  Alignment.bottomRight : Alignment.bottomLeft,
+                child: Text(
+                  DateFormat('MM-dd-yyyy HH:mm').format(widget.date).toString(),
+                  style: TextStyle(
+                    color: widget.isMe ? Colors.white : Colors.black,
+                  ),
+                ),
+              )
             ],
           ),
         ),

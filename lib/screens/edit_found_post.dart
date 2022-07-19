@@ -69,7 +69,6 @@ class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
       setState(() {
         _breed = animal;
       });
-      print(_breed);
     }
 
     void uploadChanges() async {

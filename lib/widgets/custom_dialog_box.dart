@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/screens/create_lost_post_screen.dart';
 import 'package:find_my_pet_sg/screens/create_found_post_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -72,7 +73,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      primary: const Color(0xfff26579),
+                      primary: pink(),
                       fixedSize: Size(120, 50),
                     ),
                     child: Text(

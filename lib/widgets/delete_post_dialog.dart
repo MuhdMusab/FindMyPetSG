@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -69,7 +70,7 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      primary: const Color(0xfff26579),
+                      primary: pink(),
                       fixedSize: const Size(150, 50),
                     ),
                     child: const Text(

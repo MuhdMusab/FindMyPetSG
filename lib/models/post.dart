@@ -66,6 +66,7 @@ class Post {
         "isMale": isMale,
         "username": username,
         "dateTimePosted": dateTimePosted,
+        "breed" : breed,
       };
 
   static Post fromSnap(DocumentSnapshot snap) {

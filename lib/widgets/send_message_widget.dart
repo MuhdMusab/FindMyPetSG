@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:image_picker/image_picker.dart';
+import '../utils/pickImage.dart';
 class SendMessageWidget extends StatefulWidget {
   Function? sendMessage;
   TextEditingController? textEditingController;
@@ -20,23 +26,108 @@ class SendMessageWidget extends StatefulWidget {
 }
 
 class _SendMessageWidgetState extends State<SendMessageWidget> {
+  bool _isImageAttached = false;
+  File? fileToAttach;
+
+  _selectImage(BuildContext parentContext) async {
+    return showDialog(
+      context: parentContext,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Create a Report'),
+          children: <Widget>[
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Take a photo'),
+                onPressed: () async {
+                    Navigator.pop(context);
+                    XFile? xFile = await ImagePicker.platform.getImageFromSource(
+                        source: ImageSource.camera);
+                    fileToAttach = await cropRectangleImage(File(xFile!.path));
+                    setState(() {
+                      _isImageAttached = true;
+                    });
+                    //widget.setImageCallback!(croppedFiles);
+                }),
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Choose from Gallery'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  XFile? xFile = await ImagePicker.platform.getImageFromSource(
+                      source: ImageSource.gallery);
+                  fileToAttach = await cropRectangleImage(File(xFile!.path));
+                  setState(() {
+                    _isImageAttached = true;
+                  });
+                  //widget.setImageCallback!(croppedFiles);
+                }),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(
+        InkWell(
+          onTap: () {
+            _selectImage(context);
+          },
           child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SizedBox.square(
+              child: Icon(
+                  Icons.image,
+                  size: 30,
+              ),
+            ),
+          ),
+        ),
+        Flexible(
+          child: _isImageAttached
+        ? Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: TextField(
+                  keyboardType: TextInputType.text,
+                  controller: widget.textEditingController,
+                  onSubmitted: (input) {
+                    _isImageAttached
+                        ? widget.sendMessage!(fileToAttach)
+                        : widget.sendMessage!(File('empty'));
+                    setState(() {
+                      _isImageAttached = false;
+                      fileToAttach = null;
+                    });
+                  },
+                  decoration:
+                  InputDecoration(hintText: 'Enter new message',),
+                ),
+              ),
+              Image.file(fileToAttach!),
+            ],
+          ) 
+          : Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: TextField(
               keyboardType: TextInputType.text,
               controller: widget.textEditingController,
               onSubmitted: (input) {
-
-                widget.sendMessage!();
               },
               decoration:
-              const InputDecoration(hintText: 'Enter new message'),
+              InputDecoration(hintText: 'Enter new message',),
             ),
           ),
         ),
@@ -45,7 +136,13 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                 ? CupertinoIcons.arrow_right_circle_fill
                 : CupertinoIcons.arrow_right_circle),
             onPressed: () {
-              widget.sendMessage!();
+              _isImageAttached
+                  ? widget.sendMessage!(fileToAttach)
+                  : widget.sendMessage!(File('empty'));
+              setState(() {
+                _isImageAttached = false;
+                fileToAttach = null;
+              });
             })
       ],
     );

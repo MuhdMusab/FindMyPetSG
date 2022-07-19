@@ -49,7 +49,7 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                     Navigator.pop(context);
                     XFile? xfile = await ImagePicker.platform.getImageFromSource(
                         source: ImageSource.camera);
-                    File file = (await cropSquareImage(File(xfile!.path)));
+                    File file = (await cropRectangleImage(File(xfile!.path)));
                     final StorageMethods storageMethods = StorageMethods();
                     List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
                     await DatabaseMethods.addImageToPost(widget.username, widget.postId, urls[0],);
@@ -67,7 +67,7 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                   } else {
                     XFile? xfile = await ImagePicker.platform.getImageFromSource(
                         source: ImageSource.gallery);
-                    File file = (await cropSquareImage(File(xfile!.path)));
+                    File file = (await cropRectangleImage(File(xfile!.path)));
                     final StorageMethods storageMethods = StorageMethods();
                     List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
                     await DatabaseMethods.addImageToPost(widget.username, widget.postId, urls[0],);
@@ -102,7 +102,7 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                   Navigator.pop(context);
                   XFile? xfile = await ImagePicker.platform.getImageFromSource(
                       source: ImageSource.camera);
-                  File file = (await cropSquareImage(File(xfile!.path)));
+                  File file = (await cropRectangleImage(File(xfile!.path)));
                   String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(widget.username, postIndex, activeIndex);
                   final StorageMethods storageMethods = StorageMethods();
                   storageMethods.deleteImageFromStorage(prevRef);
@@ -118,7 +118,7 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                   Navigator.pop(context);
                   XFile? xfile = await ImagePicker.platform.getImageFromSource(
                       source: ImageSource.gallery);
-                  File file = (await cropSquareImage(File(xfile!.path)));
+                  File file = (await cropRectangleImage(File(xfile!.path)));
                   String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(widget.username, postIndex, activeIndex);
                   final StorageMethods storageMethods = StorageMethods();
                   storageMethods.deleteImageFromStorage(prevRef);

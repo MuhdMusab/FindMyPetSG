@@ -71,7 +71,6 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
     setState(() {
       _breed = animal;
     });
-    print(_breed);
   }
 
   void postImage() async {
@@ -120,7 +119,7 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
             _locationController.text.trim(),
             latitude,
             longtitude,
-            _breed!,
+            _breed == null || _breed == '' ? 'Others' : _breed!,
             _dateController.text.trim(),
             _rewardController.text.trim() == "" ? 0 : int.parse(
                 _rewardController.text.trim()),

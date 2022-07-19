@@ -44,7 +44,7 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                     Navigator.pop(context);
                     XFile? file = await ImagePicker.platform.getImageFromSource(
                         source: ImageSource.camera);
-                    croppedFiles.add(await cropSquareImage(File(file!.path)));
+                    croppedFiles.add(await cropRectangleImage(File(file!.path)));
                     widget.setImageCallback!(croppedFiles);
                   }
                 }),
@@ -59,7 +59,7 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                       // do nothing
                     } else {
                       final File currentFile = File(file.path);
-                      croppedFiles.add(await cropSquareImage(currentFile));
+                      croppedFiles.add(await cropRectangleImage(currentFile));
                     }
                   }
                   widget.setImageCallback!(croppedFiles);
@@ -92,7 +92,7 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                   Navigator.pop(context);
                   XFile? file = await ImagePicker.platform.getImageFromSource(
                       source: ImageSource.camera);
-                  croppedFiles[activeIndex] = (await cropSquareImage(File(file!.path)));
+                  croppedFiles[activeIndex] = (await cropRectangleImage(File(file!.path)));
                   widget.setImageCallback!(croppedFiles);
                 }),
             SimpleDialogOption(
@@ -102,7 +102,7 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                   Navigator.pop(context);
                   XFile? file = await ImagePicker.platform.getImageFromSource(
                       source: ImageSource.gallery);
-                  croppedFiles[activeIndex] = (await cropSquareImage(File(file!.path)));
+                  croppedFiles[activeIndex] = (await cropRectangleImage(File(file!.path)));
                   widget.setImageCallback!(croppedFiles);
                 }),
             SimpleDialogOption(

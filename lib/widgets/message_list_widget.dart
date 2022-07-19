@@ -104,8 +104,10 @@ class _MessageListState extends State<MessageList> {
     return Expanded(
       child: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
-          if (notification is ScrollEndNotification) {
-            _isButtonVisible = false;
+          if (notification.metrics.atEdge) {
+            setState(() {
+              _isButtonVisible = false;
+            });
           }
           if (notification.direction == ScrollDirection.forward) {
             setState(() {
@@ -125,7 +127,10 @@ class _MessageListState extends State<MessageList> {
               controller: widget.scrollController,
               query: widget.messageDao.getOwnMessageQuery(),
               itemBuilder: (context, snapshot, animation, index) {
-                final json = snapshot.value as Map<dynamic, dynamic>;
+                Map<dynamic, dynamic> json = snapshot.value as Map<dynamic, dynamic>;
+                if (json['imageUrl'] == null) {
+                  json['imageUrl'] = '';
+                }
                 final message = Message.fromJson(json);
                 return GestureDetector(
                   child: MessageWidget(
@@ -133,7 +138,8 @@ class _MessageListState extends State<MessageList> {
                       isMe: message.isMe,
                       date: message.date,
                       messageDao: widget.messageDao,
-                      circleAvatar: widget.circleAvatar
+                      circleAvatar: widget.circleAvatar,
+                      imageUrl: message.imageUrl,
                   ),
                   onLongPress: () {
                     setState(() {
@@ -144,7 +150,8 @@ class _MessageListState extends State<MessageList> {
                           message: message.text,
                           isMe: message.isMe,
                           date: message.date,
-                          messageDao: widget.messageDao
+                          messageDao: widget.messageDao,
+                          imageUrl: message.imageUrl,
                       );
                     }).then((value) => {
                       setState(() {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:find_my_pet_sg/config/constants.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:find_my_pet_sg/screens/settings_screen.dart';
@@ -108,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
         title: Container(),
         actions: [
           IconButton(
-              color: const Color(0xFFf26579),
+              color: pink(),
               onPressed: () => {
                 Navigator.push(
                     context,

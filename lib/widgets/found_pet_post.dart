@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -94,14 +95,13 @@ class _FoundPetPostState extends State<FoundPetPost> {
                               height: 24,
                               width: 70,
                               decoration: BoxDecoration(
-                                  color: const Color(0xFFffc4d4).withOpacity(1),
+                                  color: lightPink().withOpacity(1),
                                   borderRadius: BorderRadius.circular(8.0)),
                               child: const Center(
                                 child: const Text(
                                   'Found',
                                   style: TextStyle(
-                                    color: Color(
-                                        0xFFFf5757), //ff5757 Color(0xFFf26579)
+                                    color: Color(0xFFFf5757),
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),

@@ -1,3 +1,4 @@
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -69,14 +70,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Color(0xFFf26579)),
+        iconTheme: IconThemeData(color: pink()),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           "Reset Password",
           style: TextStyle(
             fontSize: 18,
-            color: Color(0xFFf26579),
+            color: pink(),
             fontFamily: 'Open Sans Extra Bold',
             fontWeight: FontWeight.bold,
           ),
@@ -161,7 +162,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
-                primary: const Color(0xfff26579),
+                primary: pink(),
                 fixedSize: Size(MediaQuery.of(context).size.width - 50, 66),
               ),
               label: Text(

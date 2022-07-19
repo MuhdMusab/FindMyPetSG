@@ -31,7 +31,7 @@ Future<File?> pickMedia({
   }
 }
 
-Future<File> cropSquareImage(File imageFile) async =>
+Future<File> cropRectangleImage(File imageFile) async =>
     File((await ImageCropper().cropImage(
       sourcePath: imageFile.path,
       aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 1),

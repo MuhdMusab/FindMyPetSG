@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:find_my_pet_sg/modal/chatroom.dart';
 import 'package:find_my_pet_sg/modal/person.dart';
+import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
 import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
 import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
@@ -46,14 +49,22 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _sendMessage() {
-    if (_canSendMessage()) {
-      final ownMessage = Message(_messageInputController.text, DateTime.now(), true);
-      final otherMessage = Message(_messageInputController.text, DateTime.now(), false);
+  void _sendMessage(File file) async {
+    if (_canSendMessage() && file.path == 'empty') {
+
+      final ownMessage = Message(_messageInputController.text, DateTime.now(), true, '');
+      final otherMessage = Message(_messageInputController.text, DateTime.now(), false, '');
       widget.messageDao.saveOwnMessage(ownMessage);
       widget.messageDao.saveOtherMessage(otherMessage);
       _messageInputController.clear();
-      //callback();
+    } else if (_canSendMessage() && file.path != 'empty') {
+      StorageMethods storage = StorageMethods(username: widget.username);
+      String imageUrl = (await storage.uploadImageToStorage('messageImages', file.readAsBytesSync()))[0];
+      final ownMessage = Message(_messageInputController.text, DateTime.now(), true, imageUrl);
+      final otherMessage = Message(_messageInputController.text, DateTime.now(), false, imageUrl);
+      widget.messageDao.saveOwnMessage(ownMessage);
+      widget.messageDao.saveOtherMessage(otherMessage);
+      _messageInputController.clear();
     }
   }
 

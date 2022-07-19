@@ -16,7 +16,6 @@ import '../utils/showSnackBar.dart';
 import '../widgets/arrow_back_button.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_textfield_2.dart';
-import '../widgets/reward_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
@@ -48,7 +47,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _rewardController = TextEditingController();
 
   @override
   void dispose() {
@@ -57,7 +55,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
     _locationController.dispose();
     _nameController.dispose();
     _dateController.dispose();
-    _rewardController.dispose();
   }
 
   void setImageCallback(List<File> files) {
@@ -70,7 +67,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
     setState(() {
       _breed = animal;
     });
-    print(_breed);
   }
 
   void postImage() async {
@@ -115,7 +111,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
             _dateController.text.trim(),
             widget._user!['name'].toString(),
             DateTime.now(),
-            _breed!,
+            _breed == null || _breed == '' ? 'Others' : _breed!,
             _nameController.text == null || _nameController.text == ""
                 ? ""
                 : _nameController.text.trim(),
@@ -235,6 +231,86 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                     textEditingController: _nameController,
                     inputFormatters: [],
                     maxLines: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0, bottom: 12.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("Gender*",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blueGrey
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isMale = false;
+                                });
+                              },
+                              child: Container(
+                                height: 51,
+                                width: 120,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  // color: isMale ? Colors.transparent : Colors.pink,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                      width: 2.0,
+                                      color: isMale
+                                          ? Colors.black12
+                                          : Colors.pink),
+                                ),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Female"),
+                                      Icon(
+                                        Icons.female,
+                                        color: Colors.red,
+                                      )
+                                    ]),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isMale = true;
+                                });
+                              },
+                              child: Container(
+                                height: 51,
+                                width: 120,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                      width: 2.0,
+                                      color: isMale
+                                          ? Colors.pink
+                                          : Colors.black12),
+                                ),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Male"),
+                                      Icon(
+                                        Icons.male,
+                                        color: Colors.blue,
+                                      )
+                                    ]),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(

@@ -42,7 +42,12 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
               } else {
                 DatabaseEvent tempp = snapshot.data as DatabaseEvent;
                 if(tempp.snapshot.value!.toString() == "") {
-                  return ChatHeaderWidget(users: [], username: "empty",);
+                  return Column(
+                    children: [
+                      ChatHeaderWidget(users: [], username: "empty",),
+                      ChatBodyWidget(users: [], username: "empty"),
+                    ],
+                  );
                 } else {
                   final chatrooms = Map<dynamic, dynamic>.from(
                       (snapshot.data! as dynamic).snapshot.value);

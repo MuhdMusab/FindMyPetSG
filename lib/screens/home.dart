@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/screens/chats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/screens/profile_screen.dart';
@@ -67,18 +68,18 @@ class _HomeState extends State<Home> {
           ),
           items: [
           BottomNavigationBarItem(
-             activeIcon: Icon(CustomIcons.paw, color: Color(0xfff26579)),
-             icon: Icon(CustomIcons.paw, color: Color(0xfff26579)),
+             activeIcon: Icon(CustomIcons.paw, color: pink()),
+             icon: Icon(CustomIcons.paw, color: pink()),
            label: "Pets",
          ),
         BottomNavigationBarItem(
-          activeIcon: Icon(CustomIcons.chat, color: Color(0xfff26579)),
-          icon: Icon(CustomIcons.chat, color: Color(0xfff26579)),
+          activeIcon: Icon(CustomIcons.chat, color: pink()),
+          icon: Icon(CustomIcons.chat, color: pink()),
           label: "Messages",
         ),
         BottomNavigationBarItem(
-          activeIcon: Icon(Icons.account_circle, color: Color(0xfff26579)),
-          icon: Icon(Icons.account_circle_outlined, color: Color(0xfff26579)),
+          activeIcon: Icon(Icons.account_circle, color: pink()),
+          icon: Icon(Icons.account_circle_outlined, color: pink()),
           label: "Profile",
         ),],
           currentIndex: _selectedPageIndex,

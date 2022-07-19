@@ -75,7 +75,6 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
       setState(() {
         _breedController.text = animal;
       });
-      print(_breed);
     }
 
     void uploadChanges() async {

@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/models/filter_model.dart';
 import 'package:find_my_pet_sg/models/category.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_geofence/geofence.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
@@ -149,47 +150,68 @@ class _ExploreScreenState extends State<ExploreScreen>
     super.initState();
     buildMarkerIcons();
     this._getUserPosition();
-    CollectionReference<Map<String, dynamic>> a =
-        FirebaseFirestore.instance.collection('posts');
+
+    final service = FlutterBackgroundService();
+    //listenToDatabase();
+    final String username = widget._user!['name'].toString();
+    DatabaseReference ref = FirebaseDatabase.instance.ref('chatroom').child(username);
+    Stream<DatabaseEvent> stream = ref.onValue;
+    DateTime currTime = DateTime.now();
+    stream.listen((DatabaseEvent event) {
+      Map<dynamic, dynamic> chatrooms = Map<dynamic, dynamic>.from(
+          (event as dynamic).snapshot.value);
+      Map<dynamic, dynamic>? otherChatters;
+      chatrooms.forEach((key, value) {
+        otherChatters = Map<String, dynamic>.from(value);
+        DatabaseReference ref = FirebaseDatabase.instance.ref(otherChatters?.values.first).child(username).child('messages');
+        ref.onChildAdded.listen((event) {
+          Map<dynamic, dynamic> currentMap = Map<dynamic, dynamic>.from(
+              (event as dynamic).snapshot.value);
+          if (currentMap.containsKey('date')) {
+            DateTime date = DateTime.parse(currentMap['date'] as String);
+            if (date.difference(currTime).inSeconds > 0) {
+              Map<String, dynamic> map = {
+                'otherUser': otherChatters?.values.first,
+                'text' : currentMap['text'],
+              };
+              service.invoke('newMessage', map);
+            }
+          }
+        });
+      });
+    });
+    CollectionReference<Map<String, dynamic>> a = FirebaseFirestore.instance.collection('posts');
     a.snapshots().listen((QuerySnapshot<Map<String, dynamic>> event) {
       List<DocumentChange<Map<String, dynamic>>> a = event.docChanges;
       DateTime currTime = DateTime.now();
-      print(currTime);
       for (DocumentChange<Map<String, dynamic>> doc in a) {
         if (doc.type == DocumentChangeType.added) {
           Map<String, dynamic> currMap = doc.doc.data()!;
-          if (currMap.containsKey('dateTimePosted')) {
-            Timestamp timestamp = currMap['dateTimePosted'];
-            if (currTime.difference(timestamp.toDate()).inHours <= 1) {
-              if (currMap.containsKey('name')) {
-                print('post contains pet with name ${currMap['name']}');
-                Map<String, dynamic> map = {
-                  'name': currMap['name'],
-                  'type': currMap['type'],
-                  'location': currMap['location'],
-                  'breed': currMap['breed'],
-                };
-                Workmanager().registerPeriodicTask(
-                  'LookoutNotifications' + Random().nextInt(100000).toString(),
-                  'backUp',
-                  frequency: Duration(minutes: 16),
-                  inputData: map,
-                  tag: 'lookoutNotifications',
-                );
-              } else {
-                print('noti posted');
-                Map<String, dynamic> map = {
-                  'type': currMap['type'],
-                  'location': currMap['location'],
-                  'breed': currMap['breed'],
-                };
-                Workmanager().registerPeriodicTask(
-                  'LookoutNotifications' + Random().nextInt(100000).toString(),
-                  'backUp',
-                  frequency: Duration(minutes: 16),
-                  inputData: map,
-                  tag: 'lookoutNotifications',
-                );
+          double distanceBetweenUserAndPost = Geolocator.distanceBetween(userPosition!.latitude,
+              userPosition!.longitude, currMap['latitude'], currMap['longtitude']);
+          print(distanceBetweenUserAndPost);
+          if (distanceBetweenUserAndPost <= 1000) {
+            if (currMap.containsKey('dateTimePosted')) {
+              Timestamp timestamp = currMap['dateTimePosted'];
+              if (currTime
+                  .difference(timestamp.toDate())
+                  .inHours <= 1) {
+                if (currMap.containsKey('name')) {
+                  Map<String, dynamic> map = {
+                    'name': currMap['name'],
+                    'type': currMap['type'],
+                    'location': currMap['location'],
+                    'breed': currMap['breed'],
+                  };
+                  service.invoke('lookout', map);
+                } else {
+                  Map<String, dynamic> map = {
+                    'type': currMap['type'],
+                    'location': currMap['location'],
+                    'breed': currMap['breed'],
+                  };
+                  service.invoke('lookout', map);
+                }
               }
             }
           }
@@ -236,7 +258,6 @@ class _ExploreScreenState extends State<ExploreScreen>
         if (userPosition != null) {
           sendLookoutNotification(snapshot);
         }
-
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             backgroundColor: pink(),

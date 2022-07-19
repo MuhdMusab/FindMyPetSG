@@ -55,7 +55,7 @@ class _RewardTextfield extends State<RewardTextfield> {
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding:
-                      EdgeInsets.only(left: 25.0, top: 15.5, bottom: 15.5),
+                  EdgeInsets.only(left: 25.0, top: 15.5, bottom: 15.5),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide(color: Colors.pink, width: 1.5),
@@ -63,12 +63,12 @@ class _RewardTextfield extends State<RewardTextfield> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide:
-                        BorderSide(color: Colors.blueGrey.shade200, width: 1.5),
+                    BorderSide(color: Colors.blueGrey.shade200, width: 1.5),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide:
-                        BorderSide(color: Colors.transparent, width: 1.5),
+                    BorderSide(color: Colors.transparent, width: 1.5),
                   ),
                   border: InputBorder.none,
                   isDense: true,

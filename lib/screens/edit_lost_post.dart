@@ -48,13 +48,20 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _descriptionController = TextEditingController(text: widget.snapshot['description']);
-    final TextEditingController _locationController = TextEditingController(text: widget.snapshot['location']);
-    final TextEditingController _nameController = TextEditingController(text: widget.snapshot['name']);
-    final TextEditingController _dateController = TextEditingController(text: widget.snapshot['date']);
-    final TextEditingController _rewardController = TextEditingController(text: widget.snapshot['reward'].toString());
-    final TextEditingController _ageController = TextEditingController(text: widget.snapshot['age'].toString());
-    final TextEditingController _breedController = TextEditingController(text: widget.snapshot['breed']);
+    final TextEditingController _descriptionController =
+        TextEditingController(text: widget.snapshot['description']);
+    final TextEditingController _locationController =
+        TextEditingController(text: widget.snapshot['location']);
+    final TextEditingController _nameController =
+        TextEditingController(text: widget.snapshot['name']);
+    final TextEditingController _dateController =
+        TextEditingController(text: widget.snapshot['date']);
+    final TextEditingController _rewardController =
+        TextEditingController(text: widget.snapshot['reward'].toString());
+    final TextEditingController _ageController =
+        TextEditingController(text: widget.snapshot['age'].toString());
+    final TextEditingController _breedController =
+        TextEditingController(text: widget.snapshot['breed']);
     double latitude = widget.snapshot['latitude'];
     double longtitude = widget.snapshot['longtitude'];
     bool isMale = false;
@@ -79,41 +86,30 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
 
     void uploadChanges() async {
       if (isLoading) {
-
       } else {
         setState(() {
           isLoading = true;
         });
         // start the loading
-        if (_descriptionController.text
-            .trim()
-            .length == 0 || _nameController.text
-            .trim()
-            .length == 0
-            || _locationController.text
-                .trim()
-                .length == 0 || _breed == null || _breed == "" ||
-            _dateController.text
-                .trim()
-                .length == 0 || _ageController.text
-            .trim()
-            .length == 0) {
-          ScaffoldMessenger.of(context)
-            ..removeCurrentSnackBar();
+        if (_descriptionController.text.trim().length == 0 ||
+            _nameController.text.trim().length == 0 ||
+            _locationController.text.trim().length == 0 ||
+            _breed == null ||
+            _breed == "" ||
+            _dateController.text.trim().length == 0 ||
+            _ageController.text.trim().length == 0) {
+          ScaffoldMessenger.of(context)..removeCurrentSnackBar();
           showSnackBar(context, "Incomplete fields given");
           setState(() {
             isLoading = false;
           });
         } else {
-          DatabaseMethods.updatePostField(
-              widget.username, widget.postId, 'description',
-              _descriptionController.text.trim());
-          DatabaseMethods.updatePostField(
-              widget.username, widget.postId, 'name',
-              _nameController.text.trim());
-          DatabaseMethods.updatePostField(
-              widget.username, widget.postId, 'location',
-              _locationController.text.trim());
+          DatabaseMethods.updatePostField(widget.username, widget.postId,
+              'description', _descriptionController.text.trim());
+          DatabaseMethods.updatePostField(widget.username, widget.postId,
+              'name', _nameController.text.trim());
+          DatabaseMethods.updatePostField(widget.username, widget.postId,
+              'location', _locationController.text.trim());
           DatabaseMethods.updatePostField(
               widget.username, widget.postId, 'latitude', latitude);
           DatabaseMethods.updatePostField(
@@ -123,9 +119,13 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
           DatabaseMethods.updatePostField(
               widget.username, widget.postId, 'date', _dateController.text);
           DatabaseMethods.updatePostField(
-            widget.username, widget.postId, 'reward',
-            _rewardController.text.trim() == "" ? 0
-                : int.parse(_rewardController.text.trim()),);
+            widget.username,
+            widget.postId,
+            'reward',
+            _rewardController.text.trim() == ""
+                ? 0
+                : int.parse(_rewardController.text.trim()),
+          );
           DatabaseMethods.updatePostField(
               widget.username, widget.postId, 'isMale', isMale);
           DatabaseMethods.updatePostField(widget.username, widget.postId, 'age',
@@ -135,7 +135,7 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
           });
           showSnackBar(
             context,
-            'Posted!',
+            'Edited!',
           );
           Navigator.pop(context, true);
         }
@@ -182,14 +182,19 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
                     maxLines: 1,
                   ),
                   GenderFieldPicker(isMale: isMale, setGender: setGender),
-                  LocationFieldPicker(locationController: _locationController, latitude: setLatitude, longtitude: setLongtitude),
+                  LocationFieldPicker(
+                      locationController: _locationController,
+                      latitude: setLatitude,
+                      longtitude: setLongtitude),
                   DateFieldPicker(dateController: _dateController),
                   Container(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                       BreedEditor(setAnimalTypeCallback: setAnimalTypeCallback, breedController: _breedController),
+                        BreedEditor(
+                            setAnimalTypeCallback: setAnimalTypeCallback,
+                            breedController: _breedController),
                         RewardTextfield(
                           infoText: "Reward",
                           hintText: "Reward",

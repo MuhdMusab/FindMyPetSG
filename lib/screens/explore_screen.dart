@@ -54,7 +54,7 @@ class _ExploreScreenState extends State<ExploreScreen>
   @override
   bool get wantKeepAlive => true;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  new FlutterLocalNotificationsPlugin();
+      new FlutterLocalNotificationsPlugin();
   StreamSubscription<Position>? _positionStreamSubscription;
 
   void scheduleNotification(String title, String subtitle) {
@@ -94,10 +94,10 @@ class _ExploreScreenState extends State<ExploreScreen>
     for (int index = 0; index < numberOfPosts; index++) {
       double lostPetLatitude = snapshot.data!.docs[index].get('latitude');
       double lostPetLongitude = snapshot.data!.docs[index].get('longtitude');
-      DateTime dateOfLostPet =
-      DateFormat('d/M/y').parse(snapshot.data!.docs[index].get('date'));
+      String dateOfLostPet = snapshot.data!.docs[index].get('date');
+      DateTime dateTimeOfLostPet = DateFormat('d/M/y').parse(dateOfLostPet);
       double distance = distanceAway(lostPetLatitude, lostPetLongitude);
-      if (distance < 1000 && isRecent(dateOfLostPet)) {
+      if (distance < 1000 && isRecent(dateTimeOfLostPet)) {
         String name = (snapshot.data!.docs[index].get('name'));
         String formattedDistance = distance.toStringAsFixed(2);
         scheduleNotification("Lookout for $name",
@@ -149,7 +149,8 @@ class _ExploreScreenState extends State<ExploreScreen>
     super.initState();
     buildMarkerIcons();
     this._getUserPosition();
-    CollectionReference<Map<String, dynamic>> a = FirebaseFirestore.instance.collection('posts');
+    CollectionReference<Map<String, dynamic>> a =
+        FirebaseFirestore.instance.collection('posts');
     a.snapshots().listen((QuerySnapshot<Map<String, dynamic>> event) {
       List<DocumentChange<Map<String, dynamic>>> a = event.docChanges;
       DateTime currTime = DateTime.now();
@@ -159,9 +160,7 @@ class _ExploreScreenState extends State<ExploreScreen>
           Map<String, dynamic> currMap = doc.doc.data()!;
           if (currMap.containsKey('dateTimePosted')) {
             Timestamp timestamp = currMap['dateTimePosted'];
-            if (currTime
-                .difference(timestamp.toDate())
-                .inHours <= 1) {
+            if (currTime.difference(timestamp.toDate()).inHours <= 1) {
               if (currMap.containsKey('name')) {
                 print('post contains pet with name ${currMap['name']}');
                 Map<String, dynamic> map = {
@@ -198,10 +197,9 @@ class _ExploreScreenState extends State<ExploreScreen>
       }
     });
 
-
     /// When app is running, everytime user moves by 500m, variable userPosition is updated
     _positionStreamSubscription = Geolocator.getPositionStream(
-        locationSettings: LocationSettings(distanceFilter: 500))
+            locationSettings: LocationSettings(distanceFilter: 500))
         .listen((Position? position) {
       if (position == null) {
         print('unknown');
@@ -235,7 +233,9 @@ class _ExploreScreenState extends State<ExploreScreen>
             child: CircularProgressIndicator(),
           );
         }
-        sendLookoutNotification(snapshot);
+        if (userPosition != null) {
+          sendLookoutNotification(snapshot);
+        }
 
         return Scaffold(
           floatingActionButton: FloatingActionButton(
@@ -263,7 +263,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                 child: Stack(children: [
                   Padding(
                     padding:
-                    const EdgeInsets.only(left: 12, top: 18, bottom: 10),
+                        const EdgeInsets.only(left: 12, top: 18, bottom: 10),
                     child: FilterButton(
                       callback: _callback,
                       user: widget._user,
@@ -294,7 +294,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                             },
                             borderColor: lightPink(),
                             colorBuilder: (i) =>
-                            i.isEven ? lightPink() : lightPink(),
+                                i.isEven ? lightPink() : lightPink(),
                             onChanged: (i) {
                               if (i == 0) {
                                 setState(() {
@@ -317,21 +317,21 @@ class _ExploreScreenState extends State<ExploreScreen>
               ),
               (value == 1 && userPosition != null)
                   ? MapsScreen(
-                  filters: filters,
-                  user: widget._user,
-                  initialLatLng: LatLng(
-                      userPosition!.latitude!, userPosition!.longitude!))
+                      filters: filters,
+                      user: widget._user,
+                      initialLatLng: LatLng(
+                          userPosition!.latitude!, userPosition!.longitude!))
                   : (value == 1 && userPosition == null)
-                  ? Padding(
-                padding: const EdgeInsets.only(top: 250.0),
-                child: Text(
-                  "Enable Google's location services for map view",
-                  style:
-                  TextStyle(fontSize: 30, color: Colors.black45),
-                  textAlign: TextAlign.center,
-                ),
-              )
-                  : FullPosts(user: widget._user, filters: filters),
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 250.0),
+                          child: Text(
+                            "Enable Google's location services for map view",
+                            style:
+                                TextStyle(fontSize: 30, color: Colors.black45),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : FullPosts(user: widget._user, filters: filters),
             ],
           ),
         );

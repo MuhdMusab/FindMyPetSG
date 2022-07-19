@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 // import 'package:find_my_pet_sg/widgets/arrow_back_button.dart';
 import 'package:find_my_pet_sg/models/user.dart' as model;
 import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
+import '../config/constants.dart';
 import '../services/firestore_methods.dart';
 import '../utils/pickImage.dart';
 import '../utils/showSnackBar.dart';
@@ -75,35 +76,25 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
 
   void postImage() async {
     if (isLoading) {
-
     } else {
       setState(() {
         isLoading = true;
       });
       // start the loading
-      if (_descriptionController.text
-          .trim()
-          .length == 0
-          || _locationController.text
-              .trim()
-              .length == 0 || _breed == null || _breed == "" ||
-          _dateController.text
-              .trim()
-              .length == 0 || _ageController.text
-          .trim()
-          .length == 0
-          || _nameController.text
-              .trim()
-              .length == 0) {
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar();
+      if (_descriptionController.text.trim().length == 0 ||
+          _locationController.text.trim().length == 0 ||
+          _breed == null ||
+          _breed == "" ||
+          _dateController.text.trim().length == 0 ||
+          _ageController.text.trim().length == 0 ||
+          _nameController.text.trim().length == 0) {
+        ScaffoldMessenger.of(context)..removeCurrentSnackBar();
         showSnackBar(context, "Incomplete fields given");
         setState(() {
           isLoading = false;
         });
       } else if (_files == null) {
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar();
+        ScaffoldMessenger.of(context)..removeCurrentSnackBar();
         showSnackBar(context, "Please upload at least one image");
         setState(() {
           isLoading = false;
@@ -121,8 +112,9 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
             longtitude,
             _breed == null || _breed == '' ? 'Others' : _breed!,
             _dateController.text.trim(),
-            _rewardController.text.trim() == "" ? 0 : int.parse(
-                _rewardController.text.trim()),
+            _rewardController.text.trim() == ""
+                ? 0
+                : int.parse(_rewardController.text.trim()),
             int.parse(_ageController.text.trim()),
             isMale,
             widget._user!['name'].toString(),
@@ -266,7 +258,9 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                     hintText: "Name",
                     textInputType: TextInputType.name,
                     textEditingController: _nameController,
-                    inputFormatters: [],
+                    inputFormatters: [
+                      new LengthLimitingTextInputFormatter(nameCharacterLimit)
+                    ],
                     maxLines: 1,
                   ),
                   CustomTextfield2(
@@ -274,7 +268,10 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                     hintText: "Age",
                     textInputType: TextInputType.number,
                     textEditingController: _ageController,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      new LengthLimitingTextInputFormatter(ageCharacterLimit)
+                    ],
                     maxLines: 1,
                   ),
                   Padding(
@@ -284,11 +281,10 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("Gender*",
+                            Text(
+                              "Gender*",
                               style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.blueGrey
-                              ),
+                                  fontSize: 16, color: Colors.blueGrey),
                             ),
                           ],
                         ),
@@ -365,11 +361,10 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("Location*",
+                            Text(
+                              "Location*",
                               style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.blueGrey
-                              ),
+                                  fontSize: 16, color: Colors.blueGrey),
                             ),
                           ],
                         ),
@@ -401,9 +396,7 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                                     child: Text(
                                       _locationController.text,
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.blueGrey
-                                      ),
+                                          fontSize: 16, color: Colors.blueGrey),
                                     ),
                                   ),
                                 ],
@@ -421,11 +414,10 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Date*",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blueGrey
-                          ),
+                        Text(
+                          "Date*",
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.blueGrey),
                         ),
                         Container(
                           height: 51,
@@ -455,9 +447,7 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                                     child: Text(
                                       _dateController.text,
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.blueGrey
-                                      ),
+                                          fontSize: 16, color: Colors.blueGrey),
                                     ),
                                   ),
                                 ],
@@ -481,10 +471,10 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text("Type of Animal*", style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.blueGrey
-                                  ),
+                                  Text(
+                                    "Type of Animal*",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.blueGrey),
                                   ),
                                 ],
                               ),
@@ -492,19 +482,25 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                                 height: 51,
                                 padding: EdgeInsets.symmetric(horizontal: 12),
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blueGrey.shade200),
+                                  border: Border.all(
+                                      color: Colors.blueGrey.shade200),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Material(
                                   color: Colors.transparent,
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(4.0),
-                                    onTap: () => showSearch(context: context, delegate: AnimalSearchDelegate(callback: setAnimalTypeCallback, callback2: (String temp) {})),
+                                    onTap: () => showSearch(
+                                        context: context,
+                                        delegate: AnimalSearchDelegate(
+                                            callback: setAnimalTypeCallback,
+                                            callback2: (String temp) {})),
                                     child: Stack(
                                       children: [
                                         Container(
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(4.0),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
                                             color: Colors.transparent,
                                           ),
                                           height: 30,
@@ -514,11 +510,12 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                                           top: 14,
                                           left: 2,
                                           child: Text(
-                                            _breed == null || _breed!.isEmpty ? "" : _breed!,
+                                            _breed == null || _breed!.isEmpty
+                                                ? ""
+                                                : _breed!,
                                             style: TextStyle(
                                                 fontSize: 16,
-                                                color: Colors.blueGrey
-                                            ),
+                                                color: Colors.blueGrey),
                                           ),
                                         ),
                                       ],
@@ -541,7 +538,10 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                           hintText: "Description",
                           textInputType: TextInputType.text,
                           textEditingController: _descriptionController,
-                          inputFormatters: [],
+                          inputFormatters: [
+                            new LengthLimitingTextInputFormatter(
+                                descriptionCharacterLimit)
+                          ],
                           maxLines: 10,
                         ),
                         Padding(

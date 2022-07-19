@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:find_my_pet_sg/models/user.dart' as model;
 import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
+import '../config/constants.dart';
 import '../services/firestore_methods.dart';
 import '../utils/showSnackBar.dart';
 import '../widgets/arrow_back_button.dart';
@@ -47,11 +48,16 @@ class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _descriptionController = TextEditingController(text: widget.snapshot['description']);
-    final TextEditingController _locationController = TextEditingController(text: widget.snapshot['location']);
-    final TextEditingController _nameController = TextEditingController(text: widget.snapshot['name']);
-    final TextEditingController _dateController = TextEditingController(text: widget.snapshot['date']);
-    final TextEditingController _breedController = TextEditingController(text: widget.snapshot['breed']);
+    final TextEditingController _descriptionController =
+        TextEditingController(text: widget.snapshot['description']);
+    final TextEditingController _locationController =
+        TextEditingController(text: widget.snapshot['location']);
+    final TextEditingController _nameController =
+        TextEditingController(text: widget.snapshot['name']);
+    final TextEditingController _dateController =
+        TextEditingController(text: widget.snapshot['date']);
+    final TextEditingController _breedController =
+        TextEditingController(text: widget.snapshot['breed']);
     double latitude = widget.snapshot['latitude'];
     double longtitude = widget.snapshot['longtitude'];
     String _breed = widget.snapshot['breed'];
@@ -73,36 +79,28 @@ class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
 
     void uploadChanges() async {
       if (isLoading) {
-
       } else {
         setState(() {
           isLoading = true;
         });
         // start the loading
-        if (_descriptionController.text
-            .trim()
-            .length == 0 || _dateController.text
-            .trim()
-            .length == 0
-            || _locationController.text
-                .trim()
-                .length == 0 || _breed == null || _breed == "") {
-          ScaffoldMessenger.of(context)
-            ..removeCurrentSnackBar();
+        if (_descriptionController.text.trim().length == 0 ||
+            _dateController.text.trim().length == 0 ||
+            _locationController.text.trim().length == 0 ||
+            _breed == null ||
+            _breed == "") {
+          ScaffoldMessenger.of(context)..removeCurrentSnackBar();
           showSnackBar(context, "Incomplete fields given");
           setState(() {
             isLoading = false;
           });
         } else {
-          DatabaseMethods.updatePostField(
-              widget.username, widget.postId, 'description',
-              _descriptionController.text.trim());
-          DatabaseMethods.updatePostField(
-              widget.username, widget.postId, 'name',
-              _nameController.text.trim());
-          DatabaseMethods.updatePostField(
-              widget.username, widget.postId, 'location',
-              _locationController.text.trim());
+          DatabaseMethods.updatePostField(widget.username, widget.postId,
+              'description', _descriptionController.text.trim());
+          DatabaseMethods.updatePostField(widget.username, widget.postId,
+              'name', _nameController.text.trim());
+          DatabaseMethods.updatePostField(widget.username, widget.postId,
+              'location', _locationController.text.trim());
           DatabaseMethods.updatePostField(
               widget.username, widget.postId, 'latitude', latitude);
           DatabaseMethods.updatePostField(
@@ -116,7 +114,7 @@ class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
           });
           showSnackBar(
             context,
-            'Posted!',
+            'Edited!',
           );
           Navigator.pop(context, true);
         }
@@ -147,23 +145,33 @@ class _EditFoundPostScreenState extends State<EditFoundPostScreen> {
                     hintText: "Name",
                     textInputType: TextInputType.name,
                     textEditingController: _nameController,
-                    inputFormatters: [],
+                    inputFormatters: [
+                      new LengthLimitingTextInputFormatter(nameCharacterLimit)
+                    ],
                     maxLines: 1,
                   ),
-                  LocationFieldPicker(locationController: _locationController, latitude: setLatitude, longtitude: setLongtitude),
+                  LocationFieldPicker(
+                      locationController: _locationController,
+                      latitude: setLatitude,
+                      longtitude: setLongtitude),
                   DateFieldPicker(dateController: _dateController),
                   Container(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        BreedEditor(setAnimalTypeCallback: setAnimalTypeCallback, breedController: _breedController),
+                        BreedEditor(
+                            setAnimalTypeCallback: setAnimalTypeCallback,
+                            breedController: _breedController),
                         CustomTextfield2(
                           infoText: "Description*",
                           hintText: "Description",
                           textInputType: TextInputType.text,
                           textEditingController: _descriptionController,
-                          inputFormatters: [],
+                          inputFormatters: [
+                            new LengthLimitingTextInputFormatter(
+                                descriptionCharacterLimit)
+                          ],
                           maxLines: 10,
                         ),
                         Padding(

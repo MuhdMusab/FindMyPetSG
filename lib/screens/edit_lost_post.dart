@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:find_my_pet_sg/models/user.dart' as model;
 import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
+import '../config/constants.dart';
 import '../services/firestore_methods.dart';
 import '../utils/showSnackBar.dart';
 import '../widgets/arrow_back_button.dart';
@@ -170,7 +171,9 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
                     hintText: "Name",
                     textInputType: TextInputType.name,
                     textEditingController: _nameController,
-                    inputFormatters: [],
+                    inputFormatters: [
+                      new LengthLimitingTextInputFormatter(nameCharacterLimit)
+                    ],
                     maxLines: 1,
                   ),
                   CustomTextfield2(
@@ -178,7 +181,10 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
                     hintText: "Age",
                     textInputType: TextInputType.number,
                     textEditingController: _ageController,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      new LengthLimitingTextInputFormatter(ageCharacterLimit)
+                    ],
                     maxLines: 1,
                   ),
                   GenderFieldPicker(isMale: isMale, setGender: setGender),
@@ -207,7 +213,10 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
                           hintText: "Description",
                           textInputType: TextInputType.text,
                           textEditingController: _descriptionController,
-                          inputFormatters: [],
+                          inputFormatters: [
+                            new LengthLimitingTextInputFormatter(
+                                descriptionCharacterLimit)
+                          ],
                           maxLines: 10,
                         ),
                         Padding(

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 // import 'package:find_my_pet_sg/widgets/arrow_back_button.dart';
 import 'package:find_my_pet_sg/models/user.dart' as model;
 import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
+import '../config/constants.dart';
 import '../services/firestore_methods.dart';
 import '../utils/pickImage.dart';
 import '../utils/showSnackBar.dart';
@@ -71,29 +72,22 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
 
   void postImage() async {
     if (isLoading) {
-
     } else {
       setState(() {
         isLoading = true;
       });
       // start the loading
-      if (_descriptionController.text
-          .trim()
-          .length == 0 || _locationController.text
-          .trim()
-          .length == 0 ||
-          _breed == null || _dateController.text
-          .trim()
-          .length == 0) {
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar();
+      if (_descriptionController.text.trim().length == 0 ||
+          _locationController.text.trim().length == 0 ||
+          _breed == null ||
+          _dateController.text.trim().length == 0) {
+        ScaffoldMessenger.of(context)..removeCurrentSnackBar();
         showSnackBar(context, "Incomplete fields given");
         setState(() {
           isLoading = false;
         });
       } else if (_files!.length == 0) {
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar();
+        ScaffoldMessenger.of(context)..removeCurrentSnackBar();
         showSnackBar(context, "Please upload at least one image");
         setState(() {
           isLoading = false;
@@ -229,7 +223,9 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                     hintText: "Name",
                     textInputType: TextInputType.name,
                     textEditingController: _nameController,
-                    inputFormatters: [],
+                    inputFormatters: [
+                      new LengthLimitingTextInputFormatter(nameCharacterLimit)
+                    ],
                     maxLines: 1,
                   ),
                   Padding(
@@ -239,11 +235,10 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("Gender*",
+                            Text(
+                              "Gender*",
                               style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.blueGrey
-                              ),
+                                  fontSize: 16, color: Colors.blueGrey),
                             ),
                           ],
                         ),
@@ -320,11 +315,10 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("Location*",
+                            Text(
+                              "Location*",
                               style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.blueGrey
-                              ),
+                                  fontSize: 16, color: Colors.blueGrey),
                             ),
                           ],
                         ),
@@ -356,9 +350,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                     child: Text(
                                       _locationController.text,
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.blueGrey
-                                      ),
+                                          fontSize: 16, color: Colors.blueGrey),
                                     ),
                                   ),
                                 ],
@@ -376,11 +368,10 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Date*",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blueGrey
-                          ),
+                        Text(
+                          "Date*",
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.blueGrey),
                         ),
                         Container(
                           height: 51,
@@ -410,9 +401,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                     child: Text(
                                       _dateController.text,
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.blueGrey
-                                      ),
+                                          fontSize: 16, color: Colors.blueGrey),
                                     ),
                                   ),
                                 ],
@@ -436,10 +425,10 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text("Type of Animal*", style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.blueGrey
-                                  ),
+                                  Text(
+                                    "Type of Animal*",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.blueGrey),
                                   ),
                                 ],
                               ),
@@ -447,19 +436,25 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                 height: 51,
                                 padding: EdgeInsets.symmetric(horizontal: 12),
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blueGrey.shade200),
+                                  border: Border.all(
+                                      color: Colors.blueGrey.shade200),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Material(
                                   color: Colors.transparent,
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(4.0),
-                                    onTap: () => showSearch(context: context, delegate: AnimalSearchDelegate(callback: setAnimalTypeCallback, callback2: (String temp) {})),
+                                    onTap: () => showSearch(
+                                        context: context,
+                                        delegate: AnimalSearchDelegate(
+                                            callback: setAnimalTypeCallback,
+                                            callback2: (String temp) {})),
                                     child: Stack(
                                       children: [
                                         Container(
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(4.0),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
                                             color: Colors.transparent,
                                           ),
                                           height: 30,
@@ -469,11 +464,12 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                           top: 14,
                                           left: 2,
                                           child: Text(
-                                            _breed == null || _breed!.isEmpty ? "" : _breed!,
+                                            _breed == null || _breed!.isEmpty
+                                                ? ""
+                                                : _breed!,
                                             style: TextStyle(
                                                 fontSize: 16,
-                                                color: Colors.blueGrey
-                                            ),
+                                                color: Colors.blueGrey),
                                           ),
                                         ),
                                       ],
@@ -489,7 +485,10 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                           hintText: "Description",
                           textInputType: TextInputType.text,
                           textEditingController: _descriptionController,
-                          inputFormatters: [],
+                          inputFormatters: [
+                            new LengthLimitingTextInputFormatter(
+                                descriptionCharacterLimit)
+                          ],
                           maxLines: 10,
                         ),
                         Padding(

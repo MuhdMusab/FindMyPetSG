@@ -56,6 +56,7 @@ class _ExploreScreenState extends State<ExploreScreen>
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       new FlutterLocalNotificationsPlugin();
   StreamSubscription<Position>? _positionStreamSubscription;
+  StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
 
   void scheduleNotification(String title, String subtitle) {
     print("scheduling one with $title and $subtitle");
@@ -142,13 +143,17 @@ class _ExploreScreenState extends State<ExploreScreen>
       _positionStreamSubscription = null;
     }
 
+    if (_serviceStatusStreamSubscription != null) {
+      _serviceStatusStreamSubscription!.cancel();
+      _serviceStatusStreamSubscription = null;
+    }
+
     super.dispose();
   }
 
   void initState() {
     super.initState();
     buildMarkerIcons();
-    this._getUserPosition();
     CollectionReference<Map<String, dynamic>> a =
         FirebaseFirestore.instance.collection('posts');
     a.snapshots().listen((QuerySnapshot<Map<String, dynamic>> event) {
@@ -194,6 +199,20 @@ class _ExploreScreenState extends State<ExploreScreen>
             }
           }
         }
+      }
+    });
+
+    /// Check when user turns on/off GPS
+    _serviceStatusStreamSubscription =
+        Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+      if (status == ServiceStatus.disabled) {
+        setState(() {
+          userPosition = null;
+        });
+        showSnackBar(context, "Location disabled");
+      } else {
+        _getUserPosition();
+        showSnackBar(context, "Location enabled");
       }
     });
 
@@ -325,7 +344,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                       ? Padding(
                           padding: const EdgeInsets.only(top: 250.0),
                           child: Text(
-                            "Enable Google's location services for map view",
+                            "Turn on Google's location services and enable location permission for map view",
                             style:
                                 TextStyle(fontSize: 30, color: Colors.black45),
                             textAlign: TextAlign.center,

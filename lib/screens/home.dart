@@ -16,8 +16,6 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-
-
 class _HomeState extends State<Home> {
   int _selectedPageIndex = 0;
   List<Widget> ? _pages;
@@ -31,16 +29,8 @@ class _HomeState extends State<Home> {
       ProfileScreen(widget._user),
     ];
     _pageController = PageController(initialPage: _selectedPageIndex);
-    //_activateListeners();
   }
 
-  // void _activateListeners() {
-  //   final String username = widget._user!['name'].toString();
-  //   FirebaseDatabase.instance.ref().child(username).onChildAdded.listen((event) {
-  //     // final String message = event.snapshot.value as String;
-  //     // NotificationService().showNotification(1, "new message ", message, 2);
-  //   });
-  // }
 
 
   @override

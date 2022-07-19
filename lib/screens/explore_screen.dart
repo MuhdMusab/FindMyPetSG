@@ -167,15 +167,16 @@ class _ExploreScreenState extends State<ExploreScreen>
       Map<dynamic, dynamic>? otherChatters;
       chatrooms.forEach((key, value) {
         otherChatters = Map<String, dynamic>.from(value);
-        DatabaseReference ref = FirebaseDatabase.instance.ref(otherChatters?.values.first).child(username).child('messages');
+        String otherUser = otherChatters?.values.first;
+        DatabaseReference ref = FirebaseDatabase.instance.ref(otherUser).child(username).child('messages');
         ref.onChildAdded.listen((event) {
           Map<dynamic, dynamic> currentMap = Map<dynamic, dynamic>.from(
               (event as dynamic).snapshot.value);
           if (currentMap.containsKey('date')) {
             DateTime date = DateTime.parse(currentMap['date'] as String);
-            if (date.difference(currTime).inSeconds > 0) {
+            if (date.difference(currTime).inSeconds > 0 && currentMap['isMe']) {
               Map<String, dynamic> map = {
-                'otherUser': otherChatters?.values.first,
+                'otherUser': otherUser,
                 'text' : currentMap['text'],
               };
               service.invoke('newMessage', map);

@@ -9,10 +9,12 @@ import '../widgets/found_pet_post.dart';
 class FullPosts extends StatefulWidget {
   List<Filter?> filters;
   QueryDocumentSnapshot<Object?>? user;
+  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
   FullPosts({
     Key? key,
     required this.user,
     required this.filters,
+    required this.snapshot,
   }) : super(key: key);
 
   @override
@@ -23,58 +25,42 @@ class _FullPostsState extends State<FullPosts> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('posts')
-            .orderBy("dateTimePosted", descending: true)
-            .snapshots(),
-        builder: (context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (ctx, index) {
-                bool postTypeBool = true;
-                bool categoryBool = true;
-                if (widget.filters.isNotEmpty) {
-                  postTypeBool = false;
-                  categoryBool = false;
-                  for (int i = 0; i < 16; i++) {
-                    Filter filter = widget.filters[i]!;
-                    if (filter.value) {
-                      if (filter is Category) {
-                        categoryBool = categoryBool ||
-                            snapshot.data!.docs[index].data()['breed'] ==
-                                (filter as Category).name;
-                      } else {
-                        postTypeBool = postTypeBool ||
-                            snapshot.data!.docs[index].data()['type'] ==
-                                (filter as PostType).postType;
-                      }
-                    }
+      child: ListView.builder(
+          itemCount: widget.snapshot.data!.docs.length,
+          itemBuilder: (ctx, index) {
+            bool postTypeBool = true;
+            bool categoryBool = true;
+            if (widget.filters.isNotEmpty) {
+              postTypeBool = false;
+              categoryBool = false;
+              for (int i = 0; i < 16; i++) {
+                Filter filter = widget.filters[i]!;
+                if (filter.value) {
+                  if (filter is Category) {
+                    categoryBool = categoryBool ||
+                        widget.snapshot.data!.docs[index].data()['breed'] ==
+                            (filter as Category).name;
+                  } else {
+                    postTypeBool = postTypeBool ||
+                        widget.snapshot.data!.docs[index].data()['type'] ==
+                            (filter as PostType).postType;
                   }
                 }
-                return Container(
-                    child: postTypeBool && categoryBool
-                        ? snapshot.data!.docs[index].data()['type'] == "lost"
-                        ? LostPetPost(
-                      snap: snapshot.data!.docs[index].data(),
-                      user: widget.user,
-                    )
-                        : FoundPetPost(
-                      snap: snapshot.data!.docs[index].data(),
-                      user: widget.user,
-                    )
-                        : Container()
-                );
               }
-          );
-        },
-      ),
+            }
+            return Container(
+                child: postTypeBool && categoryBool
+                    ? widget.snapshot.data!.docs[index].data()['type'] == "lost"
+                        ? LostPetPost(
+                            snap: widget.snapshot.data!.docs[index].data(),
+                            user: widget.user,
+                          )
+                        : FoundPetPost(
+                            snap: widget.snapshot.data!.docs[index].data(),
+                            user: widget.user,
+                          )
+                    : Container());
+          }),
     );
   }
 }

@@ -51,6 +51,7 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen>
     with AutomaticKeepAliveClientMixin<ExploreScreen>, WidgetsBindingObserver {
   Position? userPosition;
+  bool? isPrecise;
   int value = 0;
   @override
   bool get wantKeepAlive => true;
@@ -133,12 +134,14 @@ class _ExploreScreenState extends State<ExploreScreen>
 
     var accuracy = await Geolocator.getLocationAccuracy();
     if (accuracy != LocationAccuracyStatus.precise) {
+      isPrecise = false;
       return Future.error('Must use precise location.');
     }
 
     Position userLocation = await Geolocator.getCurrentPosition();
 
     setState(() {
+      isPrecise = true;
       userPosition = userLocation;
     });
   }
@@ -163,10 +166,10 @@ class _ExploreScreenState extends State<ExploreScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     Geolocator.getLocationAccuracy().then((value) {
       if (value != LocationAccuracyStatus.precise) {
-        userPosition = null;
+        isPrecise = false;
       }
     });
-    if (userPosition == null) {
+    if (userPosition == null || isPrecise == false) {
       _getUserPosition();
     }
   }
@@ -287,7 +290,7 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (userPosition == null) {
+    if (userPosition == null || isPrecise == false) {
       _getUserPosition();
     }
     super.build(context);
@@ -380,11 +383,11 @@ class _ExploreScreenState extends State<ExploreScreen>
                     child: CircularProgressIndicator(),
                   );
                 }
-                if (userPosition != null) {
+                if (userPosition != null && isPrecise == true) {
                   sendLookoutNotification(snapshot);
                 }
 
-                return (value == 1 && userPosition != null)
+                return (value == 1 && isPrecise == true && userPosition != null)
                     ? MapsScreen(
                         filters: filters,
                         user: widget._user,
@@ -392,7 +395,8 @@ class _ExploreScreenState extends State<ExploreScreen>
                             userPosition!.latitude!, userPosition!.longitude!),
                         snapshot: snapshot,
                       )
-                    : (value == 1 && userPosition == null)
+                    : (value == 1 &&
+                            (userPosition == null || isPrecise == false))
                         ? Padding(
                             padding: const EdgeInsets.only(top: 250.0),
                             child: Text(

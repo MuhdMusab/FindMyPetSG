@@ -49,7 +49,7 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen>
-    with AutomaticKeepAliveClientMixin<ExploreScreen> {
+    with AutomaticKeepAliveClientMixin<ExploreScreen>, WidgetsBindingObserver {
   Position? userPosition;
   int value = 0;
   @override
@@ -130,6 +130,12 @@ class _ExploreScreenState extends State<ExploreScreen>
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+
+    var accuracy = await Geolocator.getLocationAccuracy();
+    if (accuracy != LocationAccuracyStatus.precise) {
+      return Future.error('Must use precise location.');
+    }
+
     Position userLocation = await Geolocator.getCurrentPosition();
 
     setState(() {
@@ -152,10 +158,24 @@ class _ExploreScreenState extends State<ExploreScreen>
     super.dispose();
   }
 
+  ///Check the status of permission/location accuracy when the user returns back from the settings page.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    Geolocator.getLocationAccuracy().then((value) {
+      if (value != LocationAccuracyStatus.precise) {
+        userPosition = null;
+      }
+    });
+    if (userPosition == null) {
+      _getUserPosition();
+    }
+  }
+
   void initState() {
     super.initState();
     buildMarkerIcons();
     this._getUserPosition();
+    WidgetsBinding.instance.addObserver(this);
     final service = FlutterBackgroundService();
     final String username = widget._user!['name'].toString();
     DatabaseReference ref =
@@ -267,6 +287,9 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   Widget build(BuildContext context) {
+    if (userPosition == null) {
+      _getUserPosition();
+    }
     super.build(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -373,7 +396,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                         ? Padding(
                             padding: const EdgeInsets.only(top: 250.0),
                             child: Text(
-                              "Turn on GPS and enable location permission for map view",
+                              "Turn on GPS and enable precise location permission for map view",
                               style: TextStyle(
                                   fontSize: 30, color: Colors.black45),
                               textAlign: TextAlign.center,

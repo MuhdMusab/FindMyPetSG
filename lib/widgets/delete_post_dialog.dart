@@ -4,12 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DeletePostDialog extends StatefulWidget {
-  final String title;
   final Function function;
 
   const DeletePostDialog({
     Key? key,
-    required this.title,
     required this.function,
   }) : super(key: key);
 
@@ -34,6 +32,7 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
     return Stack(
       children: <Widget>[
         Container(
+          width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
@@ -48,19 +47,25 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
             children: <Widget>[
               Center(
                 child: Text(
-                  widget.title,
+                  'Are you sure you want',
                   style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600, ),
-
+                ),
+              ),
+              Center(
+                child: Text(
+                  'to delete this post?',
+                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600, ),
                 ),
               ),
               const SizedBox(
                 height: 15,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
+                  // const SizedBox(
+                  //   width: 10,
+                  // ),
                   ElevatedButton(
                     onPressed: () {
                       widget.function();
@@ -71,7 +76,7 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       primary: pink(),
-                      fixedSize: const Size(150, 50),
+                      fixedSize: const Size(130, 50),
                     ),
                     child: const Text(
                       "Delete",
@@ -82,7 +87,7 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10,),
+                  //const SizedBox(width: 10,),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -92,7 +97,7 @@ class _DeletePostDialogState extends State<DeletePostDialog> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       primary: const Color(0xFFff9dab),
-                      fixedSize: const Size(150, 50),
+                      fixedSize: const Size(130, 50),
                     ),
                     child: const Text(
                       "Cancel",

@@ -1,4 +1,4 @@
-import 'package:find_my_pet_sg/modal/messagedao.dart';
+import 'package:find_my_pet_sg/models/messagedao.dart';
 import 'package:find_my_pet_sg/screens/chat_screen.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:flutter/material.dart';
@@ -88,10 +88,15 @@ class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
                               if (snapshot.connectionState ==
                                   ConnectionState.done &&
                                   snapshot.hasData) {
-                                _circleAvatar = CircleAvatar(
+                                _circleAvatar = snapshot.data == 'fail'
+                                    ? CircleAvatar(
                                   radius: 25,
-                                  backgroundImage: NetworkImage(
-                                      snapshot.data!),
+                                  backgroundImage: AssetImage(
+                                      "assets/images/default_user_icon.png"),
+                                )
+                                    : CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: NetworkImage(snapshot.data!),
                                 );
                                 return _circleAvatar;
                               } else {
@@ -130,18 +135,9 @@ class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
               height: 60,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: widget.users.length + 1,
+                itemCount: widget.users.length,
                 itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Container(
-                      margin: EdgeInsets.only(right: 12),
-                      child: CircleAvatar(
-                        radius: 24,
-                        child: Icon(Icons.search),
-                      ),
-                    );
-                  } else {
-                    final otherUser = widget.users[index - 1];
+                    final otherUser = widget.users[index];
                     final StorageMethods storage = StorageMethods(
                         username: otherUser);
                     return Container(
@@ -176,10 +172,15 @@ class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
                               if (snapshot.connectionState ==
                                   ConnectionState.done &&
                                   snapshot.hasData) {
-                                  _circleAvatar = CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: NetworkImage(
-                                        snapshot.data!),
+                                _circleAvatar = snapshot.data == 'fail'
+                                    ? CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: AssetImage(
+                                      "assets/images/default_user_icon.png"),
+                                )
+                                    : CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: NetworkImage(snapshot.data!),
                                 );
                                 return _circleAvatar;
                               } else {
@@ -193,7 +194,6 @@ class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
                         ),
                       ),
                     );
-                  }
                 },
               ),
             )

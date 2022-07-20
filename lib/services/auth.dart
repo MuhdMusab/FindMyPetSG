@@ -1,5 +1,5 @@
 import "package:firebase_auth/firebase_auth.dart";
-import "package:find_my_pet_sg/modal/person.dart";
+import 'package:find_my_pet_sg/models/person.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;

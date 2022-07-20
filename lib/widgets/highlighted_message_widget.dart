@@ -5,10 +5,10 @@ import 'package:find_my_pet_sg/screens/create_found_post_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:find_my_pet_sg/modal/messagedao.dart';
+import 'package:find_my_pet_sg/models/messagedao.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:flutter/material.dart';
-import 'package:find_my_pet_sg/modal/message_model.dart';
+import 'package:find_my_pet_sg/models/message_model.dart';
 import 'package:intl/intl.dart';
 
 class HighlightedMessageWidget extends StatefulWidget {
@@ -80,7 +80,7 @@ class _HighlightedMessageWidgetState extends State<HighlightedMessageWidget> {
              Align(
                alignment: widget.isMe ?  Alignment.bottomRight : Alignment.bottomLeft,
                child: Text(
-                 DateFormat('MM-dd-yyyy HH:mm').format(widget.date).toString(),
+                 DateFormat('dd-MM-yyyy HH:mm').format(widget.date).toString(),
                  style: TextStyle(
                    color: widget.isMe ? Colors.white : Colors.black,
                ),
@@ -104,7 +104,7 @@ class _HighlightedMessageWidgetState extends State<HighlightedMessageWidget> {
               Align(
                 alignment: widget.isMe ?  Alignment.bottomRight : Alignment.bottomLeft,
                 child: Text(
-                  DateFormat('MM-dd-yyyy HH:mm').format(widget.date).toString(),
+                  DateFormat('dd-MM-yyyy HH:mm').format(widget.date).toString(),
                   style: TextStyle(
                     color: widget.isMe ? Colors.white : Colors.black,
                   ),

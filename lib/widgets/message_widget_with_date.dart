@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/models/message_model.dart';
 import 'package:intl/intl.dart';
 
-class MessageWidget extends StatelessWidget {
+class MessageWidgetWithDate extends StatelessWidget {
   final String message;
   final bool isMe;
   final DateTime date;
@@ -13,7 +13,7 @@ class MessageWidget extends StatelessWidget {
   final CircleAvatar circleAvatar;
   String? imageUrl;
 
-  MessageWidget({
+  MessageWidgetWithDate({
     required this.message,
     required this.isMe,
     required this.date,
@@ -27,8 +27,21 @@ class MessageWidget extends StatelessWidget {
     final radius = Radius.circular(12);
     final borderRadius = BorderRadius.all(radius);
     final StorageMethods storage = StorageMethods(username: messageDao.otherUsername!);
+    String utcDate = date.toString().substring(0,10);
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                utcDate.substring(8,10) + utcDate.substring(4,8) + utcDate.substring(0,4),
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
         Row(
           mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: <Widget>[
@@ -69,7 +82,7 @@ class MessageWidget extends StatelessWidget {
       isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children:
       imageUrl != ''
-      ? <Widget>[
+          ? <Widget>[
         Image.network(imageUrl!),
         Text(
           message,

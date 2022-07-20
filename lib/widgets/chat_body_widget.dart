@@ -1,4 +1,4 @@
-import 'package:find_my_pet_sg/modal/messagedao.dart';
+import 'package:find_my_pet_sg/models/messagedao.dart';
 import 'package:find_my_pet_sg/screens/chat_screen.dart';
 import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
@@ -76,8 +76,6 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
           height: 75,
           child: ListTile(
             onTap: () async {
-              final StorageMethods storage = StorageMethods(
-                  username: otherUser);
               String url = await storage.downloadURL();
               CircleAvatar _circleAvatar = url == 'fail'
                   ? CircleAvatar(
@@ -104,7 +102,13 @@ class _ChatBodyWidgetState extends State<ChatBodyWidget> {
                     AsyncSnapshot<String> snapshot) {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.hasData) {
-                    _circleAvatar = CircleAvatar(
+                    _circleAvatar = snapshot.data == 'fail'
+                        ? CircleAvatar(
+                      radius: 25,
+                      backgroundImage: AssetImage(
+                          "assets/images/default_user_icon.png"),
+                    )
+                        : CircleAvatar(
                       radius: 25,
                       backgroundImage: NetworkImage(snapshot.data!),
                     );

@@ -93,6 +93,12 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     }
     return numberOfPosts;
   }
+
+
+  // _callback() {
+  //   setState(() {
+  //   });
+  // }
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -100,7 +106,12 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     final StorageMethods storage = StorageMethods(username: username);
     int postIndex = 0;
     _callback() {
-      setState(() {});
+      setState(() {
+        postIndex = 0;
+        // print('Before $postIndex');
+        // postIndex--;
+        // print('After $postIndex');
+      });
     }
     return Scaffold(
       appBar: AppBar(
@@ -125,7 +136,15 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
           stream: FirebaseFirestore.instance.collection('posts').snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            return Column(
+            int count = 0;
+            for (int i = 0; i < snapshot.data!.docs.length; i++) {
+              if (snapshot.data!.docs[i].data()['username'] == username) {
+                count++;
+              }
+            }
+            postIndex = 0;
+            print('Count: $count');
+            Column col = Column(
               children: [
                 const SizedBox(height: 10,),
                 Align(
@@ -225,21 +244,33 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                 Expanded(
                     child:
                     ListView.builder(
-                      itemBuilder: (ctx, index) =>
-                      index < snapshot.data!.docs.length && snapshot.data!.docs[index].data()['username'] == username
-                          ? snapshot.data!.docs[index].data()['type'] == 'lost'
-                          ? OwnLostPetPost(snapshot: snapshot.data!.docs[index].data(),
-                        postIndex: postIndex++, username: username, callback: _callback,
-                        postId: snapshot.data!.docs[index].data()['postId'],)
-                          : OwnFoundPetPost(snapshot: snapshot.data!.docs[index].data(),
-                        postIndex: postIndex++, username: username, callback: _callback,
-                        postId: snapshot.data!.docs[index].data()['postId'],)
-                          : Container(),
-                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (ctx, index) {
+                        return index < snapshot.data!.docs.length &&
+                            snapshot.data!.docs[index].data()['username'] ==
+                                username
+                            ? snapshot.data!.docs[index].data()['type'] ==
+                            'lost'
+                            ? OwnLostPetPost(
+                          snapshot: snapshot.data!.docs[index].data(),
+                          postIndex: postIndex++,
+                          username: username,
+                          callback: _callback,
+                          postId: snapshot.data!.docs[index].data()['postId'],)
+                            : OwnFoundPetPost(
+                          snapshot: snapshot.data!.docs[index].data(),
+                          postIndex: postIndex++,
+                          username: username,
+                          callback: _callback,
+                          postId: snapshot.data!.docs[index].data()['postId'],)
+                            : Container();
+                      },
+                        itemCount: snapshot.data!.docs.length,
                     )
                 ),
               ],
             );
+            print('postIndex: $postIndex');
+            return col;
           }
       ),
     );

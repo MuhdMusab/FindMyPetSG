@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:find_my_pet_sg/modal/RealtimeUser.dart';
-import 'package:find_my_pet_sg/modal/chatroom.dart';
-import 'package:find_my_pet_sg/modal/chatroomdao.dart';
-import 'package:find_my_pet_sg/modal/realtimeuserdao.dart';
+import 'package:find_my_pet_sg/models/RealtimeUser.dart';
+import 'package:find_my_pet_sg/models/chatroom.dart';
+import 'package:find_my_pet_sg/models/chatroomdao.dart';
+import 'package:find_my_pet_sg/models/realtimeuserdao.dart';
 
 class DatabaseMethods {
   static Future<void> addUserInfo(userData, String username) async {

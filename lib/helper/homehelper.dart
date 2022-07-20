@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:find_my_pet_sg/modal/messages.dart';
+import 'package:find_my_pet_sg/models/messages.dart';
 
 class HomeProvider extends ChangeNotifier {
   final List<Messages> _messages = [];

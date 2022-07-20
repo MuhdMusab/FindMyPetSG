@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:find_my_pet_sg/modal/message_model.dart';
+import 'package:find_my_pet_sg/models/message_model.dart';
 
 class MessageDao {
   String? ownUsername;

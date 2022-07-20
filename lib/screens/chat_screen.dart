@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:find_my_pet_sg/modal/chatroom.dart';
-import 'package:find_my_pet_sg/modal/person.dart';
+import 'package:find_my_pet_sg/models/chatroom.dart';
+import 'package:find_my_pet_sg/models/person.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
 import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
@@ -14,13 +14,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:find_my_pet_sg/helper/homehelper.dart';
 import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/modal/messages.dart';
+import 'package:find_my_pet_sg/models/messages.dart';
 import 'package:intl/intl.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:find_my_pet_sg/modal/message_model.dart';
+import 'package:find_my_pet_sg/models/message_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:find_my_pet_sg/modal/messagedao.dart';
+import 'package:find_my_pet_sg/models/messagedao.dart';
 import 'package:find_my_pet_sg/widgets/message_widget.dart';
 
 class ChatScreen extends StatefulWidget {

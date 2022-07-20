@@ -17,9 +17,9 @@ import 'package:find_my_pet_sg/widgets/noncurved_image_slider_carousel.dart';
 import 'package:find_my_pet_sg/models/user.dart' as model;
 import '../services/firestore_methods.dart';
 import '../utils/showSnackBar.dart';
-import 'package:find_my_pet_sg/modal/chatroom.dart';
-import 'package:find_my_pet_sg/modal/chatroomdao.dart';
-import 'package:find_my_pet_sg/modal/messagedao.dart';
+import 'package:find_my_pet_sg/models/chatroom.dart';
+import 'package:find_my_pet_sg/models/chatroomdao.dart';
+import 'package:find_my_pet_sg/models/messagedao.dart';
 import 'package:find_my_pet_sg/screens/chat_screen.dart';
 
 import 'arrow_back_button.dart';

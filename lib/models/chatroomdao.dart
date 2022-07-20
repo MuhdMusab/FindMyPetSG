@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:find_my_pet_sg/modal/chatroom.dart';
+import 'package:find_my_pet_sg/models/chatroom.dart';
 
 class ChatroomDao {
   final DatabaseReference _chatroomRef =

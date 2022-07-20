@@ -2,14 +2,15 @@ import 'dart:ui';
 
 import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/helper/functions.dart';
-import 'package:find_my_pet_sg/modal/chatroom.dart';
-import 'package:find_my_pet_sg/modal/person.dart';
+import 'package:find_my_pet_sg/models/chatroom.dart';
+import 'package:find_my_pet_sg/models/person.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
 import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
 import 'package:find_my_pet_sg/widgets/highlighted_message_widget.dart';
 import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
 import 'package:find_my_pet_sg/widgets/message_widget.dart';
+import 'package:find_my_pet_sg/widgets/message_widget_with_date.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,13 +18,13 @@ import 'package:flutter/rendering.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../helper/homehelper.dart';
 import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/modal/messages.dart';
+import 'package:find_my_pet_sg/models/messages.dart';
 import 'package:intl/intl.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:find_my_pet_sg/modal/message_model.dart';
+import 'package:find_my_pet_sg/models/message_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:find_my_pet_sg/modal/messagedao.dart';
+import 'package:find_my_pet_sg/models/messagedao.dart';
 import 'package:find_my_pet_sg/widgets/message_widget.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -71,28 +72,10 @@ class _MessageListState extends State<MessageList> {
   bool _isButtonVisible = false;
   bool _isFilterVisible = false;
 
-
   @override
   Widget build(BuildContext context) {
     final StorageMethods storage = StorageMethods(username: widget.messageDao.ownUsername!);
-    // getUrl() async {
-    //   String url = (await storage.downloadURL());
-    //   if (url == 'fail') {
-    //     setState(() {
-    //       _otherCircleAvatar = CircleAvatar(
-    //         radius: 25,
-    //         backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-    //       );
-    //     });
-    //   } else {
-    //     setState(() {
-    //       _otherCircleAvatar = CircleAvatar(
-    //         radius: 25,
-    //         backgroundImage: NetworkImage(url),
-    //       );
-    //     });
-    //   }
-    // }
+    int _prevDate = 32;
     void _scrollToBottom() {
       if (widget.scrollController.hasClients) {
         setState(() {
@@ -132,6 +115,40 @@ class _MessageListState extends State<MessageList> {
                   json['imageUrl'] = '';
                 }
                 final message = Message.fromJson(json);
+                if (message.date.day != _prevDate) {
+                    _prevDate = message.date.day;
+                  return GestureDetector(
+                    child: MessageWidgetWithDate(
+                      message: message.text,
+                      isMe: message.isMe,
+                      date: message.date,
+                      messageDao: widget.messageDao,
+                      circleAvatar: widget.circleAvatar,
+                      imageUrl: message.imageUrl,
+                    ),
+                    onLongPress: () {
+                      setState(() {
+                        _isFilterVisible = true;
+                      });
+                      showDialog(barrierColor: Colors.white.withOpacity(0),
+                          context: context,
+                          builder: (builder) {
+                            return HighlightedMessageWidget(
+                              message: message.text,
+                              isMe: message.isMe,
+                              date: message.date,
+                              messageDao: widget.messageDao,
+                              imageUrl: message.imageUrl,
+                            );
+                          }).then((value) =>
+                      {
+                        setState(() {
+                          _isFilterVisible = false;
+                        })
+                      });
+                    },
+                  );
+                }
                 return GestureDetector(
                   child: MessageWidget(
                       message: message.text,

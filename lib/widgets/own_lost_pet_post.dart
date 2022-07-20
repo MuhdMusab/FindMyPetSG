@@ -19,8 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/modal/chatroom.dart';
-import 'package:find_my_pet_sg/modal/chatroomdao.dart';
+import 'package:find_my_pet_sg/models/chatroom.dart';
+import 'package:find_my_pet_sg/models/chatroomdao.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -58,7 +58,6 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
     //user, delete storageRefs, get last storage ref index and shift
     int numberOfImagesInPost = await DatabaseMethods.getNumberOfImagesInPost(widget.username, widget.postId);
     print('Number of images in post: $numberOfImagesInPost');
-    print(widget.postIndex);
     final StorageMethods storageMethods = StorageMethods();
     for (int i = 0; i < numberOfImagesInPost; i++) {
       String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(widget.username, widget.postIndex, i);
@@ -249,10 +248,11 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
         Positioned(
           child: GestureDetector(
             onTap: () {
+              print(widget.postIndex.toString() + 'hellooo');
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return DeletePostDialog(title: "Are you sure you want to delete this post?", function: deletePost,);
+                    return DeletePostDialog(function: deletePost,);
                   });
             },
             child: Icon(

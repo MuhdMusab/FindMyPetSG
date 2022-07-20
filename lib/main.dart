@@ -91,7 +91,6 @@ void onStart(ServiceInstance service) async {
   }
   DartPluginRegistrant.ensureInitialized();
 
-
   SharedPreferences preferences = await SharedPreferences.getInstance();
   await preferences.setString("hello", "world");
 

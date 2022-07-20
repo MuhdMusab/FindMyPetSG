@@ -15,13 +15,12 @@ class DateFieldPicker extends StatefulWidget {
 class _DateFieldPickerState extends State<DateFieldPicker> {
   @override
   Widget build(BuildContext context) {
-
     void _showDatePicker() {
       showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
-        lastDate: DateTime(DateTime.now().year, 12, 31),
+        lastDate: DateTime.now(),
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
@@ -44,18 +43,16 @@ class _DateFieldPickerState extends State<DateFieldPicker> {
         }
       });
     }
+
     return Padding(
-      padding: const EdgeInsets.only(
-          left: 12.0, right: 12.0, bottom: 12),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Date*",
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.blueGrey
-            ),
+          Text(
+            "Date*",
+            style: TextStyle(fontSize: 16, color: Colors.blueGrey),
           ),
           Container(
             height: 51,
@@ -84,10 +81,7 @@ class _DateFieldPickerState extends State<DateFieldPicker> {
                       left: 2,
                       child: Text(
                         widget.dateController.text,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blueGrey
-                        ),
+                        style: TextStyle(fontSize: 16, color: Colors.blueGrey),
                       ),
                     ),
                   ],

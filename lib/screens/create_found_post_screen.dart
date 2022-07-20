@@ -147,7 +147,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime(DateTime.now().year, 12, 31),
+      lastDate: DateTime.now(),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -371,7 +371,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                         Text(
                           "Date*",
                           style:
-                          TextStyle(fontSize: 16, color: Colors.blueGrey),
+                              TextStyle(fontSize: 16, color: Colors.blueGrey),
                         ),
                         Container(
                           height: 51,
@@ -454,7 +454,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                         Container(
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                            BorderRadius.circular(4.0),
+                                                BorderRadius.circular(4.0),
                                             color: Colors.transparent,
                                           ),
                                           height: 30,

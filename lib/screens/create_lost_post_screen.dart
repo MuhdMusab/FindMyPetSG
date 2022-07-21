@@ -236,337 +236,380 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            ArrowBackButton(),
-            Expanded(
-              child: ListView(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: Stack(
-                      children: [
-                        UploadSliderCarousel(
-                            setImageCallback: setImageCallback),
-                      ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              ArrowBackButton(),
+              Expanded(
+                child: ListView(
+                  children: [
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  CustomTextfield2(
-                    infoText: "Name*",
-                    hintText: "Name",
-                    textInputType: TextInputType.name,
-                    textEditingController: _nameController,
-                    inputFormatters: [
-                      new LengthLimitingTextInputFormatter(nameCharacterLimit)
-                    ],
-                    maxLines: 1,
-                  ),
-                  CustomTextfield2(
-                    infoText: "Age*",
-                    hintText: "Age",
-                    textInputType: TextInputType.number,
-                    textEditingController: _ageController,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      new LengthLimitingTextInputFormatter(ageCharacterLimit)
-                    ],
-                    maxLines: 1,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12.0, bottom: 12.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Gender*",
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  isMale = false;
-                                });
-                              },
-                              child: Container(
-                                height: 51,
-                                width: 120,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  // color: isMale ? Colors.transparent : Colors.pink,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(
-                                      width: 2.0,
-                                      color: isMale
-                                          ? Colors.black12
-                                          : Colors.pink),
-                                ),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Female"),
-                                      Icon(
-                                        Icons.female,
-                                        color: Colors.red,
-                                      )
-                                    ]),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  isMale = true;
-                                });
-                              },
-                              child: Container(
-                                height: 51,
-                                width: 120,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(
-                                      width: 2.0,
-                                      color: isMale
-                                          ? Colors.pink
-                                          : Colors.black12),
-                                ),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Male"),
-                                      Icon(
-                                        Icons.male,
-                                        color: Colors.blue,
-                                      )
-                                    ]),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
+                    Center(
+                      child: Stack(
+                        children: [
+                          UploadSliderCarousel(
+                              setImageCallback: setImageCallback),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 12.0, right: 12.0, bottom: 12.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Location*",
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          height: 51,
-                          padding: EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueGrey.shade200),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(4.0),
-                              onTap: _showLocationPicker,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4.0),
-                                      color: Colors.transparent,
-                                    ),
-                                    height: 30,
-                                    width: 370,
-                                  ),
-                                  Positioned(
-                                    top: 14,
-                                    left: 2,
-                                    child: Text(
-                                      _locationController.text,
-                                      style: TextStyle(
-                                          fontSize: 16, color: Colors.blueGrey),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 12.0, right: 12.0, bottom: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Date*",
-                          style:
-                              TextStyle(fontSize: 16, color: Colors.blueGrey),
-                        ),
-                        Container(
-                          height: 51,
-                          padding: EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueGrey.shade200),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(4.0),
-                              onTap: _showDatePicker,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4.0),
-                                      color: Colors.transparent,
-                                    ),
-                                    height: 30,
-                                    width: 370,
-                                  ),
-                                  Positioned(
-                                    top: 14,
-                                    left: 2,
-                                    child: Text(
-                                      _dateController.text,
-                                      style: TextStyle(
-                                          fontSize: 16, color: Colors.blueGrey),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                    CustomTextfield2(
+                      infoText: "Name*",
+                      hintText: "Name",
+                      textInputType: TextInputType.name,
+                      textEditingController: _nameController,
+                      inputFormatters: [
+                        new LengthLimitingTextInputFormatter(nameCharacterLimit)
                       ],
+                      maxLines: 1,
                     ),
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 12.0, right: 12.0, bottom: 12.0),
-                          child: Column(
+                    CustomTextfield2(
+                      infoText: "Age*",
+                      hintText: "Age",
+                      textInputType: TextInputType.number,
+                      textEditingController: _ageController,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        new LengthLimitingTextInputFormatter(ageCharacterLimit)
+                      ],
+                      maxLines: 1,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0, bottom: 12.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Type of Animal*",
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.blueGrey),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                height: 51,
-                                padding: EdgeInsets.symmetric(horizontal: 12),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.blueGrey.shade200),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(4.0),
-                                    onTap: () => showSearch(
-                                        context: context,
-                                        delegate: AnimalSearchDelegate(
-                                            callback: setAnimalTypeCallback,
-                                            callback2: (String temp) {})),
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4.0),
-                                            color: Colors.transparent,
-                                          ),
-                                          height: 30,
-                                          width: 370,
-                                        ),
-                                        Positioned(
-                                          top: 14,
-                                          left: 2,
-                                          child: Text(
-                                            _breed == null || _breed!.isEmpty
-                                                ? ""
-                                                : _breed!,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.blueGrey),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                              Text(
+                                "Gender*",
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.blueGrey),
                               ),
                             ],
                           ),
-                        ),
-                        RewardTextfield(
-                          infoText: "Reward",
-                          hintText: "Reward",
-                          textInputType: TextInputType.datetime,
-                          textEditingController: _rewardController,
-                          maxLines: 1,
-                        ),
-                        CustomTextfield2(
-                          infoText: "Description*",
-                          hintText: "Description",
-                          textInputType: TextInputType.text,
-                          textEditingController: _descriptionController,
-                          inputFormatters: [
-                            new LengthLimitingTextInputFormatter(
-                                descriptionCharacterLimit)
-                          ],
-                          maxLines: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: CustomMadeButton(
-                            isLoading: isLoading,
-                            text: "Post",
-                            onPressed: () => postImage(),
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    isMale = false;
+                                  });
+                                },
+                                child: Container(
+                                  height: 51,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    // color: isMale ? Colors.transparent : Colors.pink,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: Border.all(
+                                        width: 2.0,
+                                        color: isMale
+                                            ? Colors.black12
+                                            : Colors.pink),
+                                  ),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text("Female"),
+                                        Icon(
+                                          Icons.female,
+                                          color: Colors.red,
+                                        )
+                                      ]),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    isMale = true;
+                                  });
+                                },
+                                child: Container(
+                                  height: 51,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: Border.all(
+                                        width: 2.0,
+                                        color: isMale
+                                            ? Colors.pink
+                                            : Colors.black12),
+                                  ),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text("Male"),
+                                        Icon(
+                                          Icons.male,
+                                          color: Colors.blue,
+                                        )
+                                      ]),
+                                ),
+                              )
+                            ],
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 12.0, right: 12.0, bottom: 12.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Location*",
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 51,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.blueGrey.shade200),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(4.0),
+                                onTap: () {
+                                  FocusScope.of(context).unfocus();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return PlacePicker(
+                                        apiKey: Platform.isAndroid
+                                            ? "AIzaSyDz1ECR-KPkB3vSSyCqvXq5j8lMhRJfTqM"
+                                            : "AIzaSyCevtQ-g4R3ZZMse4jdPPsZ1xh7yhod_o4",
+                                        onPlacePicked: (result) {
+                                          setState(() {
+                                            _locationController.text = result
+                                                .formattedAddress
+                                                .toString();
+                                            latitude =
+                                                result.geometry!.location.lat;
+                                            longtitude =
+                                                result.geometry!.location.lng;
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                        initialPosition:
+                                            LatLng(1.290270, 103.851959),
+                                        onMapCreated: (controller) {
+                                          googleMapController = controller;
+                                        },
+                                        useCurrentLocation: true,
+                                      );
+                                    }),
+                                  );
+                                  // _showLocationPicker;
+                                },
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
+                                        color: Colors.transparent,
+                                      ),
+                                      height: 30,
+                                      width: 370,
+                                    ),
+                                    Positioned(
+                                      top: 14,
+                                      left: 2,
+                                      child: Text(
+                                        _locationController.text,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blueGrey),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 12.0, right: 12.0, bottom: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Date*",
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.blueGrey),
+                          ),
+                          Container(
+                            height: 51,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.blueGrey.shade200),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(4.0),
+                                onTap: _showDatePicker,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
+                                        color: Colors.transparent,
+                                      ),
+                                      height: 30,
+                                      width: 370,
+                                    ),
+                                    Positioned(
+                                      top: 14,
+                                      left: 2,
+                                      child: Text(
+                                        _dateController.text,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blueGrey),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 12.0, right: 12.0, bottom: 12.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Type of Animal*",
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.blueGrey),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  height: 51,
+                                  padding: EdgeInsets.symmetric(horizontal: 12),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.blueGrey.shade200),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      onTap: () => showSearch(
+                                          context: context,
+                                          delegate: AnimalSearchDelegate(
+                                              callback: setAnimalTypeCallback,
+                                              callback2: (String temp) {})),
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4.0),
+                                              color: Colors.transparent,
+                                            ),
+                                            height: 30,
+                                            width: 370,
+                                          ),
+                                          Positioned(
+                                            top: 14,
+                                            left: 2,
+                                            child: Text(
+                                              _breed == null || _breed!.isEmpty
+                                                  ? ""
+                                                  : _breed!,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.blueGrey),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          RewardTextfield(
+                            infoText: "Reward",
+                            hintText: "Reward",
+                            textInputType: TextInputType.datetime,
+                            textEditingController: _rewardController,
+                            maxLines: 1,
+                          ),
+                          CustomTextfield2(
+                            infoText: "Description*",
+                            hintText: "Description",
+                            textInputType: TextInputType.text,
+                            textEditingController: _descriptionController,
+                            inputFormatters: [
+                              new LengthLimitingTextInputFormatter(
+                                  descriptionCharacterLimit)
+                            ],
+                            maxLines: 10,
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: CustomMadeButton(
+                              isLoading: isLoading,
+                              text: "Post",
+                              onPressed: () => postImage(),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

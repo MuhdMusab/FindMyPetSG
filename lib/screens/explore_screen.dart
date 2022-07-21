@@ -343,7 +343,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                   ),
                   Positioned(
                     top: 14,
-                    right: 47,
+                    right: 64,
                     child: InkWell(
                       child: Container(
                           decoration: BoxDecoration(
@@ -355,10 +355,14 @@ class _ExploreScreenState extends State<ExploreScreen>
                                 bottomLeft: Radius.circular(6.0),
                                 topLeft: Radius.circular(6.0)),
                           ),
-                          child: Icon(
-                            Icons.list,
-                            size: 36,
-                            color: pink(),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Icon(
+                              Icons.list,
+                              size: 36,
+                              color: pink(),
+                            ),
                           )),
                       onTap: () {
                         viewChangeNotifier.value = 0;
@@ -384,18 +388,18 @@ class _ExploreScreenState extends State<ExploreScreen>
                                 bottomRight: Radius.circular(6.0),
                                 topRight: Radius.circular(6.0)),
                           ),
-                          child: Icon(
-                            MdiIcons.mapMarker,
-                            size: 36,
-                            color: pink(),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Icon(
+                              MdiIcons.mapMarker,
+                              size: 36,
+                              color: pink(),
+                            ),
                           )),
                       onTap: () {
                         viewChangeNotifier.value = 1;
-                        if (isPrecise == true && userPosition != null) {
-                          pageController.jumpToPage(1);
-                        } else {
-                          pageController.jumpToPage(2);
-                        }
+                        pageController.jumpToPage(1);
                       },
                       highlightColor: lightPink(),
                       borderRadius: BorderRadius.only(
@@ -567,34 +571,35 @@ class _ExploreScreenState extends State<ExploreScreen>
                 sendLookoutNotification(snapshot);
               }
 
-              return Expanded(
-                child: PageView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: pageController,
-                  children: [
-                    FullPosts(
-                      user: widget._user,
-                      filters: filters,
-                      snapshot: snapshot,
-                    ),
-                    MapsScreen(
-                      filters: filters,
-                      user: widget._user,
-                      initialLatLng: LatLng(
-                          userPosition!.latitude!, userPosition!.longitude!),
-                      snapshot: snapshot,
-                    ),
-                    Padding(
+              return (userPosition != null && isPrecise == true)
+                  ? Expanded(
+                      child: PageView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: pageController,
+                        children: [
+                          FullPosts(
+                            user: widget._user,
+                            filters: filters,
+                            snapshot: snapshot,
+                          ),
+                          MapsScreen(
+                            filters: filters,
+                            user: widget._user,
+                            initialLatLng: LatLng(userPosition!.latitude!,
+                                userPosition!.longitude!),
+                            snapshot: snapshot,
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Padding(
                       padding: const EdgeInsets.only(top: 250.0),
                       child: Text(
-                        "Turn on GPS and enable precise location permission for map view",
+                        "Turn on GPS and enable precise location permission",
                         style: TextStyle(fontSize: 30, color: Colors.black45),
                         textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
-                ),
-              );
+                    );
             },
           ),
           //     (value == 1 && isPrecise == true && userPosition != null)

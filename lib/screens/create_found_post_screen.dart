@@ -43,7 +43,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
   double latitude = 0;
   double longtitude = 0;
   String? _breed;
-
+  GoogleMapController? googleMapController;
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -56,6 +56,7 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
     _locationController.dispose();
     _nameController.dispose();
     _dateController.dispose();
+    googleMapController?.dispose();
   }
 
   void setImageCallback(List<File> files) {
@@ -188,7 +189,10 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
             Navigator.of(context).pop();
           },
           initialPosition: LatLng(1.290270, 103.851959),
-          // useCurrentLocation: true,
+          onMapCreated: (controller) {
+            googleMapController = controller;
+          },
+          useCurrentLocation: true,
         );
       }),
     );

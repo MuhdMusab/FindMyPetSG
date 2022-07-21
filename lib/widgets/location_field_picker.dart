@@ -20,6 +20,13 @@ class LocationFieldPicker extends StatefulWidget {
 }
 
 class _LocationFieldPickerState extends State<LocationFieldPicker> {
+  GoogleMapController? googleMapController;
+
+  @override
+  void dispose() {
+    super.dispose();
+    googleMapController?.dispose();
+  }
 
   void _showLocationPicker() {
     Navigator.push(
@@ -31,33 +38,35 @@ class _LocationFieldPickerState extends State<LocationFieldPicker> {
               : "AIzaSyCevtQ-g4R3ZZMse4jdPPsZ1xh7yhod_o4",
           onPlacePicked: (result) {
             setState(() {
-              widget.locationController.text = result.formattedAddress.toString();
+              widget.locationController.text =
+                  result.formattedAddress.toString();
               widget.latitude(result.geometry!.location.lat);
               widget.longtitude(result.geometry!.location.lng);
             });
             Navigator.of(context).pop();
           },
           initialPosition: LatLng(1.290270, 103.851959),
-          // useCurrentLocation: true,
+          onMapCreated: (controller) {
+            googleMapController = controller;
+          },
+          useCurrentLocation: true,
         );
       }),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          left: 12.0, right: 12.0, bottom: 12.0),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("Location*",
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blueGrey
-                ),
+              Text(
+                "Location*",
+                style: TextStyle(fontSize: 16, color: Colors.blueGrey),
               ),
             ],
           ),
@@ -88,10 +97,7 @@ class _LocationFieldPickerState extends State<LocationFieldPicker> {
                       left: 2,
                       child: Text(
                         widget.locationController.text,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blueGrey
-                        ),
+                        style: TextStyle(fontSize: 16, color: Colors.blueGrey),
                       ),
                     ),
                   ],
@@ -104,4 +110,3 @@ class _LocationFieldPickerState extends State<LocationFieldPicker> {
     );
   }
 }
-

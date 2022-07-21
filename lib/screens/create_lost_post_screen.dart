@@ -43,6 +43,7 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
   bool isLoading = false;
   double latitude = 0;
   double longtitude = 0;
+  GoogleMapController? googleMapController;
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -60,6 +61,7 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
     _dateController.dispose();
     _rewardController.dispose();
     _ageController.dispose();
+    googleMapController?.dispose();
   }
 
   void setImageCallback(List<File> files) {
@@ -198,7 +200,10 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
             Navigator.of(context).pop();
           },
           initialPosition: LatLng(1.290270, 103.851959),
-          // useCurrentLocation: true,
+          onMapCreated: (controller) {
+            googleMapController = controller;
+          },
+          useCurrentLocation: true,
         );
       }),
     );

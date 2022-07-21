@@ -21,46 +21,48 @@ class FullPosts extends StatefulWidget {
   State<FullPosts> createState() => _FullPostsState();
 }
 
-class _FullPostsState extends State<FullPosts> {
+class _FullPostsState extends State<FullPosts>
+    with AutomaticKeepAliveClientMixin<FullPosts> {
+  @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-          itemCount: widget.snapshot.data!.docs.length,
-          itemBuilder: (ctx, index) {
-            bool postTypeBool = true;
-            bool categoryBool = true;
-            if (widget.filters.isNotEmpty) {
-              postTypeBool = false;
-              categoryBool = false;
-              for (int i = 0; i < 16; i++) {
-                Filter filter = widget.filters[i]!;
-                if (filter.value) {
-                  if (filter is Category) {
-                    categoryBool = categoryBool ||
-                        widget.snapshot.data!.docs[index].data()['breed'] ==
-                            (filter as Category).name;
-                  } else {
-                    postTypeBool = postTypeBool ||
-                        widget.snapshot.data!.docs[index].data()['type'] ==
-                            (filter as PostType).postType;
-                  }
+    super.build(context);
+    return ListView.builder(
+        itemCount: widget.snapshot.data!.docs.length,
+        itemBuilder: (ctx, index) {
+          bool postTypeBool = true;
+          bool categoryBool = true;
+          if (widget.filters.isNotEmpty) {
+            postTypeBool = false;
+            categoryBool = false;
+            for (int i = 0; i < 16; i++) {
+              Filter filter = widget.filters[i]!;
+              if (filter.value) {
+                if (filter is Category) {
+                  categoryBool = categoryBool ||
+                      widget.snapshot.data!.docs[index].data()['breed'] ==
+                          (filter as Category).name;
+                } else {
+                  postTypeBool = postTypeBool ||
+                      widget.snapshot.data!.docs[index].data()['type'] ==
+                          (filter as PostType).postType;
                 }
               }
             }
-            return Container(
-                child: postTypeBool && categoryBool
-                    ? widget.snapshot.data!.docs[index].data()['type'] == "lost"
-                        ? LostPetPost(
-                            snap: widget.snapshot.data!.docs[index].data(),
-                            user: widget.user,
-                          )
-                        : FoundPetPost(
-                            snap: widget.snapshot.data!.docs[index].data(),
-                            user: widget.user,
-                          )
-                    : Container());
-          }),
-    );
+          }
+          return Container(
+              child: postTypeBool && categoryBool
+                  ? widget.snapshot.data!.docs[index].data()['type'] == "lost"
+                      ? LostPetPost(
+                          snap: widget.snapshot.data!.docs[index].data(),
+                          user: widget.user,
+                        )
+                      : FoundPetPost(
+                          snap: widget.snapshot.data!.docs[index].data(),
+                          user: widget.user,
+                        )
+                  : Container());
+        });
   }
 }

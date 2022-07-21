@@ -4,6 +4,7 @@ import 'package:find_my_pet_sg/screens/chats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/screens/profile_screen.dart';
 import 'package:find_my_pet_sg/screens/explore_screen.dart';
+import 'package:provider/provider.dart';
 import '../helper/custom_icons_icons.dart';
 
 class Home extends StatefulWidget {
@@ -18,8 +19,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedPageIndex = 0;
-  List<Widget> ? _pages;
-  PageController ? _pageController;
+  List<Widget>? _pages;
+  PageController? _pageController;
   void initState() {
     super.initState();
     _selectedPageIndex = 0;
@@ -31,8 +32,6 @@ class _HomeState extends State<Home> {
     _pageController = PageController(initialPage: _selectedPageIndex);
   }
 
-
-
   @override
   void dispose() {
     _pageController!.dispose();
@@ -42,44 +41,45 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageView(
-          controller: _pageController,
-          physics: NeverScrollableScrollPhysics(),
-          children: _pages!,
+      body: PageView(
+        controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
+        children: _pages!,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.black,
+        type: BottomNavigationBarType.fixed,
+        selectedLabelStyle: TextStyle(
+          color: Colors.black,
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: Colors.black,
-          type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: TextStyle(
-            color: Colors.black,
-          ),
-          unselectedLabelStyle: TextStyle(
-            color: Colors.black,
-          ),
-          items: [
+        unselectedLabelStyle: TextStyle(
+          color: Colors.black,
+        ),
+        items: [
           BottomNavigationBarItem(
-             activeIcon: Icon(CustomIcons.paw, color: pink()),
-             icon: Icon(CustomIcons.paw, color: pink()),
-           label: "Pets",
-         ),
-        BottomNavigationBarItem(
-          activeIcon: Icon(CustomIcons.chat, color: pink()),
-          icon: Icon(CustomIcons.chat, color: pink()),
-          label: "Messages",
-        ),
-        BottomNavigationBarItem(
-          activeIcon: Icon(Icons.account_circle, color: pink()),
-          icon: Icon(Icons.account_circle_outlined, color: pink()),
-          label: "Profile",
-        ),],
-          currentIndex: _selectedPageIndex,
-          onTap: (selectedPageIndex) {
-            setState(() {
-              _selectedPageIndex = selectedPageIndex;
-              _pageController!.jumpToPage(selectedPageIndex);
-            });
-          },
-        )
+            activeIcon: Icon(CustomIcons.paw, color: pink()),
+            icon: Icon(CustomIcons.paw, color: pink()),
+            label: "Pets",
+          ),
+          BottomNavigationBarItem(
+            activeIcon: Icon(CustomIcons.chat, color: pink()),
+            icon: Icon(CustomIcons.chat, color: pink()),
+            label: "Messages",
+          ),
+          BottomNavigationBarItem(
+            activeIcon: Icon(Icons.account_circle, color: pink()),
+            icon: Icon(Icons.account_circle_outlined, color: pink()),
+            label: "Profile",
+          ),
+        ],
+        currentIndex: _selectedPageIndex,
+        onTap: (selectedPageIndex) {
+          setState(() {
+            _selectedPageIndex = selectedPageIndex;
+            _pageController!.jumpToPage(selectedPageIndex);
+          });
+        },
+      ),
     );
   }
 }

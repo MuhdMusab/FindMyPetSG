@@ -41,8 +41,11 @@ class MapsScreen extends StatefulWidget {
   State<MapsScreen> createState() => _MapsScreenState();
 }
 
-class _MapsScreenState extends State<MapsScreen> {
+class _MapsScreenState extends State<MapsScreen>
+    with AutomaticKeepAliveClientMixin<MapsScreen> {
   late GoogleMapController _googleMapController;
+  @override
+  bool get wantKeepAlive => true;
   CustomInfoWindowController _customInfoWindowController =
       CustomInfoWindowController();
 
@@ -153,56 +156,55 @@ class _MapsScreenState extends State<MapsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Stack(
-        children: [
-          GoogleMap(
-            myLocationButtonEnabled: true,
-            myLocationEnabled: true,
-            onTap: (position) {
-              _customInfoWindowController.hideInfoWindow!();
-            },
-            onCameraMove: (position) {
-              _customInfoWindowController.onCameraMove!();
-            },
-            onMapCreated: (GoogleMapController controller) async {
-              _customInfoWindowController.googleMapController = controller;
-              _googleMapController = controller;
-            },
-            mapToolbarEnabled: false,
-            initialCameraPosition: CameraPosition(
-              target: widget.initialLatLng,
-              zoom: 16,
-            ),
-            markers: buildMarkers(widget.snapshot),
-            zoomControlsEnabled: false,
-            zoomGesturesEnabled: true,
+    super.build(context);
+    return Stack(
+      children: [
+        GoogleMap(
+          myLocationButtonEnabled: true,
+          myLocationEnabled: true,
+          onTap: (position) {
+            _customInfoWindowController.hideInfoWindow!();
+          },
+          onCameraMove: (position) {
+            _customInfoWindowController.onCameraMove!();
+          },
+          onMapCreated: (GoogleMapController controller) async {
+            _customInfoWindowController.googleMapController = controller;
+            _googleMapController = controller;
+          },
+          mapToolbarEnabled: false,
+          initialCameraPosition: CameraPosition(
+            target: widget.initialLatLng,
+            zoom: 16,
           ),
-          // Positioned(
-          //   right: 16,
-          //   bottom: 80,
-          //   child: FloatingActionButton(
-          //       child: const Icon(
-          //         Icons.center_focus_strong,
-          //         size: 30.0,
-          //         color: Colors.white,
-          //       ),
-          //       backgroundColor: pink(),
-          //       heroTag: getRandomString(),
-          //       onPressed: () {
-          //         _googleMapController.animateCamera(
-          //             CameraUpdate.newCameraPosition(CameraPosition(
-          //                 target: widget.currentLatLng, zoom: 16)));
-          //       }),
-          // ),
-          CustomInfoWindow(
-            controller: _customInfoWindowController,
-            offset: 0,
-            width: MediaQuery.of(context).size.width - 50,
-            height: 330,
-          ),
-        ],
-      ),
+          markers: buildMarkers(widget.snapshot),
+          zoomControlsEnabled: false,
+          zoomGesturesEnabled: true,
+        ),
+        // Positioned(
+        //   right: 16,
+        //   bottom: 80,
+        //   child: FloatingActionButton(
+        //       child: const Icon(
+        //         Icons.center_focus_strong,
+        //         size: 30.0,
+        //         color: Colors.white,
+        //       ),
+        //       backgroundColor: pink(),
+        //       heroTag: getRandomString(),
+        //       onPressed: () {
+        //         _googleMapController.animateCamera(
+        //             CameraUpdate.newCameraPosition(CameraPosition(
+        //                 target: widget.currentLatLng, zoom: 16)));
+        //       }),
+        // ),
+        CustomInfoWindow(
+          controller: _customInfoWindowController,
+          offset: 0,
+          width: MediaQuery.of(context).size.width - 50,
+          height: 330,
+        ),
+      ],
     );
   }
 }

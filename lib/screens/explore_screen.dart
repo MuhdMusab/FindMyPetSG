@@ -24,6 +24,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 import '../widgets/lost_pet_post.dart';
 import '../widgets/found_pet_post.dart';
 import '../widgets/filter_button.dart';
@@ -50,15 +51,22 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen>
     with AutomaticKeepAliveClientMixin<ExploreScreen>, WidgetsBindingObserver {
+  final PageController pageController = PageController(initialPage: 0);
   Position? userPosition;
   bool? isPrecise;
-  int value = 0;
+
+  List<bool> _isSelected = [true, false];
   @override
   bool get wantKeepAlive => true;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       new FlutterLocalNotificationsPlugin();
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
+
+  void toggle(List<bool> _isSelected) {
+    _isSelected[0] = !_isSelected[0];
+    _isSelected[1] = !_isSelected[1];
+  }
 
   void scheduleNotification(String title, String subtitle) {
     print("scheduling one with $title and $subtitle");
@@ -158,6 +166,7 @@ class _ExploreScreenState extends State<ExploreScreen>
       _serviceStatusStreamSubscription = null;
     }
 
+    pageController.dispose();
     super.dispose();
   }
 
@@ -290,6 +299,9 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "FFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK REBUILD");
+    final ValueNotifier<int> viewChangeNotifier = ValueNotifier<int>(0);
     if (userPosition == null || isPrecise == false) {
       _getUserPosition();
     }
@@ -316,55 +328,223 @@ class _ExploreScreenState extends State<ExploreScreen>
       ),
       body: Column(
         children: [
-          SafeArea(
-            child: Stack(children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 12, top: 18, bottom: 10),
-                child: FilterButton(
-                  callback: _callback,
-                  user: widget._user,
-                ),
-              ),
-              Positioned(
-                top: 14,
-                right: 10,
-                child: Container(
-                    height: 40,
-                    child: AnimatedToggleSwitch<int>.size(
-                        current: value,
-                        values: [0, 1],
-                        indicatorBorderRadius: BorderRadius.zero,
-                        borderWidth: 1.0,
-                        borderRadius: BorderRadius.circular(8.0),
-                        iconOpacity: 0.2,
-                        indicatorSize: Size.fromWidth(60),
-                        iconSize: const Size.square(40),
-                        iconBuilder: (value, size) {
-                          IconData data = MdiIcons.mapMarker;
-                          if (value.isEven) data = Icons.list;
-                          return Icon(
-                            data,
-                            size: min(size.width, size.height),
-                            color: Colors.pink,
-                          );
-                        },
-                        borderColor: lightPink(),
-                        colorBuilder: (i) =>
-                            i.isEven ? lightPink() : lightPink(),
-                        onChanged: (i) {
-                          if (i == 0) {
-                            setState(() {
-                              value = 0;
-                            });
-                          } else {
-                            // _getUserLocation();
-                            setState(() {
-                              value = 1;
-                            });
-                          }
-                        })),
-              ),
-            ]),
+          AnimatedBuilder(
+            animation: viewChangeNotifier,
+            builder: (BuildContext context, Widget? child) {
+              return SafeArea(
+                child: Stack(children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 12, top: 18, bottom: 10),
+                    child: FilterButton(
+                      callback: _callback,
+                      user: widget._user,
+                    ),
+                  ),
+                  Positioned(
+                    top: 14,
+                    right: 47,
+                    child: InkWell(
+                      child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: lightPink()),
+                            color: viewChangeNotifier.value == 0
+                                ? lightPink()
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(6.0),
+                                topLeft: Radius.circular(6.0)),
+                          ),
+                          child: Icon(
+                            Icons.list,
+                            size: 36,
+                            color: pink(),
+                          )),
+                      onTap: () {
+                        viewChangeNotifier.value = 0;
+                        pageController.jumpToPage(0);
+                      },
+                      highlightColor: lightPink(),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(6.0),
+                          topLeft: Radius.circular(6.0)),
+                    ),
+                  ),
+                  Positioned(
+                    top: 14,
+                    right: 10,
+                    child: InkWell(
+                      child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: lightPink()),
+                            color: viewChangeNotifier.value == 1
+                                ? lightPink()
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(6.0),
+                                topRight: Radius.circular(6.0)),
+                          ),
+                          child: Icon(
+                            MdiIcons.mapMarker,
+                            size: 36,
+                            color: pink(),
+                          )),
+                      onTap: () {
+                        viewChangeNotifier.value = 1;
+                        if (isPrecise == true && userPosition != null) {
+                          pageController.jumpToPage(1);
+                        } else {
+                          pageController.jumpToPage(2);
+                        }
+                      },
+                      highlightColor: lightPink(),
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(6.0),
+                          topRight: Radius.circular(6.0)),
+                    ),
+                  ),
+                  // ToggleButtons(
+                  //   children: [
+                  //     Icon(Icons.list),
+                  //     Icon(MdiIcons.mapMarker),
+                  //   ],
+                  //   isSelected: _isSelected,
+                  //   onPressed: (index) {
+                  //     if (index == 0) {
+                  //       // Provider.of<ToggleView>(context, listen: false).toggle();
+                  //       // toggle(_isSelected);
+                  //       _isSelected[0] = true;
+                  //       _isSelected[1] = false;
+                  //       pageController.jumpToPage(0);
+                  //     } else {
+                  //       if (index == 1 &&
+                  //           isPrecise == true &&
+                  //           userPosition != null) {
+                  //         // toggle(_isSelected);
+                  //         _isSelected[0] = false;
+                  //         _isSelected[1] = true;
+                  //         // Provider.of<ToggleView>(context, listen: false).toggle();
+                  //         pageController.jumpToPage(1);
+                  //       } else {
+                  //         pageController.jumpToPage(2);
+                  //       }
+                  //     }
+                  //   },
+                  //   borderRadius: BorderRadius.all(Radius.circular(10)),
+                  //   selectedColor: Colors.red,
+                  //   selectedBorderColor: Colors.purple,
+                  // ),
+                  // Positioned(
+                  //   top: 14,
+                  //   right: 10,
+                  //   child: AnimatedContainer(
+                  //     duration: Duration(milliseconds: 1000),
+                  //     height: 40.0,
+                  //     width: 100.0,
+                  //     decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(20.0),
+                  //         color: toggleValue == 0
+                  //             ? Colors.greenAccent[100]
+                  //             : Colors.redAccent[100]?.withOpacity(0.5)),
+                  //     child: Stack(
+                  //       children: [
+                  //         AnimatedPositioned(
+                  //           duration: Duration(milliseconds: 1000),
+                  //           curve: Curves.easeIn,
+                  //           top: 3.0,
+                  //           left: toggleValue == 0 ? 60.0 : 0.0,
+                  //           right: toggleValue == 1 ? 0.0 : 60.0,
+                  //           child: InkWell(
+                  //             onTap: () {
+                  //               Provider.of<ToggleView>(context, listen: false)
+                  //                   .toggle();
+                  //             },
+                  //             child: AnimatedSwitcher(
+                  //                 duration: Duration(milliseconds: 1000),
+                  //                 transitionBuilder:
+                  //                     (Widget child, Animation<double> animation) {
+                  //                   return RotationTransition(
+                  //                       child: child, turns: animation);
+                  //                 },
+                  //                 child: toggleValue
+                  //                     ? Icon(MdiIcons.mapMarker,
+                  //                         color: Colors.green,
+                  //                         size: 35.0,
+                  //                         key: UniqueKey())
+                  //                     : Icon(MdiIcons.mapMarker,
+                  //                         color: Colors.red,
+                  //                         size: 35.0,
+                  //                         key: UniqueKey())),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // )
+                  // Positioned(
+                  //   right: 3,
+                  //   child: ElevatedButton(
+                  //       onPressed: () {
+                  //         pageController.jumpToPage(0);
+                  //       },
+                  //       child: Text("list")),
+                  // ),
+                  // ElevatedButton(
+                  //     onPressed: () {
+                  //       if (isPrecise == true && userPosition != null) {
+                  //         pageController.jumpToPage(1);
+                  //       } else {
+                  //         pageController.jumpToPage(2);
+                  //       }
+                  //     },
+                  //     child: Text("map"))
+                  // Positioned(
+                  //   top: 14,
+                  //   right: 10,
+                  //   child: Container(
+                  //       height: 40,
+                  //       child: AnimatedToggleSwitch<int>.size(
+                  //           current: valuee,
+                  //           values: [0, 1],
+                  //           indicatorBorderRadius: BorderRadius.zero,
+                  //           borderWidth: 1.0,
+                  //           borderRadius: BorderRadius.circular(8.0),
+                  //           iconOpacity: 0.2,
+                  //           indicatorSize: Size.fromWidth(60),
+                  //           iconSize: const Size.square(40),
+                  //           iconBuilder: (value, size) {
+                  //             IconData data = MdiIcons.mapMarker;
+                  //             if (value.isEven) data = Icons.list;
+                  //             return Icon(
+                  //               data,
+                  //               size: min(size.width, size.height),
+                  //               color: Colors.pink,
+                  //             );
+                  //           },
+                  //           borderColor: lightPink(),
+                  //           colorBuilder: (i) =>
+                  //               i.isEven ? lightPink() : lightPink(),
+                  //           onChanged: (i) {
+                  //             if (i == 0) {
+                  //               Provider.of<ToggleView>(context, listen: false)
+                  //                   .toggleToListView();
+                  //               pageController.jumpToPage(0);
+                  //             } else {
+                  //               Provider.of<ToggleView>(context, listen: false)
+                  //                   .toggleToMapView();
+                  //               if (i == 1 &&
+                  //                   isPrecise == true &&
+                  //                   userPosition != null) {
+                  //                 pageController.jumpToPage(1);
+                  //               } else {
+                  //                 pageController.jumpToPage(2);
+                  //               }
+                  //             }
+                  //           })),
+                  // ),
+                ]),
+              );
+            },
           ),
           Divider(
             height: 1,
@@ -372,46 +552,76 @@ class _ExploreScreenState extends State<ExploreScreen>
             color: Colors.white,
           ),
           StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('posts')
-                  .orderBy("dateTimePosted", descending: true)
-                  .snapshots(),
-              builder: (context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (userPosition != null && isPrecise == true) {
-                  sendLookoutNotification(snapshot);
-                }
+            stream: FirebaseFirestore.instance
+                .collection('posts')
+                .orderBy("dateTimePosted", descending: true)
+                .snapshots(),
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (userPosition != null && isPrecise == true) {
+                sendLookoutNotification(snapshot);
+              }
 
-                return (value == 1 && isPrecise == true && userPosition != null)
-                    ? MapsScreen(
-                        filters: filters,
-                        user: widget._user,
-                        initialLatLng: LatLng(
-                            userPosition!.latitude!, userPosition!.longitude!),
-                        snapshot: snapshot,
-                      )
-                    : (value == 1 &&
-                            (userPosition == null || isPrecise == false))
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 250.0),
-                            child: Text(
-                              "Turn on GPS and enable precise location permission for map view",
-                              style: TextStyle(
-                                  fontSize: 30, color: Colors.black45),
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                        : FullPosts(
-                            user: widget._user,
-                            filters: filters,
-                            snapshot: snapshot,
-                          );
-              }),
+              return Expanded(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pageController,
+                  children: [
+                    FullPosts(
+                      user: widget._user,
+                      filters: filters,
+                      snapshot: snapshot,
+                    ),
+                    MapsScreen(
+                      filters: filters,
+                      user: widget._user,
+                      initialLatLng: LatLng(
+                          userPosition!.latitude!, userPosition!.longitude!),
+                      snapshot: snapshot,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 250.0),
+                      child: Text(
+                        "Turn on GPS and enable precise location permission for map view",
+                        style: TextStyle(fontSize: 30, color: Colors.black45),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          //     (value == 1 && isPrecise == true && userPosition != null)
+          //       ? MapsScreen(
+          //           filters: filters,
+          //           user: widget._user,
+          //           initialLatLng: LatLng(
+          //               userPosition!.latitude!, userPosition!.longitude!),
+          //           snapshot: snapshot,
+          //         )
+          //       : (value == 1 &&
+          //               (userPosition == null || isPrecise == false))
+          //           ? Padding(
+          //               padding: const EdgeInsets.only(top: 250.0),
+          //               child: Text(
+          //                 "Turn on GPS and enable precise location permission for map view",
+          //                 style: TextStyle(
+          //                     fontSize: 30, color: Colors.black45),
+          //                 textAlign: TextAlign.center,
+          //               ),
+          //             )
+          //           : FullPosts(
+          //               user: widget._user,
+          //               filters: filters,
+          //               snapshot: snapshot,
+          //             );
+          // }),
         ],
       ),
     );

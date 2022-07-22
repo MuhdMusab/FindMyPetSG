@@ -35,117 +35,182 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 10,),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            height: 50,
-            child: Row(children:
-            [
-              const Icon(Icons.notifications_none,
-                size: 32,
-              ),
-              const SizedBox(width: 3,),
-              const Text('Notifications',
-                style: TextStyle(
-                  fontSize: 17,
-                ),
-              ),
-              const Spacer(),
-              IconButton(onPressed: () => {},
-                  icon: const Icon(Icons.navigate_next,
-                    size: 30,
-                  )
-              ),
-            ],
-            ),
-          ),
-          Container(child: const Divider(),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            height: 50,
-            child: Row(children:
-            [
-              const Icon(Icons.lock_outline,
-                size: 32,
-              ),
-              const SizedBox(width: 3,),
-              const Text('Privacy & Security',
-                style: TextStyle(
-                  fontSize: 17,
-                ),
-              ),
-              const Spacer(),
-              IconButton(onPressed: () => {},
-                  icon: const Icon(Icons.navigate_next,
-                    size: 30,
-                  )
-              ),
-            ],
-            ),
-          ),
-          Container(child: const Divider(),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            height: 50,
-            child: Row(children:
-            [
-              const FaIcon(FontAwesomeIcons.circleQuestion,
-                size: 32,
-              ),
-              const SizedBox(width: 5,),
-              const Text('About',
-                style: TextStyle(
-                  fontSize: 17,
-                ),
-              ),
-              const Spacer(),
-              IconButton(onPressed: () => {},
-                  icon: const Icon(Icons.navigate_next,
-                    size: 30,
-                  )
-              ),
-            ],
-            ),
-          ),
-          Container(child: const Divider(),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            height: 50,
-            child: Row(children:
-            [
-              IconButton(
-                  onPressed: () {
-                    final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-                    provider.logout();
-                    FirebaseAuth.instance.signOut();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-
-                        builder: (context) => const MainPage(),
-                      ),
-                    );
-                  },
-                  padding: const EdgeInsets.only(left: 8),
-                  icon: Icon(Icons.logout,
+          // const SizedBox(
+          //   height: 10,
+          // ),
+          InkWell(
+            onTap: () {},
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                height: 50,
+                child: Row(children: [
+                  const Icon(
+                    Icons.notifications_none,
                     size: 32,
-                    color: pink(),
-                  )
+                  ),
+                  const SizedBox(
+                    width: 3,
+                  ),
+                  const Text(
+                    'Notifications',
+                    style: TextStyle(
+                      fontSize: 17,
+                    ),
+                  ),
+                  // const Spacer(),
+                  // IconButton(onPressed: () => {},
+                  //     icon: const Icon(Icons.navigate_next,
+                  //       size: 30,
+                  //     )
+                ]),
               ),
-              const SizedBox(width: 0,),
-              Text('Logout',
-                style: TextStyle(
-                  fontSize: 17,
-                  color: pink(),
+            ),
+          ),
+          Container(
+            child: const Divider(
+              height: 1,
+            ),
+            padding: const EdgeInsets.only(left: 20),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                height: 50,
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.lock_outline,
+                      size: 32,
+                    ),
+                    const SizedBox(
+                      width: 3,
+                    ),
+                    const Text(
+                      'Privacy & Security',
+                      style: TextStyle(
+                        fontSize: 17,
+                      ),
+                    ),
+                    // const Spacer(),
+                    // IconButton(
+                    //     onPressed: () => {},
+                    //     icon: const Icon(
+                    //       Icons.navigate_next,
+                    //       size: 30,
+                    //     )),
+                  ],
                 ),
               ),
-            ],
+            ),
+          ),
+          Container(
+            child: const Divider(
+              height: 1,
+            ),
+            padding: const EdgeInsets.only(left: 20),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                height: 50,
+                child: Row(
+                  children: [
+                    const FaIcon(
+                      FontAwesomeIcons.circleQuestion,
+                      size: 32,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Text(
+                      'About',
+                      style: TextStyle(
+                        fontSize: 17,
+                      ),
+                    ),
+                    // const Spacer(),
+                    // IconButton(
+                    //     onPressed: () => {},
+                    //     icon: const Icon(
+                    //       Icons.navigate_next,
+                    //       size: 30,
+                    //     )),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Container(
+            child: const Divider(
+              height: 1,
+            ),
+            padding: const EdgeInsets.only(left: 20),
+          ),
+          InkWell(
+            onTap: () {
+              final provider =
+                  Provider.of<GoogleSignInProvider>(context, listen: false);
+              provider.logout();
+              FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const MainPage()),
+                  (Route<dynamic> route) => false);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                height: 50,
+                child: Row(
+                  children: [
+                    // IconButton(
+                    //     onPressed: () {
+                    //       // final provider = Provider.of<GoogleSignInProvider>(
+                    //       //     context,
+                    //       //     listen: false);
+                    //       // provider.logout();
+                    //       // FirebaseAuth.instance.signOut();
+                    //       // Navigator.of(context).pushAndRemoveUntil(
+                    //       //     MaterialPageRoute(
+                    //       //         builder: (context) => const MainPage()),
+                    //       //     (Route<dynamic> route) => false);
+                    //     },
+                    //     padding: const EdgeInsets.only(left: 8),
+                    //     icon: Icon(
+                    //       Icons.logout,
+                    //       size: 32,
+                    //       color: pink(),
+                    //     )),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: Icon(
+                        Icons.logout,
+                        size: 32,
+                        color: pink(),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    Text(
+                      'Logout',
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: pink(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -153,4 +218,3 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 }
-

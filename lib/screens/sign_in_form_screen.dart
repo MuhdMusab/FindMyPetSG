@@ -98,199 +98,206 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarMain(context),
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: const AssetImage("assets/images/formbackground.png"),
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: appBarMain(context),
+        body: SingleChildScrollView(
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: const AssetImage("assets/images/formbackground.png"),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 150, horizontal: 50),
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              Container(
-                child: const Text(
-                  "SIGN IN",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+            padding: const EdgeInsets.symmetric(vertical: 150, horizontal: 50),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Container(
+                  child: const Text(
+                    "SIGN IN",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                  alignment: Alignment.centerLeft,
                 ),
-                alignment: Alignment.centerLeft,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        "Email",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
+                const SizedBox(
+                  height: 20,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          "Email",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      validator: emailValidator,
-                      controller: emailEditingController,
-                      style: simpleBlackTextStyle(),
-                      decoration: InputDecoration(
-                        fillColor: Colors.grey.withOpacity(0.1),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TextFormField(
+                        validator: emailValidator,
+                        controller: emailEditingController,
+                        style: simpleBlackTextStyle(),
+                        decoration: InputDecoration(
+                          fillColor: Colors.grey.withOpacity(0.1),
+                          filled: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 15,
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: "email",
-                        hintStyle: const TextStyle(
-                          color: Colors.black54,
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          hintText: "email",
+                          hintStyle: const TextStyle(
+                            color: Colors.black54,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        "Password",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
+                      const SizedBox(
+                        height: 13,
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          "Password",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      obscureText: _obscureText,
-                      validator: passwordValidator,
-                      controller: passwordEditingController,
-                      style: simpleBlackTextStyle(),
-                      decoration: InputDecoration(
-                        fillColor: Colors.grey.withOpacity(0.1),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TextFormField(
+                        obscureText: _obscureText,
+                        validator: passwordValidator,
+                        controller: passwordEditingController,
+                        style: simpleBlackTextStyle(),
+                        decoration: InputDecoration(
+                          fillColor: Colors.grey.withOpacity(0.1),
+                          filled: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 15,
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: "password",
-                        hintStyle: const TextStyle(
-                          color: Colors.black54,
-                        ),
-                        suffixIcon: GestureDetector(
-                          child: Icon(
-                            _obscureText
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.grey,
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onTap: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
+                          hintText: "password",
+                          hintStyle: const TextStyle(
+                            color: Colors.black54,
+                          ),
+                          suffixIcon: GestureDetector(
+                            child: Icon(
+                              _obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onTap: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SignUpInButton(
-                        isLoading: isLoading,
-                        text: "Sign in",
-                        onPressed: signIn),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text("Don't have an account? ", style: mediumTextStyle()),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Authenticate(
-                                showSignIn: false,
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SignUpInButton(
+                          isLoading: isLoading,
+                          text: "Sign in",
+                          onPressed: signIn),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Don't have an account? ",
+                                style: mediumTextStyle()),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Authenticate(
+                                      showSignIn: false,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: Text(
+                                  "Sign up",
+                                  style: TextStyle(
+                                    color: pink(),
+                                    fontSize: 17,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                    decorationThickness: 2,
+                                  ),
+                                ),
                               ),
                             ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            "Sign up",
-                            style: TextStyle(
-                              color: pink(),
-                              fontSize: 17,
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                              decorationThickness: 2,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ]),
-                  ],
+                          ]),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

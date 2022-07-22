@@ -155,88 +155,93 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
       isMale = funcIsMale;
     }
 
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            ArrowBackButton(),
-            Expanded(
-              child: ListView(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  CustomTextfield2(
-                    infoText: "Name*",
-                    hintText: "Name",
-                    textInputType: TextInputType.name,
-                    textEditingController: _nameController,
-                    inputFormatters: [
-                      new LengthLimitingTextInputFormatter(nameCharacterLimit)
-                    ],
-                    maxLines: 1,
-                  ),
-                  CustomTextfield2(
-                    infoText: "Age*",
-                    hintText: "Age",
-                    textInputType: TextInputType.number,
-                    textEditingController: _ageController,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      new LengthLimitingTextInputFormatter(ageCharacterLimit)
-                    ],
-                    maxLines: 1,
-                  ),
-                  GenderFieldPicker(isMale: isMale, setGender: setGender),
-                  LocationFieldPicker(
-                      locationController: _locationController,
-                      latitude: setLatitude,
-                      longtitude: setLongtitude),
-                  DateFieldPicker(dateController: _dateController),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        BreedEditor(
-                            setAnimalTypeCallback: setAnimalTypeCallback,
-                            breedController: _breedController),
-                        RewardTextfield(
-                          infoText: "Reward",
-                          hintText: "Reward",
-                          textInputType: TextInputType.datetime,
-                          textEditingController: _rewardController,
-                          maxLines: 1,
-                        ),
-                        CustomTextfield2(
-                          infoText: "Description*",
-                          hintText: "Description",
-                          textInputType: TextInputType.text,
-                          textEditingController: _descriptionController,
-                          inputFormatters: [
-                            new LengthLimitingTextInputFormatter(
-                                descriptionCharacterLimit)
-                          ],
-                          maxLines: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: CustomMadeButton(
-                            isLoading: isLoading,
-                            text: "Edit",
-                            onPressed: () => uploadChanges(),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                      ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              ArrowBackButton(),
+              Expanded(
+                child: ListView(
+                  children: [
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
-                ],
+                    CustomTextfield2(
+                      infoText: "Name*",
+                      hintText: "Name",
+                      textInputType: TextInputType.name,
+                      textEditingController: _nameController,
+                      inputFormatters: [
+                        new LengthLimitingTextInputFormatter(
+                            petNameCharacterLimit)
+                      ],
+                      maxLines: 1,
+                    ),
+                    CustomTextfield2(
+                      infoText: "Age*",
+                      hintText: "Age",
+                      textInputType: TextInputType.number,
+                      textEditingController: _ageController,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        new LengthLimitingTextInputFormatter(ageCharacterLimit)
+                      ],
+                      maxLines: 1,
+                    ),
+                    GenderFieldPicker(isMale: isMale, setGender: setGender),
+                    LocationFieldPicker(
+                        locationController: _locationController,
+                        latitude: setLatitude,
+                        longtitude: setLongtitude),
+                    DateFieldPicker(dateController: _dateController),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          BreedEditor(
+                              setAnimalTypeCallback: setAnimalTypeCallback,
+                              breedController: _breedController),
+                          RewardTextfield(
+                            infoText: "Reward",
+                            hintText: "Reward",
+                            textInputType: TextInputType.datetime,
+                            textEditingController: _rewardController,
+                            maxLines: 1,
+                          ),
+                          CustomTextfield2(
+                            infoText: "Description*",
+                            hintText: "Description",
+                            textInputType: TextInputType.text,
+                            textEditingController: _descriptionController,
+                            inputFormatters: [
+                              new LengthLimitingTextInputFormatter(
+                                  descriptionCharacterLimit)
+                            ],
+                            maxLines: 10,
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: CustomMadeButton(
+                              isLoading: isLoading,
+                              text: "Edit",
+                              onPressed: () => uploadChanges(),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

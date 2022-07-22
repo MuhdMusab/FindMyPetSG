@@ -230,7 +230,8 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                       textInputType: TextInputType.name,
                       textEditingController: _nameController,
                       inputFormatters: [
-                        new LengthLimitingTextInputFormatter(nameCharacterLimit)
+                        new LengthLimitingTextInputFormatter(
+                            petNameCharacterLimit)
                       ],
                       maxLines: 1,
                     ),

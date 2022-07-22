@@ -266,7 +266,8 @@ class _CreateLostPostScreenState extends State<CreateLostPostScreen> {
                       textInputType: TextInputType.name,
                       textEditingController: _nameController,
                       inputFormatters: [
-                        new LengthLimitingTextInputFormatter(nameCharacterLimit)
+                        new LengthLimitingTextInputFormatter(
+                            petNameCharacterLimit)
                       ],
                       maxLines: 1,
                     ),

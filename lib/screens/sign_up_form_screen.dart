@@ -1,4 +1,5 @@
 import 'package:find_my_pet_sg/widgets/sign_up_in_button.dart';
+import 'package:flutter/services.dart';
 
 import '../helper/authenticate.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
@@ -124,251 +125,261 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarMain(context),
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/formbackground.png"),
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: appBarMain(context),
+        body: SingleChildScrollView(
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/formbackground.png"),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 150, horizontal: 50),
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              Container(
-                child: const Text(
-                  "SIGN UP",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+            padding: const EdgeInsets.symmetric(vertical: 150, horizontal: 50),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Container(
+                  child: const Text(
+                    "SIGN UP",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  alignment: Alignment.centerLeft,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: const Text(
+                    "Username",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
-                alignment: Alignment.centerLeft,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Username",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                  ),
+                const SizedBox(
+                  height: 5,
                 ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      validator: usernameValidator,
-                      controller: userNameTextEditingController,
-                      style: simpleBlackTextStyle(),
-                      decoration: InputDecoration(
-                        fillColor: Colors.grey.withOpacity(0.1),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        inputFormatters: [
+                          new LengthLimitingTextInputFormatter(
+                              userNameCharacterLimit)
+                        ],
+                        validator: usernameValidator,
+                        controller: userNameTextEditingController,
+                        style: simpleBlackTextStyle(),
+                        decoration: InputDecoration(
+                          fillColor: Colors.grey.withOpacity(0.1),
+                          filled: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 15,
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: "username",
-                        hintStyle: const TextStyle(
-                          color: Colors.black54,
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          hintText: "username",
+                          hintStyle: const TextStyle(
+                            color: Colors.black54,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        "Email",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
+                      const SizedBox(
+                        height: 13,
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          "Email",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      validator: emailValidator,
-                      controller: emailTextEditingController,
-                      style: simpleBlackTextStyle(),
-                      decoration: InputDecoration(
-                        fillColor: Colors.grey.withOpacity(0.1),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TextFormField(
+                        validator: emailValidator,
+                        controller: emailTextEditingController,
+                        style: simpleBlackTextStyle(),
+                        decoration: InputDecoration(
+                          fillColor: Colors.grey.withOpacity(0.1),
+                          filled: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 15,
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: "email",
-                        hintStyle: const TextStyle(
-                          color: Colors.black54,
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          hintText: "email",
+                          hintStyle: const TextStyle(
+                            color: Colors.black54,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        "Password",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
+                      const SizedBox(
+                        height: 13,
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          "Password",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      obscureText: _obscureText,
-                      validator: passwordValidator,
-                      controller: passwordTextEditingController,
-                      style: simpleBlackTextStyle(),
-                      decoration: InputDecoration(
-                        fillColor: Colors.grey.withOpacity(0.1),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TextFormField(
+                        obscureText: _obscureText,
+                        validator: passwordValidator,
+                        controller: passwordTextEditingController,
+                        style: simpleBlackTextStyle(),
+                        decoration: InputDecoration(
+                          fillColor: Colors.grey.withOpacity(0.1),
+                          filled: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 15,
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: "password",
-                        hintStyle: const TextStyle(
-                          color: Colors.black54,
-                        ),
-                        suffixIcon: GestureDetector(
-                          child: Icon(
-                            _obscureText
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.grey,
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.white,
+                              width: 0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onTap: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
+                          hintText: "password",
+                          hintStyle: const TextStyle(
+                            color: Colors.black54,
+                          ),
+                          suffixIcon: GestureDetector(
+                            child: Icon(
+                              _obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onTap: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SignUpInButton(
-                        isLoading: isLoading,
-                        text: "Sign up",
-                        onPressed: signUp),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text("Already have an account? ",
-                          style: mediumTextStyle()),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Authenticate(
-                                showSignIn: true,
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SignUpInButton(
+                          isLoading: isLoading,
+                          text: "Sign up",
+                          onPressed: signUp),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Already have an account? ",
+                                style: mediumTextStyle()),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Authenticate(
+                                      showSignIn: true,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: Text(
+                                  "Sign in",
+                                  style: TextStyle(
+                                    color: pink(),
+                                    fontSize: 17,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                    decorationThickness: 2,
+                                  ),
+                                ),
                               ),
                             ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            "Sign in",
-                            style: TextStyle(
-                              color: pink(),
-                              fontSize: 17,
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                              decorationThickness: 2,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ]),
-                  ],
+                          ]),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:find_my_pet_sg/screens/home.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
+import 'package:find_my_pet_sg/utils/showSnackBar.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +26,6 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   bool _canResendEmail = false;
   Timer? timer;
 
-
-
   @override
   void initState() {
     super.initState();
@@ -35,8 +34,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       sendVerificationEmail();
 
       timer = Timer.periodic(
-          const Duration(seconds: 3),
-              (timer) => _checkEmailVerified());
+          const Duration(seconds: 3), (timer) => _checkEmailVerified());
     }
   }
 
@@ -56,6 +54,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       timer?.cancel();
     }
   }
+
   Future sendVerificationEmail() async {
     try {
       final user = FirebaseAuth.instance.currentUser!;
@@ -72,14 +71,16 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   }
 
   Future moveToHome() async {
-    QuerySnapshot querySnapshot= await DatabaseMethods().getUserInfo(FirebaseAuth.instance.currentUser!.email!);
+    QuerySnapshot querySnapshot = await DatabaseMethods()
+        .getUserInfo(FirebaseAuth.instance.currentUser!.email!);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) => Home(querySnapshot.docs[0]), fullscreenDialog: true
-      ),
+          builder: (context) => Home(querySnapshot.docs[0]),
+          fullscreenDialog: true),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     if (_isEmailVerified) {
@@ -89,80 +90,92 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     return Scaffold(
       appBar: appBarMain(context),
       body: SingleChildScrollView(
-        child: Column(
-            children: [
-              const SizedBox(height: 120,),
-              const Center(
-                  child: Icon(
-                      Icons.check_box,
-                      size: 100,
-                      color: Colors.green)
+        child: Column(children: [
+          const SizedBox(
+            height: 120,
+          ),
+          const Center(
+              child: Icon(Icons.check_box, size: 100, color: Colors.green)),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text(
+            'Check your email',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontSize: 25,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text(
+            'We have sent you a link in your email to confirm your account',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 20,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                if (_canResendEmail) {
+                  sendVerificationEmail;
+                  showSnackBar(context, "Verification email sent!");
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+                primary: pink(),
               ),
-              const SizedBox(height: 10,),
-              const Text(
-                'Check your email',
+              icon: const Icon(
+                Icons.email,
+                size: 32,
+                color: Colors.white,
+              ),
+              label: const Text(
+                'Resend Email',
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 25,
+                  fontSize: 24,
+                  color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 10,),
-              const Text(
-                'We have sent you a link in your email to confirm your account',
-                textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: TextButton(
+              onPressed: () => {
+                FirebaseAuth.instance.signOut(),
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainPage(),
+                  ),
+                ),
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+              ),
+              child: Text(
+                'Cancel',
                 style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 20,
+                  fontSize: 24,
+                  color: pink(),
                 ),
               ),
-              const SizedBox(height: 10,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: ElevatedButton.icon(
-                  onPressed: () => _canResendEmail ? sendVerificationEmail: null,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50),
-                    primary: pink(),
-                  ),
-                  icon: const Icon(
-                    Icons.email,
-                    size: 32,
-                    color: Colors.white,
-                  ),
-                  label: const Text(
-                    'Resend Email',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: TextButton(
-                  onPressed: () => {
-                    FirebaseAuth.instance.signOut(),
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MainPage(),
-                      ),
-                    ),
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50),
-                  ),
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(fontSize: 24, color: pink(),),
-                  ),
-                ),
-              ),
-            ]
-        ),
+            ),
+          ),
+        ]),
       ),
     );
   }

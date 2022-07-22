@@ -1,3 +1,5 @@
+import 'package:find_my_pet_sg/widgets/sign_up_in_button.dart';
+
 import '../helper/authenticate.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/services/database.dart';
@@ -5,6 +7,8 @@ import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/screens/verify_email_screen.dart';
 import "package:firebase_auth/firebase_auth.dart";
+
+import '../utils/showSnackBar.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
@@ -19,7 +23,7 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController userNameTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
-  bool isLoading = true;
+  bool isLoading = false;
   bool _obscureText = true;
   DatabaseMethods databaseMethods = DatabaseMethods();
 
@@ -31,8 +35,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
   String? Function(String?) emailValidator = (val) {
     return RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(val!)
+                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            .hasMatch(val!)
         ? null
         : "Please provide a valid email";
   };
@@ -51,6 +55,7 @@ class _SignUpFormState extends State<SignUpForm> {
       if (await DatabaseMethods.containsUsername(
           userNameTextEditingController.text)) {
         setState(() {
+          isLoading = false;
           final text = 'Username is taken';
           final snackBar = SnackBar(
             duration: const Duration(seconds: 60),
@@ -68,6 +73,7 @@ class _SignUpFormState extends State<SignUpForm> {
       } else if (await DatabaseMethods.containsEmail(
           emailTextEditingController.text)) {
         setState(() {
+          isLoading = false;
           final text = 'Email is taken';
           final snackBar = SnackBar(
             duration: const Duration(seconds: 60),
@@ -83,9 +89,10 @@ class _SignUpFormState extends State<SignUpForm> {
             ..showSnackBar(snackBar);
         });
       } else {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailTextEditingController.text.trim(),
-            password: passwordTextEditingController.text.trim())
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: emailTextEditingController.text.trim(),
+                password: passwordTextEditingController.text.trim())
             .then((value) async {
           if (value != null) {
             Map<String, dynamic> userInfoMap = {
@@ -95,13 +102,18 @@ class _SignUpFormState extends State<SignUpForm> {
               "posts": {},
               "storageRefs": {},
             };
-            DatabaseMethods.addUserInfo(userInfoMap, userNameTextEditingController.text.trim());
-            DatabaseMethods.addRealtimeUser(userNameTextEditingController.text.trim());
+            DatabaseMethods.addUserInfo(
+                userInfoMap, userNameTextEditingController.text.trim());
+            DatabaseMethods.addRealtimeUser(
+                userNameTextEditingController.text.trim());
+            setState(() {
+              isLoading = false;
+            });
+            showSnackBar(context, "Verification email sent!");
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const VerifyEmailPage(
-                ),
+                builder: (context) => const VerifyEmailPage(),
               ),
             );
           }
@@ -109,7 +121,6 @@ class _SignUpFormState extends State<SignUpForm> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -321,34 +332,10 @@ class _SignUpFormState extends State<SignUpForm> {
                     const SizedBox(
                       height: 20,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        signUp();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width - 50,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            pink(),
-                            pink(),
-                          ]),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text(
-                          "Sign up",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 19,
-                              fontFamily: "Open Sans Extra Bold",
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                    SignUpInButton(
+                        isLoading: isLoading,
+                        text: "Sign up",
+                        onPressed: signUp),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       Text("Already have an account? ",
                           style: mediumTextStyle()),
@@ -357,7 +344,9 @@ class _SignUpFormState extends State<SignUpForm> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Authenticate(showSignIn: true,),
+                              builder: (context) => Authenticate(
+                                showSignIn: true,
+                              ),
                             ),
                           );
                         },

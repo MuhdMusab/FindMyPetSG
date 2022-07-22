@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
+import 'package:find_my_pet_sg/widgets/sign_up_in_button.dart';
 import '../helper/authenticate.dart';
 import '../helper/homehelper.dart';
 import 'package:find_my_pet_sg/services/database.dart';
@@ -24,7 +25,7 @@ class _SignInFormState extends State<SignInForm> {
   TextEditingController emailEditingController = TextEditingController();
   TextEditingController passwordEditingController = TextEditingController();
   AuthMethods authMethods = AuthMethods();
-  bool isLoading = true;
+  bool isLoading = false;
   bool _obscureText = true;
   DatabaseMethods databaseMethods = DatabaseMethods();
   String? Function(String?) usernameValidator = (val) {
@@ -35,8 +36,8 @@ class _SignInFormState extends State<SignInForm> {
 
   String? Function(String?) emailValidator = (val) {
     return RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(val!)
+                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            .hasMatch(val!)
         ? null
         : "Please provide a valid email";
   };
@@ -47,52 +48,53 @@ class _SignInFormState extends State<SignInForm> {
         : null;
   };
 
-signIn() async {
-  if (formKey.currentState!.validate()) {
-    setState(() {
-      isLoading = true;
-    });
-    await authMethods
-        .signInWithEmailAndPassword(
-        emailEditingController.text, passwordEditingController.text)
-        .then((result) async {
-      if (result != null) {
-        if (!(FirebaseAuth.instance.currentUser!.emailVerified)) {
-         Navigator.pushReplacement(context, MaterialPageRoute(
-           builder: (context) => const VerifyEmailPage(
-           ),
-         ));
+  signIn() async {
+    if (formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+      await authMethods
+          .signInWithEmailAndPassword(
+              emailEditingController.text, passwordEditingController.text)
+          .then((result) async {
+        if (result != null) {
+          if (!(FirebaseAuth.instance.currentUser!.emailVerified)) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const VerifyEmailPage(),
+                ));
+          } else {
+            QuerySnapshot userInfoSnapshot = await DatabaseMethods()
+                .getUserInfo(emailEditingController.text);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChangeNotifierProvider(
+                        create: (context) => HomeProvider(),
+                        child: Home(userInfoSnapshot.docs[0]))));
+          }
         } else {
-          QuerySnapshot userInfoSnapshot =
-          await DatabaseMethods().getUserInfo(emailEditingController.text);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChangeNotifierProvider(
-                      create: (context) => HomeProvider(),
-                      child: Home(userInfoSnapshot.docs[0]))));
-        }
-      } else {
-        setState(() {
-          final text = 'Email or Password is invalid';
-          final snackBar = SnackBar(
-            duration: const Duration(seconds: 60),
+          setState(() {
+            final text = 'Email or Password is invalid';
+            final snackBar = SnackBar(
+              duration: const Duration(seconds: 60),
               content: Text(text),
-            action: SnackBarAction(
-              label: 'Dismiss',
-              textColor: Colors.blue,
-              onPressed: () {},
-            ),
-          );
-          ScaffoldMessenger.of(context)
-            ..removeCurrentSnackBar()
-            ..showSnackBar(snackBar);
-          isLoading = false;
-        });
-      }
-    });
+              action: SnackBarAction(
+                label: 'Dismiss',
+                textColor: Colors.blue,
+                onPressed: () {},
+              ),
+            );
+            ScaffoldMessenger.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(snackBar);
+            isLoading = false;
+          });
+        }
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -253,43 +255,20 @@ signIn() async {
                     const SizedBox(
                       height: 20,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        signIn();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width - 50,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            pink(),
-                            pink(),
-                          ]),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text(
-                          "Sign in",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 19,
-                              fontFamily: "Open Sans Extra Bold",
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                    SignUpInButton(
+                        isLoading: isLoading,
+                        text: "Sign in",
+                        onPressed: signIn),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text("Don't have an account? ",
-                          style: mediumTextStyle()),
+                      Text("Don't have an account? ", style: mediumTextStyle()),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Authenticate(showSignIn: false,),
+                              builder: (context) => Authenticate(
+                                showSignIn: false,
+                              ),
                             ),
                           );
                         },

@@ -56,7 +56,6 @@ class _DateFieldPickerState extends State<DateFieldPicker> {
           ),
           Container(
             height: 51,
-            padding: EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.blueGrey.shade200),
               borderRadius: BorderRadius.circular(10),
@@ -79,9 +78,13 @@ class _DateFieldPickerState extends State<DateFieldPicker> {
                     Positioned(
                       top: 14,
                       left: 2,
-                      child: Text(
-                        widget.dateController.text,
-                        style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Text(
+                          widget.dateController.text,
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.blueGrey),
+                        ),
                       ),
                     ),
                   ],

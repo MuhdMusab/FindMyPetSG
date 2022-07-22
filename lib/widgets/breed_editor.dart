@@ -21,23 +21,21 @@ class _BreedEditorState extends State<BreedEditor> {
       widget.breedController = TextEditingController(text: animal);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(
-          left: 12.0, right: 12.0, bottom: 12.0),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Type of animal*", style: TextStyle(
-              fontSize: 16,
-              color: Colors.blueGrey
-          ),
+          Text(
+            "Type of animal*",
+            style: TextStyle(fontSize: 16, color: Colors.blueGrey),
           ),
           Container(
             height: 51,
-            padding: EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.blueGrey.shade200),
               borderRadius: BorderRadius.circular(10),
@@ -46,7 +44,11 @@ class _BreedEditorState extends State<BreedEditor> {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(4.0),
-                onTap: () => showSearch(context: context, delegate: AnimalSearchDelegate(callback: widget.setAnimalTypeCallback, callback2: _callback)),
+                onTap: () => showSearch(
+                    context: context,
+                    delegate: AnimalSearchDelegate(
+                        callback: widget.setAnimalTypeCallback,
+                        callback2: _callback)),
                 child: Stack(
                   children: [
                     Container(
@@ -60,12 +62,13 @@ class _BreedEditorState extends State<BreedEditor> {
                     Positioned(
                       top: 14,
                       left: 2,
-                      child: Text(
-                        widget.breedController.text,
-                        // _breed == null || _breed.isEmpty ? "" : _breed,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blueGrey
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Text(
+                          widget.breedController.text,
+                          // _breed == null || _breed.isEmpty ? "" : _breed,
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.blueGrey),
                         ),
                       ),
                     ),

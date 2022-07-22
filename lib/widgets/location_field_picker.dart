@@ -72,7 +72,6 @@ class _LocationFieldPickerState extends State<LocationFieldPicker> {
           ),
           Container(
             height: 51,
-            padding: EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.blueGrey.shade200),
               borderRadius: BorderRadius.circular(10),
@@ -81,27 +80,56 @@ class _LocationFieldPickerState extends State<LocationFieldPicker> {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(4.0),
-                onTap: _showLocationPicker,
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4.0),
-                        color: Colors.transparent,
-                      ),
-                      height: 30,
-                      width: 370,
+                onTap: () {
+                  // _showLocationPicker
+                  FocusScope.of(context).unfocus();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return PlacePicker(
+                        apiKey: Platform.isAndroid
+                            ? "AIzaSyDz1ECR-KPkB3vSSyCqvXq5j8lMhRJfTqM"
+                            : "AIzaSyCevtQ-g4R3ZZMse4jdPPsZ1xh7yhod_o4",
+                        onPlacePicked: (result) {
+                          setState(() {
+                            widget.locationController.text =
+                                result.formattedAddress.toString();
+                            widget.latitude(result.geometry!.location.lat);
+                            widget.longtitude(result.geometry!.location.lng);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        initialPosition: LatLng(1.290270, 103.851959),
+                        onMapCreated: (controller) {
+                          googleMapController = controller;
+                        },
+                        useCurrentLocation: true,
+                      );
+                    }),
+                  );
+                  // _showLocationPicker;
+                },
+                child: Stack(children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: Colors.transparent,
                     ),
-                    Positioned(
-                      top: 14,
-                      left: 2,
+                    height: 30,
+                    width: 370,
+                  ),
+                  Positioned(
+                    top: 14,
+                    left: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Text(
                         widget.locationController.text,
                         style: TextStyle(fontSize: 16, color: Colors.blueGrey),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ]),
               ),
             ),
           ),

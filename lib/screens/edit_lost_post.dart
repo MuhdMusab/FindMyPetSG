@@ -50,19 +50,19 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
   @override
   Widget build(BuildContext context) {
     final TextEditingController _descriptionController =
-    TextEditingController(text: widget.snapshot['description']);
+        TextEditingController(text: widget.snapshot['description']);
     final TextEditingController _locationController =
-    TextEditingController(text: widget.snapshot['location']);
+        TextEditingController(text: widget.snapshot['location']);
     final TextEditingController _nameController =
-    TextEditingController(text: widget.snapshot['name']);
+        TextEditingController(text: widget.snapshot['name']);
     final TextEditingController _dateController =
-    TextEditingController(text: widget.snapshot['date']);
+        TextEditingController(text: widget.snapshot['date']);
     final TextEditingController _rewardController =
-    TextEditingController(text: widget.snapshot['reward'].toString());
+        TextEditingController(text: widget.snapshot['reward'].toString());
     final TextEditingController _ageController =
-    TextEditingController(text: widget.snapshot['age'].toString());
+        TextEditingController(text: widget.snapshot['age'].toString());
     final TextEditingController _breedController =
-    TextEditingController(text: widget.snapshot['breed']);
+        TextEditingController(text: widget.snapshot['breed']);
     double latitude = widget.snapshot['latitude'];
     double longtitude = widget.snapshot['longtitude'];
     bool isMale = false;
@@ -223,7 +223,7 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: CustomMadeButton(
                             isLoading: isLoading,
-                            text: "Post",
+                            text: "Edit",
                             onPressed: () => uploadChanges(),
                           ),
                         ),

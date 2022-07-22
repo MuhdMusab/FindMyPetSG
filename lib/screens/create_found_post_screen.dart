@@ -332,7 +332,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                           ),
                           Container(
                             height: 51,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
                               border:
                                   Border.all(color: Colors.blueGrey.shade200),
@@ -389,11 +388,15 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                     Positioned(
                                       top: 14,
                                       left: 2,
-                                      child: Text(
-                                        _locationController.text,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.blueGrey),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12.0),
+                                        child: Text(
+                                          _locationController.text,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.blueGrey),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -418,7 +421,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                           ),
                           Container(
                             height: 51,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
                               border:
                                   Border.all(color: Colors.blueGrey.shade200),
@@ -443,11 +445,15 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                     Positioned(
                                       top: 14,
                                       left: 2,
-                                      child: Text(
-                                        _dateController.text,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.blueGrey),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12.0),
+                                        child: Text(
+                                          _dateController.text,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.blueGrey),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -480,7 +486,6 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                 ),
                                 Container(
                                   height: 51,
-                                  padding: EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                         color: Colors.blueGrey.shade200),
@@ -509,13 +514,19 @@ class _CreateFoundPostScreenState extends State<CreateFoundPostScreen> {
                                           Positioned(
                                             top: 14,
                                             left: 2,
-                                            child: Text(
-                                              _breed == null || _breed!.isEmpty
-                                                  ? ""
-                                                  : _breed!,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.blueGrey),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12.0),
+                                              child: Text(
+                                                _breed == null ||
+                                                        _breed!.isEmpty
+                                                    ? ""
+                                                    : _breed!,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.blueGrey),
+                                              ),
                                             ),
                                           ),
                                         ],

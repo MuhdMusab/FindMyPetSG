@@ -130,14 +130,15 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
                                   height: 24,
                                   width: 70,
                                   decoration: BoxDecoration(
-                                      color: lightPink().withOpacity(1),
+                                      color: foundBoxColor(),
+                                      // lightPink().withOpacity(1),
                                       borderRadius: BorderRadius.circular(8.0)),
                                   child: Center(
                                     child: Text(
                                       'Found',
                                       style: TextStyle(
-                                        color:
-                                            Color(0xFFFf5757), //ff5757 pink()
+                                        color: foundTextColor(),
+                                        // Color(0xFFFf5757), //ff5757 pink()
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),

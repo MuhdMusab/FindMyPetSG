@@ -13,3 +13,19 @@ int petNameCharacterLimit = 15;
 int ageCharacterLimit = 3;
 int rewardCharacterLimit = 6;
 int descriptionCharacterLimit = 300;
+
+Color lostTextColor() {
+  return Colors.white;
+}
+
+Color lostBoxColor() {
+  return pink();
+}
+
+Color foundTextColor() {
+  return Colors.white;
+}
+
+Color foundBoxColor() {
+  return Colors.orange;
+}

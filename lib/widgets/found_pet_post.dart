@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
@@ -35,12 +34,15 @@ class _FoundPetPostState extends State<FoundPetPost> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-      const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20.0,),
+      padding: const EdgeInsets.only(
+        left: 8.0,
+        right: 8.0,
+        bottom: 20.0,
+      ),
       child: Material(
         child: InkWell(
           customBorder:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           splashColor: Colors.black38,
           onTap: () => {
             Navigator.push(
@@ -76,32 +78,34 @@ class _FoundPetPostState extends State<FoundPetPost> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            widget.snap['name'] == '' ?
-                            Container() :
-                            Text(
-                              widget.snap['name'],
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 20,
-                              ),
-                            ),
+                            widget.snap['name'] == ''
+                                ? Container()
+                                : Text(
+                                    widget.snap['name'],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                             const SizedBox(
                               width: 5,
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
                               height: 24,
                               width: 70,
                               decoration: BoxDecoration(
-                                  color: lightPink().withOpacity(1),
+                                  color: foundBoxColor(),
+                                  // lightPink().withOpacity(1),
                                   borderRadius: BorderRadius.circular(8.0)),
-                              child: const Center(
-                                child: const Text(
+                              child: Center(
+                                child: Text(
                                   'Found',
                                   style: TextStyle(
-                                    color: Color(0xFFFf5757),
+                                    color: foundTextColor(),
+                                    // Color(0xFFFf5757),
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -121,7 +125,7 @@ class _FoundPetPostState extends State<FoundPetPost> {
                 Stack(children: [
                   Padding(
                     padding:
-                    const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
+                        const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -194,7 +198,6 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
           body: Stack(
             children: [
               GoogleMap(
-
                 mapToolbarEnabled: false,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
@@ -215,7 +218,8 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                 zoomControlsEnabled: false,
                 zoomGesturesEnabled: true,
               ),
-              const Positioned(top: 50, left: 4, child: const ArrowBackButton3()),
+              const Positioned(
+                  top: 50, left: 4, child: const ArrowBackButton3()),
               Positioned(
                 right: 10,
                 bottom: 80,
@@ -226,7 +230,7 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                     ),
                     backgroundColor: Colors.pink,
                     onPressed: () => _googleMapController.animateCamera(
-                        CameraUpdate.newCameraPosition(CameraPosition(
+                            CameraUpdate.newCameraPosition(CameraPosition(
                           target: LatLng(
                             widget.foundPetPost.snap['latitude'],
                             widget.foundPetPost.snap['longtitude'],
@@ -262,16 +266,16 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 4.0),
-                  child: widget.foundPetPost.snap['name'] == '' ?
-                  Container() :
-                  Text(
-                    widget.foundPetPost.snap['name'],
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 20,
-                    ),
-                  ),
+                  child: widget.foundPetPost.snap['name'] == ''
+                      ? Container()
+                      : Text(
+                          widget.foundPetPost.snap['name'],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -284,7 +288,8 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("Location: " + widget.foundPetPost.snap['location']),
+                        Text("Location: " +
+                            widget.foundPetPost.snap['location']),
                       ],
                     ),
                   ),
@@ -349,8 +354,8 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
               color: Colors.black,
             ),
             InkWell(
-              customBorder:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6)),
               onTap: _showLocation,
               splashColor: Colors.black12,
               child: Container(
@@ -399,113 +404,120 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
               ),
             ),
             const SizedBox(height: 10),
-            widget.foundPetPost.user!['name'].toString() == widget.foundPetPost.snap['username']
+            widget.foundPetPost.user!['name'].toString() ==
+                    widget.foundPetPost.snap['username']
                 ? Container()
                 : InkWell(
-              customBorder:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-              onTap: () async {
-                final ownUsername =
-                widget.foundPetPost.user!['name'].toString();
-                final otherUsername = widget.foundPetPost.snap['username'];
-                final messageDao = MessageDao(ownUsername, otherUsername);
-                if (ownUsername == otherUsername) {
-                  //do nothing
-                } else if ((await messageDao.getOwnChatQuery().get())
-                    .exists) {
-                  final StorageMethods storage = StorageMethods(username: otherUsername);
-                  String url = await storage.downloadURL();
-                  CircleAvatar _circleAvatar = url == 'fail'
-                      ? CircleAvatar(
-                    radius: 25,
-                    backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-                  )
-                      : CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(url),
-                  );
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatScreen(
-                      username: otherUsername,
-                      messageDao: MessageDao(ownUsername, otherUsername),
-                      circleAvatar: _circleAvatar,
-                    ),
-                  ));
-                } else {
-                  final chatroomDao = ChatroomDao();
-                  chatroomDao.addChatroom(
-                      ownUsername, Chatroom(otherUsername));
-                  chatroomDao.addChatroom(
-                      otherUsername, Chatroom(ownUsername));
-                  messageDao.getOwnChatQuery().ref.set("");
-                  messageDao.getOtherChatQuery().ref.set("");
-                  final StorageMethods storage = StorageMethods(username: otherUsername);
-                  String url = await storage.downloadURL();
-                  CircleAvatar _circleAvatar = url == 'fail'
-                      ? CircleAvatar(
-                    radius: 25,
-                    backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-                  )
-                      : CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(url),
-                  );
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatScreen(
-                      username: otherUsername,
-                      messageDao: MessageDao(ownUsername, otherUsername),
-                      circleAvatar: _circleAvatar,
-                    ),
-                  ));
-                }
-              },
-              splashColor: Colors.black12,
-              child: Container(
-                width: 300,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(6.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
-                      spreadRadius: 0,
-                      blurRadius: 6,
-                      blurStyle: BlurStyle.outer,
-                    )
-                  ],
-                ),
-                child: Center(
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                    customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                    onTap: () async {
+                      final ownUsername =
+                          widget.foundPetPost.user!['name'].toString();
+                      final otherUsername =
+                          widget.foundPetPost.snap['username'];
+                      final messageDao = MessageDao(ownUsername, otherUsername);
+                      if (ownUsername == otherUsername) {
+                        //do nothing
+                      } else if ((await messageDao.getOwnChatQuery().get())
+                          .exists) {
+                        final StorageMethods storage =
+                            StorageMethods(username: otherUsername);
+                        String url = await storage.downloadURL();
+                        CircleAvatar _circleAvatar = url == 'fail'
+                            ? CircleAvatar(
+                                radius: 25,
+                                backgroundImage: AssetImage(
+                                    "assets/images/default_user_icon.png"),
+                              )
+                            : CircleAvatar(
+                                radius: 25,
+                                backgroundImage: NetworkImage(url),
+                              );
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ChatScreen(
+                            username: otherUsername,
+                            messageDao: MessageDao(ownUsername, otherUsername),
+                            circleAvatar: _circleAvatar,
+                          ),
+                        ));
+                      } else {
+                        final chatroomDao = ChatroomDao();
+                        chatroomDao.addChatroom(
+                            ownUsername, Chatroom(otherUsername));
+                        chatroomDao.addChatroom(
+                            otherUsername, Chatroom(ownUsername));
+                        messageDao.getOwnChatQuery().ref.set("");
+                        messageDao.getOtherChatQuery().ref.set("");
+                        final StorageMethods storage =
+                            StorageMethods(username: otherUsername);
+                        String url = await storage.downloadURL();
+                        CircleAvatar _circleAvatar = url == 'fail'
+                            ? CircleAvatar(
+                                radius: 25,
+                                backgroundImage: AssetImage(
+                                    "assets/images/default_user_icon.png"),
+                              )
+                            : CircleAvatar(
+                                radius: 25,
+                                backgroundImage: NetworkImage(url),
+                              );
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ChatScreen(
+                            username: otherUsername,
+                            messageDao: MessageDao(ownUsername, otherUsername),
+                            circleAvatar: _circleAvatar,
+                          ),
+                        ));
+                      }
+                    },
+                    splashColor: Colors.black12,
+                    child: Container(
+                      width: 300,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(6.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            spreadRadius: 0,
+                            blurRadius: 6,
+                            blurStyle: BlurStyle.outer,
+                          )
+                        ],
+                      ),
+                      child: Center(
+                        child: Stack(
                           children: [
-                            Text(
-                              "Message",
-                              style: GoogleFonts.openSans(
-                                  color: Colors.pink, fontSize: 18),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Message",
+                                    style: GoogleFonts.openSans(
+                                        color: Colors.pink, fontSize: 18),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                const Padding(
+                                  padding:
+                                      EdgeInsets.only(right: 10.0, top: 2.0),
+                                  child: const Icon(MdiIcons.message,
+                                      color: Colors.pink),
+                                )
+                              ],
                             )
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Padding(
-                            padding:
-                            EdgeInsets.only(right: 10.0, top: 2.0),
-                            child: const Icon(MdiIcons.message, color: Colors.pink),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            )
+                    ),
+                  )
           ],
         ),
       ),

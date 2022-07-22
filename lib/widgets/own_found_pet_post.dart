@@ -28,6 +28,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import '../widgets/lost_pet_post.dart';
 import '../widgets/found_pet_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class OwnFoundPetPost extends StatefulWidget {
   final Map<String, dynamic> snapshot;
   final int postIndex;
@@ -54,11 +55,13 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
     //delete storage files
     //user, access post index, delete post index, get last post index and shift
     //user, delete storageRefs, get last storage ref index and shift
-    int numberOfImagesInPost = await DatabaseMethods.getNumberOfImagesInPost(widget.username, widget.postId);
+    int numberOfImagesInPost = await DatabaseMethods.getNumberOfImagesInPost(
+        widget.username, widget.postId);
     print('Number of images in post: $numberOfImagesInPost');
     final StorageMethods storageMethods = StorageMethods();
     for (int i = 0; i < numberOfImagesInPost; i++) {
-      String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(widget.username, widget.postIndex, i);
+      String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(
+          widget.username, widget.postIndex, i);
       storageMethods.deleteImageFromStorage(prevRef);
     }
     DatabaseMethods.deleteUserPostAtIndex(widget.username, widget.postIndex);
@@ -74,8 +77,8 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
         Column(
           children: [
             Padding(
-              padding:
-              const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20.0, top: 10.0),
+              padding: const EdgeInsets.only(
+                  left: 8.0, right: 8.0, bottom: 20.0, top: 10.0),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.transparent,
@@ -91,8 +94,11 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
                 ),
                 child: Column(
                   children: [
-                    OwnSliderCarousel(postIndex: widget.postIndex, username: widget.username,
-                        posts: widget.snapshot['photoUrls'], callback: widget.callback,
+                    OwnSliderCarousel(
+                        postIndex: widget.postIndex,
+                        username: widget.username,
+                        posts: widget.snapshot['photoUrls'],
+                        callback: widget.callback,
                         postId: widget.snapshot['postId']),
                     Stack(
                       children: [
@@ -105,22 +111,22 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                widget.snapshot['name'] != '' ?
-                                Text(
-                                  widget.snapshot['name'],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                  ),
-                                )
-                                : Container(),
-                                 SizedBox(
+                                widget.snapshot['name'] != ''
+                                    ? Text(
+                                        widget.snapshot['name'],
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                        ),
+                                      )
+                                    : Container(),
+                                SizedBox(
                                   width: 10,
                                 ),
                                 Container(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
                                   height: 24,
                                   width: 70,
                                   decoration: BoxDecoration(
@@ -130,8 +136,8 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
                                     child: Text(
                                       'Found',
                                       style: TextStyle(
-                                        color: Color(
-                                            0xFFFf5757), //ff5757 pink()
+                                        color:
+                                            Color(0xFFFf5757), //ff5757 pink()
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -150,8 +156,8 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
                     ),
                     Stack(children: [
                       Padding(
-                        padding:
-                        const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
+                        padding: const EdgeInsets.only(
+                            left: 8.0, top: 5.0, bottom: 4.0),
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -191,43 +197,59 @@ class _OwnFoundPetPostState extends State<OwnFoundPetPost> {
           ],
         ),
         Positioned(
-          child: GestureDetector(
+          child: InkWell(
+            customBorder: CircleBorder(),
             onTap: () {
               print(widget.postIndex.toString() + 'hellooo');
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return DeletePostDialog(function: deletePost,);
+                    return DeletePostDialog(
+                      function: deletePost,
+                    );
                   });
             },
-            child: Icon(
-              Icons.delete,
-              color: Colors.blueGrey,
-              size: 32,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Icon(
+                Icons.delete,
+                shadows: [Shadow(offset: Offset(1, 0), blurRadius: 1)],
+                color: Colors.blueGrey,
+                size: 32,
+              ),
             ),
           ),
-          right: 30,
-          bottom: 70,
+          right: 20,
+          bottom: 18,
         ),
         Positioned(
-          child: GestureDetector(
+          child: InkWell(
+            customBorder: CircleBorder(),
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        EditFoundPostScreen(snapshot: widget.snapshot, postIndex: widget.postIndex,
-                          postId: widget.postId, username: widget.username, callback: widget.callback,),
+                    builder: (context) => EditFoundPostScreen(
+                      snapshot: widget.snapshot,
+                      postIndex: widget.postIndex,
+                      postId: widget.postId,
+                      username: widget.username,
+                      callback: widget.callback,
+                    ),
                   ));
             },
-            child: Icon(
-              Icons.edit,
-              color: Colors.blueGrey,
-              size: 32,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Icon(
+                Icons.edit,
+                shadows: [Shadow(offset: Offset(1, 0), blurRadius: 1)],
+                color: Colors.blueGrey,
+                size: 32,
+              ),
             ),
           ),
-          right: 70,
-          bottom: 70,
+          right: 60,
+          bottom: 18,
         ),
       ],
     );

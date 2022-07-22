@@ -50,23 +50,24 @@ class OwnLostPetPost extends StatefulWidget {
 }
 
 class _OwnLostPetPostState extends State<OwnLostPetPost> {
-
   deletePost() async {
-   //delete post
+    //delete post
     //delete storage files
     //user, access post index, delete post index, get last post index and shift
     //user, delete storageRefs, get last storage ref index and shift
-    int numberOfImagesInPost = await DatabaseMethods.getNumberOfImagesInPost(widget.username, widget.postId);
+    int numberOfImagesInPost = await DatabaseMethods.getNumberOfImagesInPost(
+        widget.username, widget.postId);
     print('Number of images in post: $numberOfImagesInPost');
     final StorageMethods storageMethods = StorageMethods();
     for (int i = 0; i < numberOfImagesInPost; i++) {
-      String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(widget.username, widget.postIndex, i);
+      String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(
+          widget.username, widget.postIndex, i);
       storageMethods.deleteImageFromStorage(prevRef);
     }
     DatabaseMethods.deleteUserPostAtIndex(widget.username, widget.postIndex);
     DatabaseMethods.deleteStorageRefAtIndex(widget.username, widget.postIndex);
-     DatabaseMethods.deleteUserPost(widget.username, widget.postId);
-     widget.callback();
+    DatabaseMethods.deleteUserPost(widget.username, widget.postId);
+    widget.callback();
   }
 
   @override
@@ -76,8 +77,8 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
         Column(
           children: [
             Padding(
-              padding:
-              const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20.0, top: 10.0),
+              padding: const EdgeInsets.only(
+                  left: 8.0, right: 8.0, bottom: 20.0, top: 10.0),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.transparent,
@@ -93,8 +94,11 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
                 ),
                 child: Column(
                   children: [
-                    OwnSliderCarousel(postIndex: widget.postIndex, username: widget.username,
-                        posts: widget.snapshot['photoUrls'], callback: widget.callback,
+                    OwnSliderCarousel(
+                        postIndex: widget.postIndex,
+                        username: widget.username,
+                        posts: widget.snapshot['photoUrls'],
+                        callback: widget.callback,
                         postId: widget.snapshot['postId']),
                     Stack(
                       children: [
@@ -118,41 +122,41 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
                                 ),
                                 widget.snapshot['isMale']
                                     ? Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(100.0),
-                                      color: Colors.blue),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.male,
-                                      color: Colors.white,
-                                      size: 18,
-                                    ),
-                                  ),
-                                )
+                                        height: 20,
+                                        width: 20,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100.0),
+                                            color: Colors.blue),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.male,
+                                            color: Colors.white,
+                                            size: 18,
+                                          ),
+                                        ),
+                                      )
                                     : Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(100.0),
-                                      color: Colors.pink),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.female,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
+                                        height: 20,
+                                        width: 20,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100.0),
+                                            color: Colors.pink),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.female,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
                                 SizedBox(
                                   width: 10,
                                 ),
                                 Container(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
                                   height: 24,
                                   width: 70,
                                   decoration: BoxDecoration(
@@ -162,8 +166,8 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
                                     child: Text(
                                       'Lost',
                                       style: TextStyle(
-                                        color: Color(
-                                            0xFFFf5757), //ff5757 pink()
+                                        color:
+                                            Color(0xFFFf5757), //ff5757 pink()
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -175,27 +179,29 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
                                 ),
                                 widget.snapshot['reward'] > 0
                                     ? Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4.0),
-                                  height: 24,
-                                  width: 70,
-                                  decoration: BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius:
-                                      BorderRadius.circular(8.0)),
-                                  child: Center(
-                                    child: Text(
-                                      'Reward',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                )
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        height: 24,
+                                        width: 70,
+                                        decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                                BorderRadius.circular(8.0)),
+                                        child: Center(
+                                          child: Text(
+                                            'Reward',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      )
                                     : Container(),
-                                SizedBox(width: 10,),
+                                SizedBox(
+                                  width: 10,
+                                ),
                               ],
                             ),
                           ),
@@ -205,8 +211,8 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
                     ),
                     Stack(children: [
                       Padding(
-                        padding:
-                        const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 4.0),
+                        padding: const EdgeInsets.only(
+                            left: 8.0, top: 5.0, bottom: 4.0),
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -246,43 +252,59 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
           ],
         ),
         Positioned(
-          child: GestureDetector(
+          child: InkWell(
+            customBorder: CircleBorder(),
             onTap: () {
               print(widget.postIndex.toString() + 'hellooo');
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return DeletePostDialog(function: deletePost,);
+                    return DeletePostDialog(
+                      function: deletePost,
+                    );
                   });
             },
-            child: Icon(
-              Icons.delete,
-              color: Colors.blueGrey,
-              size: 32,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Icon(
+                Icons.delete,
+                color: Colors.blueGrey,
+                shadows: [Shadow(offset: Offset(1, 0), blurRadius: 1)],
+                size: 32,
+              ),
             ),
           ),
-          right: 30,
-          bottom: 70,
+          right: 20,
+          bottom: 18,
         ),
         Positioned(
-          child: GestureDetector(
+          child: InkWell(
+            customBorder: CircleBorder(),
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          EditLostPostScreen(snapshot: widget.snapshot, postIndex: widget.postIndex,
-                            postId: widget.postId, username: widget.username, callback: widget.callback,),
-                              ));
+                    builder: (context) => EditLostPostScreen(
+                      snapshot: widget.snapshot,
+                      postIndex: widget.postIndex,
+                      postId: widget.postId,
+                      username: widget.username,
+                      callback: widget.callback,
+                    ),
+                  ));
             },
-            child: Icon(
-              Icons.edit,
-              color: Colors.blueGrey,
-              size: 32,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Icon(
+                Icons.edit,
+                shadows: [Shadow(offset: Offset(1, 0), blurRadius: 1)],
+                color: Colors.blueGrey,
+                size: 32,
+              ),
             ),
           ),
-          right: 70,
-          bottom: 70,
+          right: 60,
+          bottom: 18,
         ),
       ],
     );

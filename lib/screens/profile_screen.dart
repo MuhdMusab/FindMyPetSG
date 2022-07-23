@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:find_my_pet_sg/config/constants.dart';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:find_my_pet_sg/screens/settings_screen.dart';
 import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
 import 'package:find_my_pet_sg/widgets/own_lost_pet_post.dart';
 import 'package:find_my_pet_sg/widgets/own_found_pet_post.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -73,6 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                 String profilePicLink = await storage.downloadURL();
                 DatabaseMethods.editProfilePicLink(username, profilePicLink);
                 FilePickerStatus.done;
+                setState(() {});
                 Navigator.pop(context);
                 setState(() {});
               },
@@ -108,9 +112,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     _callback() {
       setState(() {
         postIndex = 0;
-        // print('Before $postIndex');
-        // postIndex--;
-        // print('After $postIndex');
       });
     }
     return Scaffold(
@@ -143,7 +144,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
               }
             }
             postIndex = 0;
-            print('Count: $count');
             Column col = Column(
               children: [
                 const SizedBox(height: 10,),
@@ -154,13 +154,39 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                       ClipOval(
                         child: Material(
                           color: Colors.transparent,
-                          child: FutureBuilder(
-                              future: storage.downloadURL(),
-                              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                                  if (snapshot.data != 'fail') {
+                          child: StreamBuilder(
+                              stream: FirebaseFirestore.instance.collection('users').snapshots(),
+                              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> profilePicSnapshot) {
+                                if (profilePicSnapshot.hasData) {
+                                  String picUrl = '';
+                                  for (int i = 0; i <
+                                      profilePicSnapshot.data!.docs.length; i++) {
+                                    if (profilePicSnapshot.data!.docs[i].data()['name'] ==
+                                        username) {
+                                      picUrl = profilePicSnapshot.data!.docs[i]
+                                          .data()['profilePics'];
+                                    }
+                                  }
+                                  if (picUrl != '') {
                                     return Ink.image(
-                                      image: NetworkImage(snapshot.data!),
+                                      image: NetworkImage(picUrl),
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 100,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          showImageSource(
+                                              context, storage, username);
+                                          setState(() {
+
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  } else {
+                                    return Ink.image(
+                                      image: const AssetImage(
+                                        "assets/images/default_user_icon.png",),
                                       fit: BoxFit.cover,
                                       width: 100,
                                       height: 100,
@@ -173,14 +199,17 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                                     );
                                   }
                                 }
+                                print('no');
                                 return Ink.image(
-                                  image: const AssetImage("assets/images/default_user_icon.png",),
+                                  image: const AssetImage(
+                                    "assets/images/default_user_icon.png",),
                                   fit: BoxFit.cover,
                                   width: 100,
                                   height: 100,
                                   child: InkWell(
                                     onTap: () async {
-                                      showImageSource(context, storage, username);
+                                      showImageSource(
+                                          context, storage, username);
                                     },
                                   ),
                                 );
@@ -269,7 +298,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                 ),
               ],
             );
-            print('postIndex: $postIndex');
             return col;
           }
       ),

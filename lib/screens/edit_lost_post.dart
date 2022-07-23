@@ -46,6 +46,11 @@ class EditLostPostScreen extends StatefulWidget {
 
 class _EditLostPostScreenState extends State<EditLostPostScreen> {
   bool isLoading = false;
+  TextEditingController? _breedController;
+
+  void initState() {
+    _breedController = TextEditingController(text: widget.snapshot['breed']);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +66,7 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
         TextEditingController(text: widget.snapshot['reward'].toString());
     final TextEditingController _ageController =
         TextEditingController(text: widget.snapshot['age'].toString());
-    final TextEditingController _breedController =
-        TextEditingController(text: widget.snapshot['breed']);
+
     double latitude = widget.snapshot['latitude'];
     double longtitude = widget.snapshot['longtitude'];
     bool isMale = false;
@@ -81,7 +85,7 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
 
     void setAnimalTypeCallback(String animal) {
       setState(() {
-        _breedController.text = animal;
+        _breedController!.text = animal;
       });
     }
 
@@ -116,7 +120,7 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
           DatabaseMethods.updatePostField(
               widget.username, widget.postId, 'longtitude', longtitude);
           DatabaseMethods.updatePostField(
-              widget.username, widget.postId, 'breed', _breedController.text);
+              widget.username, widget.postId, 'breed', _breedController!.text);
           DatabaseMethods.updatePostField(
               widget.username, widget.postId, 'date', _dateController.text);
           DatabaseMethods.updatePostField(
@@ -203,7 +207,7 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
                         children: [
                           BreedEditor(
                               setAnimalTypeCallback: setAnimalTypeCallback,
-                              breedController: _breedController),
+                              breedController: _breedController!),
                           RewardTextfield(
                             infoText: "Reward",
                             hintText: "Reward",

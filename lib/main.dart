@@ -9,6 +9,7 @@ import 'package:find_my_pet_sg/config/theme.dart';
 import 'package:find_my_pet_sg/firebase_options.dart';
 import 'package:find_my_pet_sg/helper/authenticate.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
+import 'package:find_my_pet_sg/helper/settings_preferences.dart';
 import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:find_my_pet_sg/screens/verify_email_screen.dart';
 import 'package:find_my_pet_sg/services/notification_service.dart';
@@ -29,6 +30,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   NotificationService().initNotification();
+  await settingsPrefs.init();
   await initializeService();
   runApp(MyApp());
 }
@@ -95,11 +97,11 @@ void onStart(ServiceInstance service) async {
   await preferences.setString("hello", "world");
 
   if (service is AndroidServiceInstance) {
-    service.setAsBackgroundService();
-    service.setForegroundNotificationInfo(
-      title: "Lookout Notification",
-      content: "Service running in background",
-    );
+    service.setAsForegroundService();
+    // service.setForegroundNotificationInfo(
+    //   title: "Lookout Notification",
+    //   content: "Service running in background",
+    // );
     service.on('lookout').listen((inputData) {
       if (inputData!.containsKey('location') && inputData.containsKey('name') && inputData['name'] != '') {
         scheduleNotification('New ${inputData['type']} ${inputData['breed']} post named ${inputData['name']}',

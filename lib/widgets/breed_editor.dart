@@ -18,9 +18,41 @@ class BreedEditor extends StatefulWidget {
 class _BreedEditorState extends State<BreedEditor> {
   _callback(String animal) {
     setState(() {
-      widget.breedController = TextEditingController(text: animal);
+      widget.breedController.text = animal;
+      breedText = Positioned(
+        top: 14,
+        left: 2,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Text(
+            widget.breedController.text,
+            style:
+            TextStyle(fontSize: 16, color: Colors.blueGrey),
+          ),
+        ),
+      );
+      widget.setAnimalTypeCallback(animal);
     });
   }
+
+  Positioned? breedText;
+
+  void initState() {
+    super.initState();
+    breedText = Positioned(
+      top: 14,
+      left: 2,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Text(
+          widget.breedController.text,
+          style:
+          TextStyle(fontSize: 16, color: Colors.blueGrey),
+        ),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,19 +91,7 @@ class _BreedEditorState extends State<BreedEditor> {
                       height: 30,
                       width: 370,
                     ),
-                    Positioned(
-                      top: 14,
-                      left: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Text(
-                          widget.breedController.text,
-                          // _breed == null || _breed.isEmpty ? "" : _breed,
-                          style:
-                              TextStyle(fontSize: 16, color: Colors.blueGrey),
-                        ),
-                      ),
-                    ),
+                    breedText!,
                   ],
                 ),
               ),

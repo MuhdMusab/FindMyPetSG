@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/screens/chats_screen.dart';
+import 'package:find_my_pet_sg/screens/main_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/screens/profile_screen.dart';
 import 'package:find_my_pet_sg/screens/explore_screen.dart';

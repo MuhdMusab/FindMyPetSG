@@ -57,7 +57,6 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
     //user, delete storageRefs, get last storage ref index and shift
     int numberOfImagesInPost = await DatabaseMethods.getNumberOfImagesInPost(
         widget.username, widget.postId);
-    print('Number of images in post: $numberOfImagesInPost');
     final StorageMethods storageMethods = StorageMethods();
     for (int i = 0; i < numberOfImagesInPost; i++) {
       String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(
@@ -256,7 +255,6 @@ class _OwnLostPetPostState extends State<OwnLostPetPost> {
           child: InkWell(
             customBorder: CircleBorder(),
             onTap: () {
-              print(widget.postIndex.toString() + 'hellooo');
               showDialog(
                   context: context,
                   builder: (BuildContext context) {

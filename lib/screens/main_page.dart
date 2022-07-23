@@ -41,7 +41,6 @@ class _MainPageState extends State<MainPage> {
 
   Future move() async {
     bool emailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    QuerySnapshot querySnapshot= await DatabaseMethods().getUserInfo(FirebaseAuth.instance.currentUser!.email!);
     if (emailVerified) {
       hasUsername();
     } else {
@@ -55,8 +54,6 @@ class _MainPageState extends State<MainPage> {
   }
   @override
   Widget build(BuildContext context) {
-    bool containsEmail = false;
-    QuerySnapshot? querySnapshot;
     return Scaffold(
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),

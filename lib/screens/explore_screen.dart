@@ -320,8 +320,8 @@ class _ExploreScreenState extends State<ExploreScreen>
         print('unknown');
       } else {
         userPosition = position;
-        showSnackBar(context,
-            'Current location: ${userPosition!.latitude.toString()}, ${userPosition!.longitude.toString()}');
+        // showSnackBar(context,
+        //     'Current location: ${userPosition!.latitude.toString()}, ${userPosition!.longitude.toString()}');
       }
     });
   }

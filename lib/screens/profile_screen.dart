@@ -26,7 +26,8 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveClientMixin<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with AutomaticKeepAliveClientMixin<ProfileScreen> {
   @override
   bool get wantKeepAlive => true;
   StreamSubscription<DocumentSnapshot>? subscription;
@@ -46,47 +47,45 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     // _activateListeners();
   }
 
-  Future showImageSource(BuildContext context, StorageMethods storage, String username) async {
+  Future showImageSource(
+      BuildContext context, StorageMethods storage, String username) async {
     showModalBottomSheet(
         context: context,
         builder: (context) => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.image),
-              title: const Text('Choose image from Gallery'),
-              onTap: () async {
-                final img = await FilePicker.platform.pickFiles(
-                    allowMultiple: false,
-                    type: FileType.custom,
-                    allowedExtensions: ['jpg', 'png']
-                );
-                if (img == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.image),
+                  title: const Text('Choose image from Gallery'),
+                  onTap: () async {
+                    final img = await FilePicker.platform.pickFiles(
+                        allowMultiple: false,
+                        type: FileType.custom,
+                        allowedExtensions: ['jpg', 'png']);
+                    if (img == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('No file selected'),
-                      )
-                  );
-                  return null;
-                }
-                final path = img.files.single.path!;
-                final fileName = '$username' + '_profile_picture';
-
-                storage.uploadFile(path, fileName);
-                String profilePicLink = await storage.downloadURL();
-                DatabaseMethods.editProfilePicLink(username, profilePicLink);
-                FilePickerStatus.done;
-                setState(() {});
-                Navigator.pop(context);
-                setState(() {});
-              },
-            ),
-          ],
-        )
-    );
+                      ));
+                      return null;
+                    }
+                    final path = img.files.single.path!;
+                    final fileName = '$username' + '_profile_picture';
+                    storage.uploadFile(path, fileName);
+                    String profilePicLink = await storage.downloadURL();
+                    DatabaseMethods.editProfilePicLink(
+                        username, profilePicLink);
+                    FilePickerStatus.done;
+                    setState(() {});
+                    Navigator.pop(context);
+                    setState(() {});
+                  },
+                ),
+              ],
+            ));
   }
 
-  _getNumberOfPosts(AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+  _getNumberOfPosts(
+      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
     final int totalNumberOfPosts = snapshot.data!.docs.length;
     int numberOfPosts = 0;
     final String username = widget._user!['name'].toString();
@@ -97,7 +96,6 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
     }
     return numberOfPosts;
   }
-
 
   // _callback() {
   //   setState(() {
@@ -114,25 +112,26 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
         postIndex = 0;
       });
     }
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Container(),
-        actions: [
-          IconButton(
-              color: pink(),
-              onPressed: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingsScreen(),
-                    ))
-              },
-              icon: const Icon(Icons.settings)
-          )
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   centerTitle: true,
+      //   title: Container(),
+      //   actions: [
+      //     IconButton(
+      //         color: pink(),
+      //         onPressed: () => {
+      //           Navigator.push(
+      //               context,
+      //               MaterialPageRoute(
+      //                 builder: (context) => const SettingsScreen(),
+      //               ))
+      //         },
+      //         icon: const Icon(Icons.settings)
+      //     )
+      //   ],
+      // ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection('posts').snapshots(),
           builder: (BuildContext context,
@@ -146,7 +145,24 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
             postIndex = 0;
             Column col = Column(
               children: [
-                const SizedBox(height: 10,),
+                SafeArea(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                          color: pink(),
+                          onPressed: () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SettingsScreen(),
+                                    ))
+                              },
+                          icon: const Icon(Icons.settings)),
+                    ],
+                  ),
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: Stack(
@@ -155,13 +171,20 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                         child: Material(
                           color: Colors.transparent,
                           child: StreamBuilder(
-                              stream: FirebaseFirestore.instance.collection('users').snapshots(),
-                              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> profilePicSnapshot) {
+                              stream: FirebaseFirestore.instance
+                                  .collection('users')
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          QuerySnapshot<Map<String, dynamic>>>
+                                      profilePicSnapshot) {
                                 if (profilePicSnapshot.hasData) {
                                   String picUrl = '';
-                                  for (int i = 0; i <
-                                      profilePicSnapshot.data!.docs.length; i++) {
-                                    if (profilePicSnapshot.data!.docs[i].data()['name'] ==
+                                  for (int i = 0;
+                                      i < profilePicSnapshot.data!.docs.length;
+                                      i++) {
+                                    if (profilePicSnapshot.data!.docs[i]
+                                            .data()['name'] ==
                                         username) {
                                       picUrl = profilePicSnapshot.data!.docs[i]
                                           .data()['profilePics'];
@@ -177,16 +200,15 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                                         onTap: () async {
                                           showImageSource(
                                               context, storage, username);
-                                          setState(() {
-
-                                          });
+                                          setState(() {});
                                         },
                                       ),
                                     );
                                   } else {
                                     return Ink.image(
                                       image: const AssetImage(
-                                        "assets/images/default_user_icon.png",),
+                                        "assets/images/default_user_icon.png",
+                                      ),
                                       fit: BoxFit.cover,
                                       width: 100,
                                       height: 100,
@@ -202,7 +224,8 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                                 print('no');
                                 return Ink.image(
                                   image: const AssetImage(
-                                    "assets/images/default_user_icon.png",),
+                                    "assets/images/default_user_icon.png",
+                                  ),
                                   fit: BoxFit.cover,
                                   width: 100,
                                   height: 100,
@@ -213,8 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                                     },
                                   ),
                                 );
-                              }
-                          ),
+                              }),
                         ),
                       ),
                       Positioned(
@@ -241,7 +263,9 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                     ],
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Text(
                   "Hello, " + widget._user!['name'],
                   style: const TextStyle(
@@ -249,14 +273,17 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                     fontSize: 18,
                   ),
                 ),
-                const SizedBox(height: 30,),
+                const SizedBox(
+                  height: 30,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 30),
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child:
-                    Text(
-                      "Your posts (" + _getNumberOfPosts(snapshot).toString() + ")",
+                    child: Text(
+                      "Your posts (" +
+                          _getNumberOfPosts(snapshot).toString() +
+                          ")",
                       style: GoogleFonts.roboto(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -264,43 +291,45 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                     ),
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 const Divider(
                   height: 1,
                   thickness: 2,
                   color: Colors.white,
                 ),
                 Expanded(
-                    child:
-                    ListView.builder(
-                      itemBuilder: (ctx, index) {
-                        return index < snapshot.data!.docs.length &&
+                    child: ListView.builder(
+                  itemBuilder: (ctx, index) {
+                    return index < snapshot.data!.docs.length &&
                             snapshot.data!.docs[index].data()['username'] ==
                                 username
-                            ? snapshot.data!.docs[index].data()['type'] ==
-                            'lost'
+                        ? snapshot.data!.docs[index].data()['type'] == 'lost'
                             ? OwnLostPetPost(
-                          snapshot: snapshot.data!.docs[index].data(),
-                          postIndex: postIndex++,
-                          username: username,
-                          callback: _callback,
-                          postId: snapshot.data!.docs[index].data()['postId'],)
+                                snapshot: snapshot.data!.docs[index].data(),
+                                postIndex: postIndex++,
+                                username: username,
+                                callback: _callback,
+                                postId:
+                                    snapshot.data!.docs[index].data()['postId'],
+                              )
                             : OwnFoundPetPost(
-                          snapshot: snapshot.data!.docs[index].data(),
-                          postIndex: postIndex++,
-                          username: username,
-                          callback: _callback,
-                          postId: snapshot.data!.docs[index].data()['postId'],)
-                            : Container();
-                      },
-                        itemCount: snapshot.data!.docs.length,
-                    )
-                ),
+                                snapshot: snapshot.data!.docs[index].data(),
+                                postIndex: postIndex++,
+                                username: username,
+                                callback: _callback,
+                                postId:
+                                    snapshot.data!.docs[index].data()['postId'],
+                              )
+                        : Container();
+                  },
+                  itemCount: snapshot.data!.docs.length,
+                )),
               ],
             );
             return col;
-          }
-      ),
+          }),
     );
   }
 }

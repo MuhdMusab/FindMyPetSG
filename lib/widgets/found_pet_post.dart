@@ -209,6 +209,9 @@ class _FullFoundPetPostState extends State<FullFoundPetPost> {
                 markers: {
                   Marker(
                       markerId: const MarkerId("lostLocation"),
+                      infoWindow: InfoWindow(
+                          title:
+                              widget.foundPetPost.snap['location'].toString()),
                       position: LatLng(
                         widget.foundPetPost.snap['latitude'],
                         widget.foundPetPost.snap['longtitude'],

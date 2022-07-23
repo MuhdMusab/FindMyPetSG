@@ -266,7 +266,10 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
                           position: LatLng(
                             widget.lostPetPost.snap['latitude'],
                             widget.lostPetPost.snap['longtitude'],
-                          ))
+                          ),
+                          infoWindow: InfoWindow(
+                              title: widget.lostPetPost.snap['location']
+                                  .toString()))
                     },
                     onMapCreated: (controller) =>
                         _googleMapController = controller,

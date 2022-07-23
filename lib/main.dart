@@ -31,7 +31,9 @@ void main() async {
   await Firebase.initializeApp();
   NotificationService().initNotification();
   await settingsPrefs.init();
-  await initializeService();
+  if (settingsPrefs.getNotificationsEnabled()) {
+    await initializeService();
+  }
   runApp(MyApp());
 }
 
@@ -98,10 +100,10 @@ void onStart(ServiceInstance service) async {
 
   if (service is AndroidServiceInstance) {
     service.setAsForegroundService();
-    // service.setForegroundNotificationInfo(
-    //   title: "Lookout Notification",
-    //   content: "Service running in background",
-    // );
+    service.setForegroundNotificationInfo(
+      title: "FindMyPetSG",
+      content: "Service running in background",
+    );
     service.on('lookout').listen((inputData) {
       if (inputData!.containsKey('location') && inputData.containsKey('name') && inputData['name'] != '') {
         scheduleNotification('New ${inputData['type']} ${inputData['breed']} post named ${inputData['name']}',

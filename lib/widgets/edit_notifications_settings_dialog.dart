@@ -3,6 +3,7 @@ import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/helper/settings_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -81,7 +82,10 @@ class _EditNotificationsSettingsDialogState extends State<EditNotificationsSetti
                             if (!newVal) {
                               settingsPrefs.setNotificationsEnabled(newVal);
                               settingsPrefs.setLookoutNotificationsEnabled(newVal);
+                              settingsPrefs.setChatNotificationsEnabled(newVal);
                               settingsPrefs.setLookoutDistance(1000);
+                              FlutterBackgroundService service = FlutterBackgroundService();
+                              service.invoke('stopService');
                               setState(() {
 
                               });
@@ -132,6 +136,18 @@ class _EditNotificationsSettingsDialogState extends State<EditNotificationsSetti
                                     )
                                   ]
                               ),
+                              lookoutSnapshot.hasData && lookoutSnapshot.data == true
+                                  ? Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15.0,),
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                'New Lookout Post Distance: ',
+                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, ),
+                              ),
+                                    ),
+                                  )
+                                  : Container(),
                               lookoutSnapshot.hasData && lookoutSnapshot.data == true
                                   ? FutureBuilder(
                                   future: _getLookoutDistancePreferences(),

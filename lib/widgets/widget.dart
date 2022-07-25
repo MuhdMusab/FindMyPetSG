@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 PreferredSizeWidget appBarMain(BuildContext context) {
   return AppBar(
     automaticallyImplyLeading: false,
-   centerTitle: true,
-    title: Container(),
+    centerTitle: true,
+    title: Text(
+      "FindMyPetSG",
+      style: TextStyle(
+        fontSize: 38,
+        color: Color(0xFFf26579),
+        fontFamily: 'Open Sans Extra Bold',
+        fontWeight: FontWeight.bold,
+      ),
+    ),
   );
 }
 
@@ -19,8 +27,7 @@ InputDecoration textFieldInputDecoration(String hintText) {
       ),
       enabledBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: Colors.white),
-      )
-  );
+      ));
 }
 
 InputDecoration circularFieldInputDecoration(String hintText) {
@@ -34,52 +41,41 @@ InputDecoration circularFieldInputDecoration(String hintText) {
 }
 
 TextStyle simpleWhiteTextStyle() {
-  return TextStyle(
-      color: Colors.white,
-      fontSize: 16
-  );
+  return TextStyle(color: Colors.white, fontSize: 16);
 }
 
 TextStyle simpleBlackTextStyle() {
-  return TextStyle(
-      color: Colors.black,
-      fontSize: 16
-  );
+  return TextStyle(color: Colors.black, fontSize: 16);
 }
 
 TextStyle simpleGreyTextStyle() {
-  return TextStyle(
-      color: Colors.black,
-      fontSize: 16
-  );
+  return TextStyle(color: Colors.black, fontSize: 16);
 }
 
 TextStyle mediumTextStyle() {
-  return TextStyle(
-      color: Colors.black,
-      fontSize: 17
-  );
+  return TextStyle(color: Colors.black, fontSize: 17);
 }
 
 typedef F<String> = List<String> Function<String>(String);
 
-Container inputTextFieldCircular(String str, TextEditingController ctrl, BuildContext context, String ? Function(String ?) validator, double radius) {
+Container inputTextFieldCircular(String str, TextEditingController ctrl,
+    BuildContext context, String? Function(String?) validator, double radius) {
   return Container(
     width: MediaQuery.of(context).size.width - 100,
     alignment: Alignment.center,
     padding: EdgeInsets.symmetric(
         //vertical: 20,
-        horizontal: 15
-    ),
+        horizontal: 15),
     decoration: BoxDecoration(
       gradient: LinearGradient(colors: [
         Colors.white,
         Colors.white,
       ]),
       borderRadius: BorderRadius.circular(radius),
-       border: Border.all(color: Colors.black26,
-         width: 2,
-       ),
+      border: Border.all(
+        color: Colors.black26,
+        width: 2,
+      ),
     ),
     child: TextFormField(
       validator: validator,
@@ -88,5 +84,4 @@ Container inputTextFieldCircular(String str, TextEditingController ctrl, BuildCo
       decoration: circularFieldInputDecoration(str),
     ),
   );
-
 }

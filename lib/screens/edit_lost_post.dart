@@ -69,7 +69,7 @@ class _EditLostPostScreenState extends State<EditLostPostScreen> {
 
     double latitude = widget.snapshot['latitude'];
     double longtitude = widget.snapshot['longtitude'];
-    bool isMale = false;
+    bool isMale = widget.snapshot['isMale'];
     String _breed = widget.snapshot['breed'];
 
     @override

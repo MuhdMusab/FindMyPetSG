@@ -17,8 +17,8 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClientMixin<SearchScreen> {
-
+class _SearchScreenState extends State<SearchScreen>
+    with AutomaticKeepAliveClientMixin<SearchScreen> {
   @override
   bool get wantKeepAlive => true;
 
@@ -28,46 +28,54 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.grey.withOpacity(0.15),
-      body: StreamBuilder(
-        stream: FirebaseDatabase(databaseURL: 'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
-            .ref().child('chatroom').child(username).onValue,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            default:
-              if (snapshot.hasError || snapshot.data == null) {
-                print(snapshot.error);
-                return Text('Something went wrong try again later');
-              } else {
-                DatabaseEvent tempp = snapshot.data as DatabaseEvent;
-                if(tempp.snapshot.value!.toString() == "") {
-                  return Column(
-                    children: [
-                      ChatHeaderWidget(users: [], username: "empty",),
-                      ChatBodyWidget(users: [], username: "empty"),
-                    ],
-                  );
-                } else {
-                  final chatrooms = Map<dynamic, dynamic>.from(
-                      (snapshot.data! as dynamic).snapshot.value);
-                  List temp = [];
-                  Map<dynamic, dynamic>? otherChatters;
-                  chatrooms.forEach((key, value) {
-                    otherChatters = Map<String, dynamic>.from(value);
-                    temp.add(otherChatters?.values.first);
-                  });
-                  return Column(
-                    children: [
-                      ChatHeaderWidget(users: temp, username: username),
-                      ChatBodyWidget(users: temp, username: username),
-                    ],
-                  );
-                }
+      body: SafeArea(
+        child: StreamBuilder(
+            stream: FirebaseDatabase(
+                    databaseURL:
+                        'https://findmypetsg-default-rtdb.asia-southeast1.firebasedatabase.app')
+                .ref()
+                .child('chatroom')
+                .child(username)
+                .onValue,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(child: CircularProgressIndicator());
+                default:
+                  if (snapshot.hasError || snapshot.data == null) {
+                    print(snapshot.error);
+                    return Text('Something went wrong try again later');
+                  } else {
+                    DatabaseEvent tempp = snapshot.data as DatabaseEvent;
+                    if (tempp.snapshot.value!.toString() == "") {
+                      return Column(
+                        children: [
+                          ChatHeaderWidget(
+                            users: [],
+                            username: "empty",
+                          ),
+                          ChatBodyWidget(users: [], username: "empty"),
+                        ],
+                      );
+                    } else {
+                      final chatrooms = Map<dynamic, dynamic>.from(
+                          (snapshot.data! as dynamic).snapshot.value);
+                      List temp = [];
+                      Map<dynamic, dynamic>? otherChatters;
+                      chatrooms.forEach((key, value) {
+                        otherChatters = Map<String, dynamic>.from(value);
+                        temp.add(otherChatters?.values.first);
+                      });
+                      return Column(
+                        children: [
+                          ChatHeaderWidget(users: temp, username: username),
+                          ChatBodyWidget(users: temp, username: username),
+                        ],
+                      );
+                    }
+                  }
               }
-          }
-        }
-
+            }),
       ),
     );
   }

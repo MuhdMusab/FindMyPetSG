@@ -51,17 +51,21 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _sendMessage(File file) async {
     if (_canSendMessage() && file.path == 'empty') {
-
-      final ownMessage = Message(_messageInputController.text, DateTime.now(), true, '');
-      final otherMessage = Message(_messageInputController.text, DateTime.now(), false, '');
+      final ownMessage =
+          Message(_messageInputController.text, DateTime.now(), true, '');
+      final otherMessage =
+          Message(_messageInputController.text, DateTime.now(), false, '');
       widget.messageDao.saveOwnMessage(ownMessage);
       widget.messageDao.saveOtherMessage(otherMessage);
       _messageInputController.clear();
     } else if (_canSendMessage() && file.path != 'empty') {
       StorageMethods storage = StorageMethods(username: widget.username);
-      String imageUrl = (await storage.uploadImageToStorage('messageImages', file.readAsBytesSync()))[0];
-      final ownMessage = Message(_messageInputController.text, DateTime.now(), true, imageUrl);
-      final otherMessage = Message(_messageInputController.text, DateTime.now(), false, imageUrl);
+      String imageUrl = (await storage.uploadImageToStorage(
+          'messageImages', file.readAsBytesSync()))[0];
+      final ownMessage =
+          Message(_messageInputController.text, DateTime.now(), true, imageUrl);
+      final otherMessage = Message(
+          _messageInputController.text, DateTime.now(), false, imageUrl);
       widget.messageDao.saveOwnMessage(ownMessage);
       widget.messageDao.saveOtherMessage(otherMessage);
       _messageInputController.clear();
@@ -84,7 +88,10 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          MessageList(messageDao: widget.messageDao, scrollController: _scrollController, circleAvatar: widget.circleAvatar),
+          MessageList(
+              messageDao: widget.messageDao,
+              scrollController: _scrollController,
+              circleAvatar: widget.circleAvatar),
           SendMessageWidget(
             sendMessage: _sendMessage,
             textEditingController: _messageInputController,

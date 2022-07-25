@@ -16,6 +16,7 @@ class ChatHeaderWidget extends StatefulWidget {
   @override
   State<ChatHeaderWidget> createState() => _ChatHeaderWidgetState();
 }
+
 class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
   CircleAvatar _circleAvatar = CircleAvatar(
     radius: 25,
@@ -26,7 +27,7 @@ class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
   Widget build(BuildContext context) {
     if (widget.users.isEmpty) {
       return Container(
-        padding: EdgeInsets.only(left: 12, right: 12, top: 40, bottom: 12),
+        padding: EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -54,50 +55,52 @@ class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
                     );
                   } else {
                     final otherUser = widget.users[index - 1];
-                    final StorageMethods storage = StorageMethods(
-                        username: otherUser);
+                    final StorageMethods storage =
+                        StorageMethods(username: otherUser);
                     return Container(
                       margin: const EdgeInsets.only(right: 12),
                       child: GestureDetector(
                         onTap: () async {
-                          final StorageMethods storage = StorageMethods(username: otherUser);
+                          final StorageMethods storage =
+                              StorageMethods(username: otherUser);
                           String url = await storage.downloadURL();
                           CircleAvatar _circleAvatar = url == 'fail'
                               ? CircleAvatar(
-                            radius: 25,
-                            backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-                          )
+                                  radius: 25,
+                                  backgroundImage: AssetImage(
+                                      "assets/images/default_user_icon.png"),
+                                )
                               : CircleAvatar(
-                            radius: 25,
-                            backgroundImage: NetworkImage(url),
-                          );
+                                  radius: 25,
+                                  backgroundImage: NetworkImage(url),
+                                );
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  ChatScreen(
+                              builder: (context) => ChatScreen(
                                     username: otherUser,
-                                    messageDao: MessageDao(
-                                        widget.username, otherUser),
-                                    circleAvatar: _circleAvatar,),
-                              fullscreenDialog: true
-                          ));
+                                    messageDao:
+                                        MessageDao(widget.username, otherUser),
+                                    circleAvatar: _circleAvatar,
+                                  ),
+                              fullscreenDialog: true));
                         },
                         child: FutureBuilder(
                             future: storage.downloadURL(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<String> snapshot) {
                               if (snapshot.connectionState ==
-                                  ConnectionState.done &&
+                                      ConnectionState.done &&
                                   snapshot.hasData) {
                                 _circleAvatar = snapshot.data == 'fail'
                                     ? CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage: AssetImage(
-                                      "assets/images/default_user_icon.png"),
-                                )
+                                        radius: 25,
+                                        backgroundImage: AssetImage(
+                                            "assets/images/default_user_icon.png"),
+                                      )
                                     : CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage: NetworkImage(snapshot.data!),
-                                );
+                                        radius: 25,
+                                        backgroundImage:
+                                            NetworkImage(snapshot.data!),
+                                      );
                                 return _circleAvatar;
                               } else {
                                 return CircleAvatar(
@@ -106,8 +109,7 @@ class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
                                       "assets/images/default_user_icon.png"),
                                 );
                               }
-                            }
-                        ),
+                            }),
                       ),
                     );
                   }
@@ -119,7 +121,7 @@ class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
       );
     } else {
       return Container(
-        padding: EdgeInsets.only(left: 12, right: 12, top: 40, bottom: 12),
+        padding: EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -137,63 +139,64 @@ class _ChatHeaderWidgetState extends State<ChatHeaderWidget> {
                 scrollDirection: Axis.horizontal,
                 itemCount: widget.users.length,
                 itemBuilder: (context, index) {
-                    final otherUser = widget.users[index];
-                    final StorageMethods storage = StorageMethods(
-                        username: otherUser);
-                    return Container(
-                      margin: const EdgeInsets.only(right: 12),
-                      child: GestureDetector(
-                        onTap: () async {
-                          final StorageMethods storage = StorageMethods(username: otherUser);
-                          String url = await storage.downloadURL();
-                          CircleAvatar _circleAvatar = url == 'fail'
-                              ? CircleAvatar(
-                            radius: 25,
-                            backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-                          )
-                              : CircleAvatar(
-                            radius: 25,
-                            backgroundImage: NetworkImage(url),
-                          );
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  ChatScreen(
-                                    username: otherUser,
-                                    messageDao: MessageDao(
-                                        widget.username, otherUser),
-                                    circleAvatar: _circleAvatar,),
-                              fullscreenDialog: true
-                          ));
-                        },
-                        child: FutureBuilder(
-                            future: storage.downloadURL(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<String> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done &&
-                                  snapshot.hasData) {
-                                _circleAvatar = snapshot.data == 'fail'
-                                    ? CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage: AssetImage(
-                                      "assets/images/default_user_icon.png"),
-                                )
-                                    : CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage: NetworkImage(snapshot.data!),
-                                );
-                                return _circleAvatar;
-                              } else {
-                                return CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage: AssetImage(
-                                      "assets/images/default_user_icon.png"),
-                                );
-                              }
+                  final otherUser = widget.users[index];
+                  final StorageMethods storage =
+                      StorageMethods(username: otherUser);
+                  return Container(
+                    margin: const EdgeInsets.only(right: 12),
+                    child: GestureDetector(
+                      onTap: () async {
+                        final StorageMethods storage =
+                            StorageMethods(username: otherUser);
+                        String url = await storage.downloadURL();
+                        CircleAvatar _circleAvatar = url == 'fail'
+                            ? CircleAvatar(
+                                radius: 25,
+                                backgroundImage: AssetImage(
+                                    "assets/images/default_user_icon.png"),
+                              )
+                            : CircleAvatar(
+                                radius: 25,
+                                backgroundImage: NetworkImage(url),
+                              );
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                                  username: otherUser,
+                                  messageDao:
+                                      MessageDao(widget.username, otherUser),
+                                  circleAvatar: _circleAvatar,
+                                ),
+                            fullscreenDialog: true));
+                      },
+                      child: FutureBuilder(
+                          future: storage.downloadURL(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<String> snapshot) {
+                            if (snapshot.connectionState ==
+                                    ConnectionState.done &&
+                                snapshot.hasData) {
+                              _circleAvatar = snapshot.data == 'fail'
+                                  ? CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage: AssetImage(
+                                          "assets/images/default_user_icon.png"),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage:
+                                          NetworkImage(snapshot.data!),
+                                    );
+                              return _circleAvatar;
+                            } else {
+                              return CircleAvatar(
+                                radius: 25,
+                                backgroundImage: AssetImage(
+                                    "assets/images/default_user_icon.png"),
+                              );
                             }
-                        ),
-                      ),
-                    );
+                          }),
+                    ),
+                  );
                 },
               ),
             )

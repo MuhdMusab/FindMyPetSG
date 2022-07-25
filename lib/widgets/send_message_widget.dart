@@ -34,7 +34,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
       context: parentContext,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text('Create a Report'),
+          title: const Text('Share an image'),
           children: <Widget>[
             SimpleDialogOption(
                 padding: const EdgeInsets.all(20),

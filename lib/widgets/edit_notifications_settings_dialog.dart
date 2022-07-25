@@ -142,8 +142,8 @@ class _EditNotificationsSettingsDialogState extends State<EditNotificationsSetti
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                'New Lookout Post Distance: ',
-                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, ),
+                                'New Lookout Post Distance(in meters): ',
+                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, ),
                               ),
                                     ),
                                   )
@@ -174,8 +174,8 @@ class _EditNotificationsSettingsDialogState extends State<EditNotificationsSetti
                                             });
                                           },
                                           min: 0,
-                                          max: 10000,
-                                          divisions: 20,
+                                          max: 50000,
+                                          divisions: 100,
                                         ),
                                       );
                                     } else {

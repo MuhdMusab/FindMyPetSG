@@ -43,7 +43,7 @@ class _CustomTextfield2 extends State<CustomTextfield2> {
           ),
           TextField(
             inputFormatters: widget.inputFormatters,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 16, color: Colors.blueGrey),
             maxLines: widget.maxLines,
             controller: widget.textEditingController,
             keyboardType: widget.textInputType,

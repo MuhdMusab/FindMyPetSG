@@ -45,7 +45,7 @@ class _RewardTextfield extends State<RewardTextfield> {
                   FilteringTextInputFormatter.digitsOnly,
                   new LengthLimitingTextInputFormatter(rewardCharacterLimit)
                 ],
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 16, color: Colors.blueGrey),
                 maxLines: widget.maxLines,
                 controller: widget.textEditingController,
                 keyboardType: widget.textInputType,

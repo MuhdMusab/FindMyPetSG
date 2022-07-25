@@ -57,7 +57,10 @@ class _GenderFieldPickerState extends State<GenderFieldPicker> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Female"),
+                        Text(
+                          "Female",
+                          style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                        ),
                         Icon(
                           Icons.female,
                           color: Colors.red,
@@ -86,7 +89,10 @@ class _GenderFieldPickerState extends State<GenderFieldPicker> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Male"),
+                        Text(
+                          "Male",
+                          style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                        ),
                         Icon(
                           Icons.male,
                           color: Colors.blue,

@@ -1,28 +1,20 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'dart:io' show Platform;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/widgets/animal_search_delegate.dart';
+import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
 import 'package:find_my_pet_sg/widgets/upload_slider_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-// import 'package:find_my_pet_sg/widgets/arrow_back_button.dart';
-import 'package:find_my_pet_sg/models/user.dart' as model;
-import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+
 import '../config/constants.dart';
 import '../services/firestore_methods.dart';
-import '../utils/pickImage.dart';
 import '../utils/showSnackBar.dart';
 import '../widgets/arrow_back_button.dart';
-import '../widgets/custom_textfield.dart';
 import '../widgets/custom_textfield_2.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:searchfield/searchfield.dart';
-import 'dart:io' show Platform;
 
 class CreateFoundPostScreen extends StatefulWidget {
   static String route = "CreatePostPage";

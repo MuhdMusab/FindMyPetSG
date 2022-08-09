@@ -26,15 +26,16 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final radius = Radius.circular(12);
     final borderRadius = BorderRadius.all(radius);
-    final StorageMethods storage = StorageMethods(username: messageDao.otherUsername!);
     return Column(
       children: [
         Row(
-          mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+          mainAxisAlignment:
+              isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(width: 12,),
-            if (!isMe)
-              circleAvatar,
+            SizedBox(
+              width: 12,
+            ),
+            if (!isMe) circleAvatar,
             Container(
               padding: EdgeInsets.all(16),
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -42,8 +43,10 @@ class MessageWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isMe ? pink() : Colors.grey[100],
                 borderRadius: isMe
-                    ? borderRadius.subtract(BorderRadius.only(bottomRight: radius))
-                    : borderRadius.subtract(BorderRadius.only(bottomLeft: radius)),
+                    ? borderRadius
+                        .subtract(BorderRadius.only(bottomRight: radius))
+                    : borderRadius
+                        .subtract(BorderRadius.only(bottomLeft: radius)),
               ),
               child: buildMessage(),
             ),
@@ -66,38 +69,27 @@ class MessageWidget extends StatelessWidget {
     //callback();
     return Column(
       crossAxisAlignment:
-      isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children:
-      imageUrl != ''
-      ? <Widget>[
-        Image.network(imageUrl!),
-        Text(
-          message,
-          style: TextStyle(
-            color: isMe ? Colors.white : Colors.black,
-          ),
-          textAlign: isMe ? TextAlign.end : TextAlign.start,
-        ),
-      ]
+          isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: imageUrl != ''
+          ? <Widget>[
+              Image.network(imageUrl!),
+              Text(
+                message,
+                style: TextStyle(
+                  color: isMe ? Colors.white : Colors.black,
+                ),
+                textAlign: isMe ? TextAlign.end : TextAlign.start,
+              ),
+            ]
           : <Widget>[
-        Text(
-          message,
-          style: TextStyle(
-            color: isMe ? Colors.white : Colors.black,
-          ),
-          textAlign: isMe ? TextAlign.end : TextAlign.start,
-        ),
-      ],
-
-      // <Widget>[
-      //   Text(
-      //     message,
-      //     style: TextStyle(
-      //       color: isMe ? Colors.white : Colors.black,
-      //     ),
-      //     textAlign: isMe ? TextAlign.end : TextAlign.start,
-      //   ),
-      // ],
+              Text(
+                message,
+                style: TextStyle(
+                  color: isMe ? Colors.white : Colors.black,
+                ),
+                textAlign: isMe ? TextAlign.end : TextAlign.start,
+              ),
+            ],
     );
   }
 }

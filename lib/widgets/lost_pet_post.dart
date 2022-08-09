@@ -1,28 +1,19 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
-import 'package:find_my_pet_sg/services/storage_methods.dart';
-import '../helper/custom_icons_icons.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/widgets/arrow_back_button_2.dart';
-import 'package:find_my_pet_sg/widgets/image_slider_carousel.dart';
-import 'package:find_my_pet_sg/widgets/noncurved_image_slider_carousel.dart';
-import 'package:find_my_pet_sg/models/user.dart' as model;
-import '../services/firestore_methods.dart';
-import '../utils/showSnackBar.dart';
 import 'package:find_my_pet_sg/models/chatroom.dart';
 import 'package:find_my_pet_sg/models/chatroomdao.dart';
 import 'package:find_my_pet_sg/models/messagedao.dart';
 import 'package:find_my_pet_sg/screens/chat_screen.dart';
+import 'package:find_my_pet_sg/services/storage_methods.dart';
+import 'package:find_my_pet_sg/widgets/arrow_back_button_2.dart';
+import 'package:find_my_pet_sg/widgets/image_slider_carousel.dart';
+import 'package:find_my_pet_sg/widgets/noncurved_image_slider_carousel.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'arrow_back_button.dart';
 import 'arrow_back_button_3.dart';
 
 class LostPetPost extends StatefulWidget {
@@ -301,6 +292,12 @@ class _FullLostPetPostState extends State<FullLostPetPost> {
           },
           fullscreenDialog: true),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _googleMapController.dispose();
   }
 
   @override

@@ -15,27 +15,25 @@ class MainPage extends StatefulWidget {
   @override
   State<MainPage> createState() => _MainPageState();
 }
-// bool _helper() async {
-//   return (await DatabaseMethods.containsEmail(
-//       FirebaseAuth.instance.currentUser!.email!).whe;
-// }
-
 
 class _MainPageState extends State<MainPage> {
   hasUsername() async {
-    if (await DatabaseMethods.containsEmail(FirebaseAuth.instance.currentUser!.email!)) {
-      QuerySnapshot querySnapshot= await DatabaseMethods().getUserInfo(FirebaseAuth.instance.currentUser!.email!);
+    if (await DatabaseMethods.containsEmail(
+        FirebaseAuth.instance.currentUser!.email!)) {
+      QuerySnapshot querySnapshot = await DatabaseMethods()
+          .getUserInfo(FirebaseAuth.instance.currentUser!.email!);
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>
-              ChangeNotifierProvider(
+          MaterialPageRoute(
+              builder: (context) => ChangeNotifierProvider(
                   create: (context) => HomeProvider(),
-                  child: Home(querySnapshot.docs[0]))
-          ));
+                  child: Home(querySnapshot.docs[0]))));
     } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => GoogleSignUpUsername(),
-      ));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GoogleSignUpUsername(),
+          ));
     }
   }
 
@@ -46,12 +44,11 @@ class _MainPageState extends State<MainPage> {
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-            builder: (context) => VerifyEmailPage()
-        ),
+        MaterialPageRoute(builder: (context) => VerifyEmailPage()),
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +59,9 @@ class _MainPageState extends State<MainPage> {
             move();
             return Scaffold();
           } else {
-            return Authenticate(showSignIn: false,);
+            return Authenticate(
+              showSignIn: false,
+            );
           }
         },
       ),

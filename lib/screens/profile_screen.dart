@@ -34,7 +34,6 @@ class _ProfileScreenState extends State<ProfileScreen>
   StreamSubscription<DocumentSnapshot>? subscription;
   List<DocumentSnapshot>? myList;
   TextEditingController userNameTextEditingController = TextEditingController();
-  int? _userIndex;
   @override
   void dispose() {
     subscription?.cancel();
@@ -45,10 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   void initState() {
     super.initState();
     tz.initializeTimeZones();
-    // _activateListeners();
   }
-
-
 
   _getNumberOfPosts(
       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -64,32 +60,23 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   _callback() {
-    setState(() {
-    });
+    setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     final String username = widget._user!['name'].toString();
     final StorageMethods storage = StorageMethods(username: username);
     int postIndex = 0;
-    // _callback() {
-    //   setState(() {
-    //   });
-    // }
     return Scaffold(
       body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection('posts').snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            // int count = 0;
-            // for (int i = 0; i < snapshot.data!.docs.length; i++) {
-            //   if (snapshot.data!.docs[i].data()['username'] == username) {
-            //     count++;
-            //   }
-            // }
             postIndex = 0;
-            if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.done ||
+                snapshot.hasData) {
               return Column(
                 children: [
                   SafeArea(
@@ -99,13 +86,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                         IconButton(
                             color: pink(),
                             onPressed: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                    const SettingsScreen(),
-                                  ))
-                            },
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SettingsScreen(),
+                                      ))
+                                },
                             icon: const Icon(Icons.settings)),
                       ],
                     ),
@@ -117,7 +104,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ClipOval(
                           child: Material(
                             color: Colors.transparent,
-                            child: ProfilePictureWidget(callback: _callback, storage: storage, username: username,),
+                            child: ProfilePictureWidget(
+                              callback: _callback,
+                              storage: storage,
+                              username: username,
+                            ),
                           ),
                         ),
                         Positioned(
@@ -182,35 +173,38 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                   Expanded(
                       child: ListView.builder(
-                        itemBuilder: (ctx, index) {
-                          return index < snapshot.data!.docs.length &&
+                    itemBuilder: (ctx, index) {
+                      return index < snapshot.data!.docs.length &&
                               snapshot.data!.docs[index].data()['username'] ==
                                   username
-                              ? snapshot.data!.docs[index].data()['type'] == 'lost'
+                          ? snapshot.data!.docs[index].data()['type'] == 'lost'
                               ? OwnLostPetPost(
-                            snapshot: snapshot.data!.docs[index].data(),
-                            postIndex: postIndex++,
-                            username: username,
-                            callback: _callback,
-                            postId:
-                            snapshot.data!.docs[index].data()['postId'],
-                          )
+                                  snapshot: snapshot.data!.docs[index].data(),
+                                  postIndex: postIndex++,
+                                  username: username,
+                                  callback: _callback,
+                                  postId: snapshot.data!.docs[index]
+                                      .data()['postId'],
+                                )
                               : OwnFoundPetPost(
-                            snapshot: snapshot.data!.docs[index].data(),
-                            postIndex: postIndex++,
-                            username: username,
-                            callback: _callback,
-                            postId:
-                            snapshot.data!.docs[index].data()['postId'],
-                          )
-                              : Container();
-                        },
-                        itemCount: snapshot.data!.docs.length,
-                      )),
+                                  snapshot: snapshot.data!.docs[index].data(),
+                                  postIndex: postIndex++,
+                                  username: username,
+                                  callback: _callback,
+                                  postId: snapshot.data!.docs[index]
+                                      .data()['postId'],
+                                )
+                          : Container();
+                    },
+                    itemCount: snapshot.data!.docs.length,
+                  )),
                 ],
               );
             } else {
-              return Center(child: CircularProgressIndicator(color: Colors.black,));
+              return Center(
+                  child: CircularProgressIndicator(
+                color: Colors.black,
+              ));
             }
           }),
     );

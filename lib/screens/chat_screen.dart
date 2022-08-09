@@ -1,27 +1,12 @@
 import 'dart:io';
 
-import 'package:find_my_pet_sg/models/chatroom.dart';
-import 'package:find_my_pet_sg/models/person.dart';
-import 'package:find_my_pet_sg/services/storage_methods.dart';
-import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
-import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
-import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
-import 'package:find_my_pet_sg/widgets/message_widget.dart';
-import 'package:find_my_pet_sg/widgets/send_message_widget.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:find_my_pet_sg/helper/homehelper.dart';
-import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/models/messages.dart';
-import 'package:intl/intl.dart';
-import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:find_my_pet_sg/models/message_model.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:find_my_pet_sg/models/messagedao.dart';
-import 'package:find_my_pet_sg/widgets/message_widget.dart';
+import 'package:find_my_pet_sg/services/storage_methods.dart';
+import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
+import 'package:find_my_pet_sg/widgets/send_message_widget.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
   final String username;
@@ -99,41 +84,6 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      // body: Padding(
-      //   padding: EdgeInsets.all(16.0),
-      //   child: Column(
-      //     children: [
-      //       _getMessageList(),
-      //       Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //           Flexible(
-      //             child: Padding(
-      //               padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      //               child: TextField(
-      //                 keyboardType: TextInputType.text,
-      //                 controller: _messageInputController,
-      //                 onChanged: (text) => setState(() {}),
-      //                 onSubmitted: (input) {
-      //                   _sendMessage();
-      //                 },
-      //                 decoration:
-      //                 const InputDecoration(hintText: 'Enter new message'),
-      //               ),
-      //             ),
-      //           ),
-      //           IconButton(
-      //               icon: Icon(_canSendMessage()
-      //                   ? CupertinoIcons.arrow_right_circle_fill
-      //                   : CupertinoIcons.arrow_right_circle),
-      //               onPressed: () {
-      //                 _sendMessage();
-      //               })
-      //         ],
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

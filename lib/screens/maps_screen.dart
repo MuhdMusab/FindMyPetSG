@@ -1,22 +1,9 @@
-import 'dart:async';
-// import 'dart:ffi';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:find_my_pet_sg/config/constants.dart';
-import 'package:find_my_pet_sg/helper/functions.dart';
-import 'package:find_my_pet_sg/utils/showSnackBar.dart';
-import 'package:find_my_pet_sg/widgets/arrow_back_button_3.dart';
+import 'package:custom_info_window/custom_info_window.dart';
 import 'package:find_my_pet_sg/widgets/found_pet_post.dart';
-import 'package:find_my_pet_sg/widgets/image_slider_carousel.dart';
 import 'package:find_my_pet_sg/widgets/lost_pet_post.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:custom_info_window/custom_info_window.dart';
-import 'package:google_maps_webservice/geocoding.dart';
 import 'package:intl/intl.dart';
 
 import '../map_markers/map_markers.dart';
@@ -74,7 +61,6 @@ class _MapsScreenState extends State<MapsScreen>
         return foundOthersMarker!;
       }
     }
-    return foundCatMarker!;
   }
 
   @override
@@ -181,23 +167,6 @@ class _MapsScreenState extends State<MapsScreen>
           zoomControlsEnabled: false,
           zoomGesturesEnabled: true,
         ),
-        // Positioned(
-        //   right: 16,
-        //   bottom: 80,
-        //   child: FloatingActionButton(
-        //       child: const Icon(
-        //         Icons.center_focus_strong,
-        //         size: 30.0,
-        //         color: Colors.white,
-        //       ),
-        //       backgroundColor: pink(),
-        //       heroTag: getRandomString(),
-        //       onPressed: () {
-        //         _googleMapController.animateCamera(
-        //             CameraUpdate.newCameraPosition(CameraPosition(
-        //                 target: widget.currentLatLng, zoom: 16)));
-        //       }),
-        // ),
         CustomInfoWindow(
           controller: _customInfoWindowController,
           offset: 0,

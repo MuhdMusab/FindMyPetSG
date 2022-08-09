@@ -2,37 +2,39 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
-  static final NotificationService _notificationService = NotificationService._internal();
+  static final NotificationService _notificationService =
+      NotificationService._internal();
 
   factory NotificationService() {
     return _notificationService;
   }
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   NotificationService._internal();
 
   Future<void> initNotification() async {
     final AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     final IOSInitializationSettings initializationSettingsIOS =
-    IOSInitializationSettings(
+        IOSInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
     );
 
     final InitializationSettings initializationSettings =
-    InitializationSettings(
-        android: initializationSettingsAndroid,
-        iOS: initializationSettingsIOS
-    );
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> showNotification(int id, String title, String body, int seconds) async {
+  Future<void> showNotification(
+      int id, String title, String body, int seconds) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
@@ -40,12 +42,11 @@ class NotificationService {
       tz.TZDateTime.now(tz.local).add(Duration(seconds: seconds)),
       const NotificationDetails(
         android: AndroidNotificationDetails(
-            'main_channel',
-            'Main Channel',
-            channelDescription: 'Main channel notifications',
-            importance: Importance.max,
-            priority: Priority.max,
-            //icon: '@drawable/ic_stat_pets'
+          'main_channel',
+          'Main Channel',
+          channelDescription: 'Main channel notifications',
+          importance: Importance.max,
+          priority: Priority.max,
         ),
         iOS: IOSNotificationDetails(
           sound: 'default.wav',
@@ -54,7 +55,8 @@ class NotificationService {
           presentSound: true,
         ),
       ),
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
   }

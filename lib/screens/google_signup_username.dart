@@ -1,8 +1,6 @@
-import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
-import 'package:find_my_pet_sg/screens/home.dart';
 import 'package:find_my_pet_sg/screens/main_page.dart';
-import 'package:find_my_pet_sg/screens/sign_up_form_screen.dart';
+import 'package:find_my_pet_sg/services/database.dart';
 import 'package:find_my_pet_sg/widgets/widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -53,18 +51,20 @@ class _GoogleSignUpUsernameState extends State<GoogleSignUpUsername> {
           "posts": {},
           "storageRefs": {},
         };
-        DatabaseMethods.addUserInfo(userInfoMap, userNameTextEditingController.text.trim());
-        DatabaseMethods.addRealtimeUser(userNameTextEditingController.text.trim());
+        DatabaseMethods.addUserInfo(
+            userInfoMap, userNameTextEditingController.text.trim());
+        DatabaseMethods.addRealtimeUser(
+            userNameTextEditingController.text.trim());
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MainPage(
-            ),
+            builder: (context) => MainPage(),
           ),
         );
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import '../utils/pickImage.dart';
 
 class OwnSliderCarousel extends StatefulWidget {
-  //final imageArray;
   final int postIndex;
   final String username;
   List<dynamic>? posts;
@@ -47,13 +46,22 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                     //do nothing
                   } else {
                     Navigator.pop(context);
-                    XFile? xfile = await ImagePicker.platform.getImageFromSource(
-                        source: ImageSource.camera);
+                    XFile? xfile = await ImagePicker.platform
+                        .getImageFromSource(source: ImageSource.camera);
                     File file = (await cropRectangleImage(File(xfile!.path)));
                     final StorageMethods storageMethods = StorageMethods();
-                    List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
-                    await DatabaseMethods.addImageToPost(widget.username, widget.postId, urls[0],);
-                    await DatabaseMethods.addStorageReference(widget.username, urls[1], postIndex,);
+                    List<String> urls = await storageMethods
+                        .uploadImageToStorage('posts', file.readAsBytesSync());
+                    await DatabaseMethods.addImageToPost(
+                      widget.username,
+                      widget.postId,
+                      urls[0],
+                    );
+                    await DatabaseMethods.addStorageReference(
+                      widget.username,
+                      urls[1],
+                      postIndex,
+                    );
                     widget.callback();
                   }
                 }),
@@ -65,13 +73,22 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                   if (widget.posts!.length >= 4) {
                     // do nothing
                   } else {
-                    XFile? xfile = await ImagePicker.platform.getImageFromSource(
-                        source: ImageSource.gallery);
+                    XFile? xfile = await ImagePicker.platform
+                        .getImageFromSource(source: ImageSource.gallery);
                     File file = (await cropRectangleImage(File(xfile!.path)));
                     final StorageMethods storageMethods = StorageMethods();
-                    List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
-                    await DatabaseMethods.addImageToPost(widget.username, widget.postId, urls[0],);
-                    await DatabaseMethods.addStorageReference(widget.username, urls[1], postIndex,);
+                    List<String> urls = await storageMethods
+                        .uploadImageToStorage('posts', file.readAsBytesSync());
+                    await DatabaseMethods.addImageToPost(
+                      widget.username,
+                      widget.postId,
+                      urls[0],
+                    );
+                    await DatabaseMethods.addStorageReference(
+                      widget.username,
+                      urls[1],
+                      postIndex,
+                    );
                     widget.callback();
                   }
                 }),
@@ -100,15 +117,20 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                 child: const Text('Take a photo'),
                 onPressed: () async {
                   Navigator.pop(context);
-                  XFile? xfile = await ImagePicker.platform.getImageFromSource(
-                      source: ImageSource.camera);
+                  XFile? xfile = await ImagePicker.platform
+                      .getImageFromSource(source: ImageSource.camera);
                   File file = (await cropRectangleImage(File(xfile!.path)));
-                  String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(widget.username, postIndex, activeIndex);
+                  String prevRef =
+                      await DatabaseMethods.getStorageReferenceAtIndex(
+                          widget.username, postIndex, activeIndex);
                   final StorageMethods storageMethods = StorageMethods();
                   storageMethods.deleteImageFromStorage(prevRef);
-                  List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
-                  await DatabaseMethods.editPostAtIndex(widget.username, widget.postId, urls[0], activeIndex);
-                  await DatabaseMethods.editStorageReferenceAtIndex(widget.username, urls[1], postIndex, activeIndex);
+                  List<String> urls = await storageMethods.uploadImageToStorage(
+                      'posts', file.readAsBytesSync());
+                  await DatabaseMethods.editPostAtIndex(
+                      widget.username, widget.postId, urls[0], activeIndex);
+                  await DatabaseMethods.editStorageReferenceAtIndex(
+                      widget.username, urls[1], postIndex, activeIndex);
                   widget.callback();
                 }),
             SimpleDialogOption(
@@ -116,15 +138,20 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                 child: const Text('Choose from Gallery'),
                 onPressed: () async {
                   Navigator.pop(context);
-                  XFile? xfile = await ImagePicker.platform.getImageFromSource(
-                      source: ImageSource.gallery);
+                  XFile? xfile = await ImagePicker.platform
+                      .getImageFromSource(source: ImageSource.gallery);
                   File file = (await cropRectangleImage(File(xfile!.path)));
-                  String prevRef = await DatabaseMethods.getStorageReferenceAtIndex(widget.username, postIndex, activeIndex);
+                  String prevRef =
+                      await DatabaseMethods.getStorageReferenceAtIndex(
+                          widget.username, postIndex, activeIndex);
                   final StorageMethods storageMethods = StorageMethods();
                   storageMethods.deleteImageFromStorage(prevRef);
-                  List<String> urls = await storageMethods.uploadImageToStorage('posts', file.readAsBytesSync());
-                  await DatabaseMethods.editPostAtIndex(widget.username, widget.postId, urls[0], activeIndex);
-                  await DatabaseMethods.editStorageReferenceAtIndex(widget.username, urls[1], postIndex, activeIndex);
+                  List<String> urls = await storageMethods.uploadImageToStorage(
+                      'posts', file.readAsBytesSync());
+                  await DatabaseMethods.editPostAtIndex(
+                      widget.username, widget.postId, urls[0], activeIndex);
+                  await DatabaseMethods.editStorageReferenceAtIndex(
+                      widget.username, urls[1], postIndex, activeIndex);
                   widget.callback();
                 }),
             SimpleDialogOption(
@@ -151,7 +178,9 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
       },
       child: Material(
           child: InkWell(
-              customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+              customBorder: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
               splashColor: Colors.black12,
               onTap: () {
                 if (activeIndex == widget.posts!.length) {
@@ -175,10 +204,10 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                       )
                     ],
                   ),
-                  child:
-                  ClipRRect(
+                  child: ClipRRect(
                     borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(10.0), topLeft: Radius.circular(10.0)),
+                        topRight: Radius.circular(10.0),
+                        topLeft: Radius.circular(10.0)),
                     child: Stack(
                       children: [
                         Container(
@@ -187,17 +216,19 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CarouselSlider.builder(
-                                itemCount: widget.posts!.length < 4 ? widget.posts!.length + 1 : widget.posts!.length,
+                                itemCount: widget.posts!.length < 4
+                                    ? widget.posts!.length + 1
+                                    : widget.posts!.length,
                                 options: CarouselOptions(
                                   enableInfiniteScroll: false,
                                   viewportFraction: 1,
                                   height: 200,
                                   onPageChanged: (index, reason) =>
                                       setState(() => activeIndex = index),
-
                                 ),
                                 itemBuilder: (context, index, realIndex) {
-                                  if (index == widget.posts!.length && widget.posts!.length < 4) {
+                                  if (index == widget.posts!.length &&
+                                      widget.posts!.length < 4) {
                                     return Image.asset(
                                       "assets/images/uploadcameraimage.png",
                                       fit: BoxFit.cover,
@@ -215,22 +246,19 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
                         ),
                         Container(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
                               children: [
-                                Column(
-                                  children: [
-                                    SizedBox(height: 170),
-                                    buildIndicator(),
-                                  ],
-                                ),
+                                SizedBox(height: 170),
+                                buildIndicator(),
                               ],
-                            ))
+                            ),
+                          ],
+                        ))
                       ],
                     ),
-                  )
-              )
-          )
-      ),
+                  )))),
     );
   }
 
@@ -244,7 +272,9 @@ class _OwnSliderCarouselState extends State<OwnSliderCarousel> {
   Widget buildIndicator() {
     return AnimatedSmoothIndicator(
       activeIndex: activeIndex,
-      count: widget.posts!.length < 4 ? widget.posts!.length + 1 : widget.posts!.length,
+      count: widget.posts!.length < 4
+          ? widget.posts!.length + 1
+          : widget.posts!.length,
       effect: JumpingDotEffect(
         dotWidth: 14,
         dotHeight: 14,

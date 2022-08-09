@@ -15,11 +15,6 @@ class NonCurvedImageSliderCarousel extends StatefulWidget {
 class _NonCurvedImageSliderCarouselState
     extends State<NonCurvedImageSliderCarousel> {
   int activeIndex = 0;
-  // final ImagesInCarousel = [
-  //   'images/cat.jpg',
-  //   'images/catt.jpg',
-  //   'images/cattt.jpg',
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +37,8 @@ class _NonCurvedImageSliderCarouselState
                       setState(() => activeIndex = index),
                 ),
                 itemBuilder: (context, index, realIndex) {
-                  // final ImageInCarousel = widget.imageArray[index];
-                  // return buildImage(ImageInCarousel, index);
                   return Image.network(
-                      widget.imageArray[index],
+                    widget.imageArray[index],
                     fit: BoxFit.cover,
                   );
                 },

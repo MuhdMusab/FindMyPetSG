@@ -33,24 +33,19 @@ class _CustomMadeButtonState extends State<CustomMadeButton> {
         child: Center(
           child: widget.isLoading
               ? const Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
-              ))
+                  child: CircularProgressIndicator(
+                  color: Colors.white,
+                ))
               : Text(
-            widget.text,
-            style: GoogleFonts.roboto(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontSize: 20,
-            ),
-          ),
+                  widget.text,
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
         ),
       ),
     );
   }
 }
-// onPressed: () {
-//   Navigator.pushNamedAndRemoveUntil(
-//       context, widget.routeName, (route) => false);
-//   // Navigator.pushReplacementNamed(context, widget.routeName);
-// },

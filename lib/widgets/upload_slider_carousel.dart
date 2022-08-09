@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import '../utils/pickImage.dart';
 
 class UploadSliderCarousel extends StatefulWidget {
-  //final imageArray;
   final Function? setImageCallback;
 
   const UploadSliderCarousel({
@@ -15,13 +14,12 @@ class UploadSliderCarousel extends StatefulWidget {
     required this.setImageCallback,
   }) : super(key: key);
 
-  //const UploadSliderCarousel({Key? key, required this.imageArray})
-  //    : super(key: key);
   @override
   State<UploadSliderCarousel> createState() => _UploadSliderCarouselState();
 }
 
-class _UploadSliderCarouselState extends State<UploadSliderCarousel> with AutomaticKeepAliveClientMixin<UploadSliderCarousel> {
+class _UploadSliderCarouselState extends State<UploadSliderCarousel>
+    with AutomaticKeepAliveClientMixin<UploadSliderCarousel> {
   int activeIndex = 0;
   List<File> croppedFiles = [];
   @override
@@ -42,9 +40,10 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                     //do nothing
                   } else {
                     Navigator.pop(context);
-                    XFile? file = await ImagePicker.platform.getImageFromSource(
-                        source: ImageSource.camera);
-                    croppedFiles.add(await cropRectangleImage(File(file!.path)));
+                    XFile? file = await ImagePicker.platform
+                        .getImageFromSource(source: ImageSource.camera);
+                    croppedFiles
+                        .add(await cropRectangleImage(File(file!.path)));
                     widget.setImageCallback!(croppedFiles);
                   }
                 }),
@@ -53,7 +52,8 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                 child: const Text('Choose from Gallery'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  List<PickedFile>? files = await ImagePicker.platform.pickMultiImage();
+                  List<PickedFile>? files =
+                      await ImagePicker.platform.pickMultiImage();
                   for (PickedFile file in files!) {
                     if (croppedFiles.length >= 4) {
                       // do nothing
@@ -88,11 +88,11 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                 padding: const EdgeInsets.all(20),
                 child: const Text('Take a photo'),
                 onPressed: () async {
-
                   Navigator.pop(context);
-                  XFile? file = await ImagePicker.platform.getImageFromSource(
-                      source: ImageSource.camera);
-                  croppedFiles[activeIndex] = (await cropRectangleImage(File(file!.path)));
+                  XFile? file = await ImagePicker.platform
+                      .getImageFromSource(source: ImageSource.camera);
+                  croppedFiles[activeIndex] =
+                      (await cropRectangleImage(File(file!.path)));
                   widget.setImageCallback!(croppedFiles);
                 }),
             SimpleDialogOption(
@@ -100,9 +100,10 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                 child: const Text('Choose from Gallery'),
                 onPressed: () async {
                   Navigator.pop(context);
-                  XFile? file = await ImagePicker.platform.getImageFromSource(
-                      source: ImageSource.gallery);
-                  croppedFiles[activeIndex] = (await cropRectangleImage(File(file!.path)));
+                  XFile? file = await ImagePicker.platform
+                      .getImageFromSource(source: ImageSource.gallery);
+                  croppedFiles[activeIndex] =
+                      (await cropRectangleImage(File(file!.path)));
                   widget.setImageCallback!(croppedFiles);
                 }),
             SimpleDialogOption(
@@ -124,7 +125,7 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
     return Material(
         child: InkWell(
             customBorder:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             splashColor: Colors.black12,
             onTap: () {
               if (activeIndex == croppedFiles.length) {
@@ -148,8 +149,7 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                     )
                   ],
                 ),
-                child:
-                ClipRRect(
+                child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   child: Stack(
                     children: [
@@ -158,18 +158,20 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CarouselSlider.builder(
-                              itemCount: croppedFiles.length < 4 ? croppedFiles.length + 1 : croppedFiles.length,
+                              itemCount: croppedFiles.length < 4
+                                  ? croppedFiles.length + 1
+                                  : croppedFiles.length,
                               options: CarouselOptions(
                                 enableInfiniteScroll: false,
                                 viewportFraction: 1,
                                 height: 200,
                                 onPageChanged: (index, reason) =>
                                     setState(() => activeIndex = index),
-
                               ),
                               itemBuilder: (context, index, realIndex) {
                                 // final ImageInCarousel = widget.imageArray[index];
-                                if (index == croppedFiles.length && croppedFiles.length < 4) {
+                                if (index == croppedFiles.length &&
+                                    croppedFiles.length < 4) {
                                   return Image.asset(
                                     "assets/images/uploadcameraimage.png",
                                     fit: BoxFit.cover,
@@ -187,22 +189,19 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
                       ),
                       Container(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
                             children: [
-                              Column(
-                                children: [
-                                  SizedBox(height: 170),
-                                  buildIndicator(),
-                                ],
-                              ),
+                              SizedBox(height: 170),
+                              buildIndicator(),
                             ],
-                          ))
+                          ),
+                        ],
+                      ))
                     ],
                   ),
-                )
-            )
-        )
-    );
+                ))));
   }
 
   Widget buildImage(String catImage, intIndex) {
@@ -216,7 +215,9 @@ class _UploadSliderCarouselState extends State<UploadSliderCarousel> with Automa
   Widget buildIndicator() {
     return AnimatedSmoothIndicator(
       activeIndex: activeIndex,
-      count: croppedFiles.length < 4 ? croppedFiles.length + 1 : croppedFiles.length,
+      count: croppedFiles.length < 4
+          ? croppedFiles.length + 1
+          : croppedFiles.length,
       effect: JumpingDotEffect(
         dotWidth: 14,
         dotHeight: 14,

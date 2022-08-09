@@ -1,33 +1,10 @@
-import 'dart:async';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
-import '../helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/edit_found_post.dart';
-import 'package:find_my_pet_sg/screens/settings_screen.dart';
-import 'package:find_my_pet_sg/services/auth.dart';
 import 'package:find_my_pet_sg/services/database.dart';
-import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
-import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:find_my_pet_sg/widgets/delete_post_dialog.dart';
 import 'package:find_my_pet_sg/widgets/own_slider_carousel.dart';
-import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/models/chatroom.dart';
-import 'package:find_my_pet_sg/models/chatroomdao.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
-import '../widgets/lost_pet_post.dart';
-import '../widgets/found_pet_post.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OwnFoundPetPost extends StatefulWidget {
   final Map<String, dynamic> snapshot;

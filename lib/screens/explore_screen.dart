@@ -1,40 +1,24 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/helper/settings_preferences.dart';
 import 'package:find_my_pet_sg/map_markers/map_markers.dart';
 import 'package:find_my_pet_sg/models/filter_model.dart';
-import 'package:find_my_pet_sg/models/post_type_model.dart';
-import 'package:find_my_pet_sg/screens/home.dart';
-import 'package:find_my_pet_sg/screens/main_page.dart';
 import 'package:find_my_pet_sg/screens/maps_screen.dart';
-import 'package:find_my_pet_sg/services/notification_service.dart';
 import 'package:find_my_pet_sg/utils/showSnackBar.dart';
 import 'package:find_my_pet_sg/widgets/custom_dialog_box.dart';
 import 'package:find_my_pet_sg/widgets/full_posts.dart';
-import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:find_my_pet_sg/models/filter_model.dart';
-import 'package:find_my_pet_sg/models/category.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_geofence/geofence.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../widgets/lost_pet_post.dart';
-import '../widgets/found_pet_post.dart';
 import '../widgets/filter_button.dart';
-import 'create_lost_post_screen.dart';
-import 'package:workmanager/workmanager.dart';
 
 const TextStyle _textStyle = TextStyle(
   fontSize: 40,
@@ -60,7 +44,6 @@ class _ExploreScreenState extends State<ExploreScreen>
   Position? userPosition;
   bool? isPrecise;
 
-  List<bool> _isSelected = [true, false];
   @override
   bool get wantKeepAlive => true;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -187,17 +170,6 @@ class _ExploreScreenState extends State<ExploreScreen>
       _getUserPosition();
     }
   }
-  // Future<bool> _getNotificationsPreferences() async {
-  //   return SettingsPreferences(await SharedPreferences.getInstance()).getNotificationsEnabled();
-  // }
-
-  // Future<bool> _getLookoutNotificationsPreferences() async {
-  //   return SettingsPreferences(await SharedPreferences.getInstance()).getLookoutNotificationsEnabled();
-  // }
-
-  // Future<int> _getLookoutDistancePreferences() async {
-  //   return SettingsPreferences(await SharedPreferences.getInstance()).getLookoutDistance();
-  // }
 
   bool? _notificationsEnabled;
 
@@ -213,22 +185,26 @@ class _ExploreScreenState extends State<ExploreScreen>
     this._getUserPosition();
     WidgetsBinding.instance.addObserver(this);
     _notificationsEnabled = settingsPrefs.getNotificationsEnabled();
-    _lookoutNotificationsEnabled = settingsPrefs.getLookoutNotificationsEnabled();
+    _lookoutNotificationsEnabled =
+        settingsPrefs.getLookoutNotificationsEnabled();
     _chatNotificationsEnabled = settingsPrefs.getChatNotificationsEnabled();
     _lookoutDistance = settingsPrefs.getLookoutDistance();
     final String username = widget._user!['name'].toString();
     final service = FlutterBackgroundService();
     DatabaseReference ref =
-    FirebaseDatabase.instance.ref('chatroom').child(username);
+        FirebaseDatabase.instance.ref('chatroom').child(username);
     Stream<DatabaseEvent> stream = ref.onValue;
     CollectionReference<Map<String, dynamic>> a =
-    FirebaseFirestore.instance.collection('posts');
+        FirebaseFirestore.instance.collection('posts');
     DateTime currTime = DateTime.now();
 
     stream.listen((DatabaseEvent event) {
-      if (_notificationsEnabled != null && _notificationsEnabled! && _chatNotificationsEnabled != null && _chatNotificationsEnabled!) {
+      if (_notificationsEnabled != null &&
+          _notificationsEnabled! &&
+          _chatNotificationsEnabled != null &&
+          _chatNotificationsEnabled!) {
         Map<dynamic, dynamic> chatrooms =
-        Map<dynamic, dynamic>.from((event as dynamic).snapshot.value);
+            Map<dynamic, dynamic>.from((event as dynamic).snapshot.value);
         Map<dynamic, dynamic>? otherChatters;
         chatrooms.forEach((key, value) {
           otherChatters = Map<String, dynamic>.from(value);
@@ -239,10 +215,11 @@ class _ExploreScreenState extends State<ExploreScreen>
               .child('messages');
           ref.onChildAdded.listen((event) {
             Map<dynamic, dynamic> currentMap =
-            Map<dynamic, dynamic>.from((event as dynamic).snapshot.value);
+                Map<dynamic, dynamic>.from((event as dynamic).snapshot.value);
             if (currentMap.containsKey('date')) {
               DateTime date = DateTime.parse(currentMap['date'] as String);
-              if (date.difference(currTime).inSeconds > 0 && currentMap['isMe']) {
+              if (date.difference(currTime).inSeconds > 0 &&
+                  currentMap['isMe']) {
                 Map<String, dynamic> map = {
                   'otherUser': otherUser,
                   'text': currentMap['text'],
@@ -256,7 +233,10 @@ class _ExploreScreenState extends State<ExploreScreen>
     });
 
     a.snapshots().listen((QuerySnapshot<Map<String, dynamic>> event) {
-      if (_notificationsEnabled != null && _notificationsEnabled! && _lookoutNotificationsEnabled != null && _lookoutNotificationsEnabled!) {
+      if (_notificationsEnabled != null &&
+          _notificationsEnabled! &&
+          _lookoutNotificationsEnabled != null &&
+          _lookoutNotificationsEnabled!) {
         this._getUserPosition();
         List<DocumentChange<Map<String, dynamic>>> a = event.docChanges;
         DateTime currTime = DateTime.now();
@@ -268,12 +248,11 @@ class _ExploreScreenState extends State<ExploreScreen>
                 userPosition!.longitude,
                 currMap['latitude'],
                 currMap['longtitude']);
-            if (_lookoutDistance != null && distanceBetweenUserAndPost <= _lookoutDistance!) {
+            if (_lookoutDistance != null &&
+                distanceBetweenUserAndPost <= _lookoutDistance!) {
               if (currMap.containsKey('dateTimePosted')) {
                 Timestamp timestamp = currMap['dateTimePosted'];
-                if (currTime
-                    .difference(timestamp.toDate())
-                    .inHours <= 1) {
+                if (currTime.difference(timestamp.toDate()).inHours <= 1) {
                   if (currMap.containsKey('name')) {
                     Map<String, dynamic> map = {
                       'name': currMap['name'],
@@ -320,8 +299,6 @@ class _ExploreScreenState extends State<ExploreScreen>
         print('unknown');
       } else {
         userPosition = position;
-        // showSnackBar(context,
-        //     'Current location: ${userPosition!.latitude.toString()}, ${userPosition!.longitude.toString()}');
       }
     });
   }
@@ -335,8 +312,6 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "FFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK REBUILD");
     final ValueNotifier<int> viewChangeNotifier = ValueNotifier<int>(0);
     if (userPosition == null || isPrecise == false) {
       _getUserPosition();
@@ -443,145 +418,6 @@ class _ExploreScreenState extends State<ExploreScreen>
                           topRight: Radius.circular(6.0)),
                     ),
                   ),
-                  // ToggleButtons(
-                  //   children: [
-                  //     Icon(Icons.list),
-                  //     Icon(MdiIcons.mapMarker),
-                  //   ],
-                  //   isSelected: _isSelected,
-                  //   onPressed: (index) {
-                  //     if (index == 0) {
-                  //       // Provider.of<ToggleView>(context, listen: false).toggle();
-                  //       // toggle(_isSelected);
-                  //       _isSelected[0] = true;
-                  //       _isSelected[1] = false;
-                  //       pageController.jumpToPage(0);
-                  //     } else {
-                  //       if (index == 1 &&
-                  //           isPrecise == true &&
-                  //           userPosition != null) {
-                  //         // toggle(_isSelected);
-                  //         _isSelected[0] = false;
-                  //         _isSelected[1] = true;
-                  //         // Provider.of<ToggleView>(context, listen: false).toggle();
-                  //         pageController.jumpToPage(1);
-                  //       } else {
-                  //         pageController.jumpToPage(2);
-                  //       }
-                  //     }
-                  //   },
-                  //   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  //   selectedColor: Colors.red,
-                  //   selectedBorderColor: Colors.purple,
-                  // ),
-                  // Positioned(
-                  //   top: 14,
-                  //   right: 10,
-                  //   child: AnimatedContainer(
-                  //     duration: Duration(milliseconds: 1000),
-                  //     height: 40.0,
-                  //     width: 100.0,
-                  //     decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.circular(20.0),
-                  //         color: toggleValue == 0
-                  //             ? Colors.greenAccent[100]
-                  //             : Colors.redAccent[100]?.withOpacity(0.5)),
-                  //     child: Stack(
-                  //       children: [
-                  //         AnimatedPositioned(
-                  //           duration: Duration(milliseconds: 1000),
-                  //           curve: Curves.easeIn,
-                  //           top: 3.0,
-                  //           left: toggleValue == 0 ? 60.0 : 0.0,
-                  //           right: toggleValue == 1 ? 0.0 : 60.0,
-                  //           child: InkWell(
-                  //             onTap: () {
-                  //               Provider.of<ToggleView>(context, listen: false)
-                  //                   .toggle();
-                  //             },
-                  //             child: AnimatedSwitcher(
-                  //                 duration: Duration(milliseconds: 1000),
-                  //                 transitionBuilder:
-                  //                     (Widget child, Animation<double> animation) {
-                  //                   return RotationTransition(
-                  //                       child: child, turns: animation);
-                  //                 },
-                  //                 child: toggleValue
-                  //                     ? Icon(MdiIcons.mapMarker,
-                  //                         color: Colors.green,
-                  //                         size: 35.0,
-                  //                         key: UniqueKey())
-                  //                     : Icon(MdiIcons.mapMarker,
-                  //                         color: Colors.red,
-                  //                         size: 35.0,
-                  //                         key: UniqueKey())),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // )
-                  // Positioned(
-                  //   right: 3,
-                  //   child: ElevatedButton(
-                  //       onPressed: () {
-                  //         pageController.jumpToPage(0);
-                  //       },
-                  //       child: Text("list")),
-                  // ),
-                  // ElevatedButton(
-                  //     onPressed: () {
-                  //       if (isPrecise == true && userPosition != null) {
-                  //         pageController.jumpToPage(1);
-                  //       } else {
-                  //         pageController.jumpToPage(2);
-                  //       }
-                  //     },
-                  //     child: Text("map"))
-                  // Positioned(
-                  //   top: 14,
-                  //   right: 10,
-                  //   child: Container(
-                  //       height: 40,
-                  //       child: AnimatedToggleSwitch<int>.size(
-                  //           current: valuee,
-                  //           values: [0, 1],
-                  //           indicatorBorderRadius: BorderRadius.zero,
-                  //           borderWidth: 1.0,
-                  //           borderRadius: BorderRadius.circular(8.0),
-                  //           iconOpacity: 0.2,
-                  //           indicatorSize: Size.fromWidth(60),
-                  //           iconSize: const Size.square(40),
-                  //           iconBuilder: (value, size) {
-                  //             IconData data = MdiIcons.mapMarker;
-                  //             if (value.isEven) data = Icons.list;
-                  //             return Icon(
-                  //               data,
-                  //               size: min(size.width, size.height),
-                  //               color: Colors.pink,
-                  //             );
-                  //           },
-                  //           borderColor: lightPink(),
-                  //           colorBuilder: (i) =>
-                  //               i.isEven ? lightPink() : lightPink(),
-                  //           onChanged: (i) {
-                  //             if (i == 0) {
-                  //               Provider.of<ToggleView>(context, listen: false)
-                  //                   .toggleToListView();
-                  //               pageController.jumpToPage(0);
-                  //             } else {
-                  //               Provider.of<ToggleView>(context, listen: false)
-                  //                   .toggleToMapView();
-                  //               if (i == 1 &&
-                  //                   isPrecise == true &&
-                  //                   userPosition != null) {
-                  //                 pageController.jumpToPage(1);
-                  //               } else {
-                  //                 pageController.jumpToPage(2);
-                  //               }
-                  //             }
-                  //           })),
-                  // ),
                 ]),
               );
             },
@@ -603,8 +439,12 @@ class _ExploreScreenState extends State<ExploreScreen>
                   child: CircularProgressIndicator(),
                 );
               }
-              if (userPosition != null && isPrecise == true && _notificationsEnabled != null && _notificationsEnabled!
-                  && _lookoutNotificationsEnabled != null && _lookoutNotificationsEnabled!) {
+              if (userPosition != null &&
+                  isPrecise == true &&
+                  _notificationsEnabled != null &&
+                  _notificationsEnabled! &&
+                  _lookoutNotificationsEnabled != null &&
+                  _lookoutNotificationsEnabled!) {
                 sendLookoutNotification(snapshot);
               }
 
@@ -639,31 +479,6 @@ class _ExploreScreenState extends State<ExploreScreen>
                     );
             },
           ),
-          //     (value == 1 && isPrecise == true && userPosition != null)
-          //       ? MapsScreen(
-          //           filters: filters,
-          //           user: widget._user,
-          //           initialLatLng: LatLng(
-          //               userPosition!.latitude!, userPosition!.longitude!),
-          //           snapshot: snapshot,
-          //         )
-          //       : (value == 1 &&
-          //               (userPosition == null || isPrecise == false))
-          //           ? Padding(
-          //               padding: const EdgeInsets.only(top: 250.0),
-          //               child: Text(
-          //                 "Turn on GPS and enable precise location permission for map view",
-          //                 style: TextStyle(
-          //                     fontSize: 30, color: Colors.black45),
-          //                 textAlign: TextAlign.center,
-          //               ),
-          //             )
-          //           : FullPosts(
-          //               user: widget._user,
-          //               filters: filters,
-          //               snapshot: snapshot,
-          //             );
-          // }),
         ],
       ),
     );

@@ -178,17 +178,12 @@ class FullFoundPetPost extends StatefulWidget {
 }
 
 class _FullFoundPetPostState extends State<FullFoundPetPost> {
-  // deletePost(String postId) async {
-  //   try {
-  //     await FireStoreMethods().deletePost(postId);
-  //   } catch (err) {
-  //     showSnackBar(
-  //       context,
-  //       err.toString(),
-  //     );
-  //   }
-  // }
   late GoogleMapController _googleMapController;
+
+  void dispose() {
+    super.dispose();
+    _googleMapController.dispose();
+  }
 
   void _showLocation() {
     Navigator.push(

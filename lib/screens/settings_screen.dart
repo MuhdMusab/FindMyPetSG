@@ -1,11 +1,10 @@
-import 'package:find_my_pet_sg/widgets/edit_notifications_settings_dialog.dart';
-import 'package:find_my_pet_sg/widgets/notifications_denied_dialog.dart';
-import 'package:flutter/material.dart';
 import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/helper/google_sign_in_provider.dart';
 import 'package:find_my_pet_sg/screens/main_page.dart';
+import 'package:find_my_pet_sg/widgets/edit_notifications_settings_dialog.dart';
+import 'package:find_my_pet_sg/widgets/notifications_denied_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 import 'package:provider/provider.dart';
 
@@ -38,19 +37,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: Column(
         children: [
-          // const SizedBox(
-          //   height: 10,
-          // ),
           InkWell(
             onTap: () async {
-              PermissionStatus permissionStatus = await NotificationPermissions.getNotificationPermissionStatus();
+              PermissionStatus permissionStatus = await NotificationPermissions
+                  .getNotificationPermissionStatus();
               if (permissionStatus == PermissionStatus.denied) {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return NotificationsDeniedDialog();
-                    }
-                );
+                    });
               } else if (permissionStatus == PermissionStatus.granted) {
                 showDialog(
                     barrierDismissible: false,
@@ -58,10 +54,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     builder: (BuildContext context) {
                       return WillPopScope(
                           onWillPop: () async => false,
-                          child: EditNotificationsSettingsDialog()
-                      );
-                    }
-                );
+                          child: EditNotificationsSettingsDialog());
+                    });
               }
             },
             child: Padding(
@@ -83,11 +77,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       fontSize: 17,
                     ),
                   ),
-                  // const Spacer(),
-                  // IconButton(onPressed: () => {},
-                  //     icon: const Icon(Icons.navigate_next,
-                  //       size: 30,
-                  //     )
                 ]),
               ),
             ),

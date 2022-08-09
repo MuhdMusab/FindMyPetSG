@@ -1,28 +1,17 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:find_my_pet_sg/services/database.dart';
-import 'package:find_my_pet_sg/widgets/animal_search_delegate.dart';
 import 'package:find_my_pet_sg/widgets/breed_editor.dart';
+import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
 import 'package:find_my_pet_sg/widgets/date_field_picker.dart';
 import 'package:find_my_pet_sg/widgets/gender_field_picker.dart';
 import 'package:find_my_pet_sg/widgets/location_field_picker.dart';
-import 'package:find_my_pet_sg/widgets/upload_slider_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:find_my_pet_sg/models/user.dart' as model;
-import 'package:find_my_pet_sg/widgets/custom_made_button.dart';
+
 import '../config/constants.dart';
-import '../services/firestore_methods.dart';
 import '../utils/showSnackBar.dart';
 import '../widgets/arrow_back_button.dart';
 import '../widgets/custom_textfield_2.dart';
 import '../widgets/reward_textfield.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:searchfield/searchfield.dart';
-import 'dart:io' show Platform;
 
 class EditLostPostScreen extends StatefulWidget {
   final Map<String, dynamic> snapshot;

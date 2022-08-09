@@ -38,7 +38,9 @@ class _PopupIconState extends State<PopupIcon> {
               duration: const Duration(milliseconds: 200),
               child: AnimatedAlign(
                 curve: onIt ? Curves.easeOutBack : Curves.easeIn,
-                alignment: onIt ? const Alignment(0.0, -1.0) : const Alignment(0.0, 0.0),
+                alignment: onIt
+                    ? const Alignment(0.0, -1.0)
+                    : const Alignment(0.0, 0.0),
                 duration: const Duration(milliseconds: 200),
                 child: Stack(
                   clipBehavior: Clip.none,
@@ -100,7 +102,8 @@ class _PopupIconState extends State<PopupIcon> {
                   ),
                   child: FutureBuilder(
                       future: widget.storage!.downloadURL(),
-                      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
                         if (snapshot.connectionState == ConnectionState.done &&
                             snapshot.hasData) {
                           return CircleAvatar(
@@ -108,11 +111,11 @@ class _PopupIconState extends State<PopupIcon> {
                           );
                         } else {
                           return const CircleAvatar(
-                            backgroundImage: AssetImage("assets/images/default_user_icon.png"),
+                            backgroundImage: AssetImage(
+                                "assets/images/default_user_icon.png"),
                           );
                         }
-                      }
-                  ),
+                      }),
                 ),
               ),
             ),
@@ -122,21 +125,3 @@ class _PopupIconState extends State<PopupIcon> {
     );
   }
 }
-
-// child: FutureBuilder(
-// future: storage.downloadURL(),
-// builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-// if (snapshot.connectionState == ConnectionState.done &&
-// snapshot.hasData) {
-// return CircleAvatar(
-// radius: 24,
-// backgroundImage: NetworkImage(snapshot.data!),
-// );
-// } else {
-// return CircleAvatar(
-// radius: 24,
-// backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-// );
-// }
-// }
-// ),

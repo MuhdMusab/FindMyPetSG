@@ -2,31 +2,16 @@ import 'dart:ui';
 
 import 'package:find_my_pet_sg/config/constants.dart';
 import 'package:find_my_pet_sg/helper/functions.dart';
-import 'package:find_my_pet_sg/models/chatroom.dart';
-import 'package:find_my_pet_sg/models/person.dart';
+import 'package:find_my_pet_sg/models/message_model.dart';
+import 'package:find_my_pet_sg/models/messagedao.dart';
 import 'package:find_my_pet_sg/services/storage_methods.dart';
-import 'package:find_my_pet_sg/widgets/chat_body_widget.dart';
-import 'package:find_my_pet_sg/widgets/chat_header_widget.dart';
 import 'package:find_my_pet_sg/widgets/highlighted_message_widget.dart';
-import 'package:find_my_pet_sg/widgets/message_list_widget.dart';
 import 'package:find_my_pet_sg/widgets/message_widget.dart';
 import 'package:find_my_pet_sg/widgets/message_widget_with_date.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/rendering.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import '../helper/homehelper.dart';
-import 'package:provider/provider.dart';
-import 'package:find_my_pet_sg/models/messages.dart';
-import 'package:intl/intl.dart';
-import 'package:find_my_pet_sg/widgets/widget.dart';
-import 'package:find_my_pet_sg/models/message_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:find_my_pet_sg/models/messagedao.dart';
-import 'package:find_my_pet_sg/widgets/message_widget.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class MessageList extends StatefulWidget {
   final MessageDao messageDao;
@@ -45,45 +30,27 @@ class MessageList extends StatefulWidget {
 }
 
 class _MessageListState extends State<MessageList> {
-  CircleAvatar? _otherCircleAvatar;
-
   @override
   void initState() {
     super.initState();
-
-    //     FutureBuilder(
-    //     future: storage.downloadURL(),
-    //     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.done &&
-    //           snapshot.hasData) {
-    //         return CircleAvatar(
-    //           radius: 25,
-    //           backgroundImage: NetworkImage(snapshot.data!),
-    //         );
-    //       } else {
-    //         return CircleAvatar(
-    //           radius: 25,
-    //           backgroundImage: AssetImage("assets/images/default_user_icon.png"),
-    //         );
-    //       }
-    //     }
-    // );
   }
+
   bool _isButtonVisible = false;
   bool _isFilterVisible = false;
 
   @override
   Widget build(BuildContext context) {
-    final StorageMethods storage = StorageMethods(username: widget.messageDao.ownUsername!);
     int _prevDate = 32;
     void _scrollToBottom() {
       if (widget.scrollController.hasClients) {
         setState(() {
           _isButtonVisible = false;
         });
-        widget.scrollController.jumpTo(widget.scrollController.position.maxScrollExtent);
+        widget.scrollController
+            .jumpTo(widget.scrollController.position.maxScrollExtent);
       }
     }
+
     return Expanded(
       child: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
@@ -110,13 +77,14 @@ class _MessageListState extends State<MessageList> {
               controller: widget.scrollController,
               query: widget.messageDao.getOwnMessageQuery(),
               itemBuilder: (context, snapshot, animation, index) {
-                Map<dynamic, dynamic> json = snapshot.value as Map<dynamic, dynamic>;
+                Map<dynamic, dynamic> json =
+                    snapshot.value as Map<dynamic, dynamic>;
                 if (json['imageUrl'] == null) {
                   json['imageUrl'] = '';
                 }
                 final message = Message.fromJson(json);
                 if (message.date.day != _prevDate) {
-                    _prevDate = message.date.day;
+                  _prevDate = message.date.day;
                   return GestureDetector(
                     child: MessageWidgetWithDate(
                       message: message.text,
@@ -130,7 +98,8 @@ class _MessageListState extends State<MessageList> {
                       setState(() {
                         _isFilterVisible = true;
                       });
-                      showDialog(barrierColor: Colors.white.withOpacity(0),
+                      showDialog(
+                          barrierColor: Colors.white.withOpacity(0),
                           context: context,
                           builder: (builder) {
                             return HighlightedMessageWidget(
@@ -140,70 +109,76 @@ class _MessageListState extends State<MessageList> {
                               messageDao: widget.messageDao,
                               imageUrl: message.imageUrl,
                             );
-                          }).then((value) =>
-                      {
-                        setState(() {
-                          _isFilterVisible = false;
-                        })
-                      });
+                          }).then((value) => {
+                            setState(() {
+                              _isFilterVisible = false;
+                            })
+                          });
                     },
                   );
                 }
                 return GestureDetector(
                   child: MessageWidget(
-                      message: message.text,
-                      isMe: message.isMe,
-                      date: message.date,
-                      messageDao: widget.messageDao,
-                      circleAvatar: widget.circleAvatar,
-                      imageUrl: message.imageUrl,
+                    message: message.text,
+                    isMe: message.isMe,
+                    date: message.date,
+                    messageDao: widget.messageDao,
+                    circleAvatar: widget.circleAvatar,
+                    imageUrl: message.imageUrl,
                   ),
                   onLongPress: () {
                     setState(() {
                       _isFilterVisible = true;
                     });
-                    showDialog(barrierColor: Colors.white.withOpacity(0), context: context, builder: (builder) {
-                      return HighlightedMessageWidget(
-                          message: message.text,
-                          isMe: message.isMe,
-                          date: message.date,
-                          messageDao: widget.messageDao,
-                          imageUrl: message.imageUrl,
-                      );
-                    }).then((value) => {
-                      setState(() {
-                        _isFilterVisible = false;
-                      })
-                    });
+                    showDialog(
+                        barrierColor: Colors.white.withOpacity(0),
+                        context: context,
+                        builder: (builder) {
+                          return HighlightedMessageWidget(
+                            message: message.text,
+                            isMe: message.isMe,
+                            date: message.date,
+                            messageDao: widget.messageDao,
+                            imageUrl: message.imageUrl,
+                          );
+                        }).then((value) => {
+                          setState(() {
+                            _isFilterVisible = false;
+                          })
+                        });
                   },
                 );
               },
             ),
-            _isButtonVisible ? Positioned(
-              bottom: 10,
-              left: 20,
-              child: FloatingActionButton(
-                onPressed: () {
-                  _scrollToBottom();
-                },
-                backgroundColor: pink(),
-                heroTag: getRandomString(),
-                child: Icon(
-                  Icons.arrow_downward,
-                  color: Colors.white,
-                ),
-              ),
-            ) : Container(),
-            _isFilterVisible  ? BackdropFilter(filter: ImageFilter.blur(
-              sigmaX: 5,
-              sigmaY: 5,
-            ),
-              child: Container(),
-            ) : Container(),
+            _isButtonVisible
+                ? Positioned(
+                    bottom: 10,
+                    left: 20,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        _scrollToBottom();
+                      },
+                      backgroundColor: pink(),
+                      heroTag: getRandomString(),
+                      child: Icon(
+                        Icons.arrow_downward,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : Container(),
+            _isFilterVisible
+                ? BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: 5,
+                      sigmaY: 5,
+                    ),
+                    child: Container(),
+                  )
+                : Container(),
           ],
         ),
       ),
     );
   }
 }
-

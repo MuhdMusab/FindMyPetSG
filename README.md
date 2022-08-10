@@ -45,6 +45,10 @@ In Singapore, there is no one-stop portal for lost-and-found pets. Posting on th
   <dd> -Users can sign up using their Google account or by filling up a form that includes email verification </dd>
   <dd> -User remains logged in even after closing the app </dd>
   <dd> -User's account is stored onto Firebase </dd>
+  <p align="center"> 
+    <img src="assets/gifs/authentication_google_sign_in.gif" height="389px" width="200"> <img src="assets/gifs/authentication_sign_up.gif" height="389px" width="200"> 
+  </p>
+  <br>
 </li>
 <li>Lost and Found Explore Screen 
   <dd> -Users can view all the Lost and Found pet listing</dd>
@@ -92,9 +96,10 @@ In Singapore, there is no one-stop portal for lost-and-found pets. Posting on th
 <li>Profile Screen
   <dd> -Users can customise their profile picture </dd>
   <dd> -Users can view all their posts and edit the contents of the posts </dd>
+  <dd> -Users can delete their posts once they have found their pet/handed over the found pet to the lost pet owner </dd>
   <br>
   <p align="center"> 
-    <img src="assets/gifs/lookout_notifications.gif" height="408px" width="200">
+    <img src="assets/gifs/profile_screen_edit_profile_picture.gif" height="408px" width="200"> <img src="assets/gifs/profile_screen_edit_post.gif" height="408px" width="200"> <img src="assets/gifs/profile_screen_delete_post.gif" height="408px" width="200">
   </p>
   <br>
 </li>
@@ -102,7 +107,7 @@ In Singapore, there is no one-stop portal for lost-and-found pets. Posting on th
   <dd> -Users can change their Chat and Lookout notifications preferences </dd>
   <br>
   <p align="center"> 
-    <img src="assets/gifs/lookout_notifications.gif" height="408px" width="200">
+    <img src="assets/gifs/settings_screen.gif" height="408px" width="200">
   </p>
   <br>
 </li>

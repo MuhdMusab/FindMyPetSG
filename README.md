@@ -1,4 +1,8 @@
-# FindMyPetSG
+<h1>
+<p align="center">
+  <img src = "https://user-images.githubusercontent.com/70519015/183803055-f93b485b-91da-4d1e-a99a-fd79658563f8.png" width="200" height="200">
+  <br>FindMyPetSG
+</h1>
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -16,34 +20,42 @@
   </ol>
 </details>
 
+
 <!-- ABOUT THE PROJECT -->
 ## :monocle_face: About The Project
 
 
 ### Motivation
-In Singapore, there is no one-stop portal for lost-and-found pets. Posting on the different pet forums and notifying all the different relevant authorities may be inconvenient as it is hard to keep track of so many different forums, social media groups and websites. We hope to allow pet owners to follow a standard and easy-to-follow procedure to list out and update relevant information so that it is easier for the public to help keep a lookout for them. We also want to allow lost pet’s information to be automatically checked against the data of our local animal shelters and SPCA and provide a platform to report abuse, illnesses of pets to relevant authorities. 
+In Singapore, there is no one-stop portal for lost-and-found pets. Posting on the different pet forums and notifying all the different relevant authorities may be inconvenient as it is hard to keep track of so many different forums, social media groups and websites. We hope to allow pet owners to follow a standard and easy-to-follow procedure to list out and update relevant information so that it is easier for the public to help keep a lookout for them and develop a community that actively looks out for lost pets.
 
 ### Features
-- Lost and Found explore page 
+- Lost and Found Explore Screen 
 
-<div align='center'>
-  <img src="https://user-images.githubusercontent.com/70519015/170710056-115cc670-7bd8-4de9-a91a-d6cae7251014.png" width="313" height="443">
-</div>
+<p align="center"> 
+  <img src="assets/gifs/explore_screen.gif" height="389px" width="200">
+</p>
 
-- Report Abuse
-<div align='center'>
-  <img src="https://user-images.githubusercontent.com/70519015/170727442-ddabf041-406f-4e94-b5f8-3841ae4e4437.png" width="313" height="443">
-</div>
+- Filters Screen 
 
-- Chat
-<div align='center'>
-<img src = "https://user-images.githubusercontent.com/70519015/170712489-25202f47-9235-4d4b-9eea-a9504b533cff.png" width="330" height="443">
-</div>
+<p align="center"> 
+  <img src="assets/gifs/filter_screen.gif" height="386px" width="200">
+</p>
+
+- Maps Screen 
+
+<p align="center"> 
+  <img src="assets/gifs/maps_screen.gif" height="388px" width="200">
+</p>
+
+- Chats Screen
+<p align="center"> 
+  <img src="assets/gifs/messages_screen.gif" height="388px" width="200">
+</p>
 
 - Lookout notifications
-<div align='center'>
-<img src = "https://user-images.githubusercontent.com/70519015/170723200-de1f46d9-5dba-41a1-bba8-ab31c1c980c6.png" width="313" height="443">
-</div>
+<p align="center"> 
+  <img src="assets/gifs/lookout_notifications.gif" height="408px" width="200">
+</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -52,5 +64,4 @@ In Singapore, there is no one-stop portal for lost-and-found pets. Posting on th
 ## :technologist:Tech Stack
 - This project uses the [Flutter app development framework](https://flutter.dev/). Flutter is a cross-platform hybrid app development platform which allows development for mobile, desktop and the web using a single codebase.
 - This project uses Firebase hosting, realtime-database, functions and storage.
-- For real-time chat functions, the app uses [Socket.io](https://socket.io/).
 

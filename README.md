@@ -41,7 +41,7 @@ In Singapore, there is no one-stop portal for lost-and-found pets. Posting on th
 
 ### Features
 <ol><dl>
-<li>Authentication Screen>
+<li>Authentication Screen
   <dd> -Users can sign up using their Google account or by filling up a form that includes email verification </dd>
   <dd> -User remains logged in even after closing the app </dd>
   <dd> -User's account is stored onto Firebase </dd>

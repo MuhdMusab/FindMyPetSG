@@ -8,6 +8,7 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
+    <li><a href="#rocket-getting-started">Getting Started</a></li>
     <li>
       <a href="#monocle_face-about-the-project">About The Project</a>
       <ul>
@@ -17,10 +18,20 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#technologisttech-stack">Tech Stack</a></li>
+    <li><a href="#scrollcredits">Credits</a></li>
   </ol>
 </details>
 
+<!-- GETTING STARTED -->
+## :rocket: Getting Started 
 
+To run the project either install [Flutter](https://flutter.io/docs/get-started/install) and use the launch configuration in VSCode/Android Studio or use the following command:
+
+```sh
+$ flutter run --profile
+```
+
+Or [download Apk file](https://drive.google.com/file/d/1h4oqJ7LA9VD4KLXBRFbbHwUWWtUVhZrN/view?usp=sharing)（for Android only)
 <!-- ABOUT THE PROJECT -->
 ## :monocle_face: About The Project
 
@@ -52,7 +63,7 @@ In Singapore, there is no one-stop portal for lost-and-found pets. Posting on th
   <img src="assets/gifs/messages_screen.gif" height="388px" width="200">
 </p>
 
-- Lookout notifications
+- Lookout Notifications
 <p align="center"> 
   <img src="assets/gifs/lookout_notifications.gif" height="408px" width="200">
 </p>
@@ -65,3 +76,13 @@ In Singapore, there is no one-stop portal for lost-and-found pets. Posting on th
 - This project uses the [Flutter app development framework](https://flutter.dev/). Flutter is a cross-platform hybrid app development platform which allows development for mobile, desktop and the web using a single codebase.
 - This project uses Firebase hosting, realtime-database, functions and storage.
 
+<!-- CREDITS -->
+## :scroll:Credits
+Muhammad Mus'ab Bin Mustaffa
+
+[![GitHub Badge](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MuhdMusab)
+[![LinkedIn Badge](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/musab-mustaffa)
+
+Gerald Teo
+
+[![GitHub Badge](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jialatteo)
